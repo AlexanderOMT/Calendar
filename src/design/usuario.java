@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package calendar;
+package design;
+
+import model.User;
 
 /**
  *
- * @author TESTER
+ * @author Minerva
  */
-class Date {
-    
+interface usuario {
+    static public User userSigned=new User();
 }

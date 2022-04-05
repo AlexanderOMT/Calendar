@@ -1,8 +1,6 @@
 package model;
 
-import java.util.logging.Logger;
-
-public class user {
+public class User {
     
     private int id;
     private String name;
@@ -10,11 +8,11 @@ public class user {
     private String email;
     private boolean login;
     
-    public user(){
+    public User(){
         
     }
     
-    public user(int id, String name, String pwd, String email, boolean login) {
+    public User(int id, String name, String pwd, String email, boolean login) {
         this.id = id;
         this.name = name;
         this.pwd = pwd;
@@ -22,14 +20,17 @@ public class user {
         this.login = login;
     }
     
-    public user (Integer id, String email, String pwd) {
+    public User (Integer id, String email, String pwd) {
         this.id = id;
         this.email = email;
         this.pwd = pwd;
     }       
-    
-    public user getUser(){
-        user user = new user();
+    public User (String email, String pwd) {
+        this.email = email;
+        this.pwd = pwd;
+    }
+    public User getUser(){
+        User user = new User();
         user.setEmail(email);
         user.setPwd(pwd);
         return user;
@@ -75,5 +76,4 @@ public class user {
     public String toString(){
         return "ID: " + id + ", Nombre: " + name + ", Email: " + email + ", Contraseña: " + pwd + ", Login: " + login;
     }
-    
 }

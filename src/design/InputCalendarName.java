@@ -1,27 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package design;
 
+import SqlDatabase.HerokuCalendarPermitSqlConnection;
+import SqlDatabase.HerokuCalendarSqlConnection;
+import SqlDatabase.HerokuTaskSqlConnection;
 import SqlDatabase.HerokuUsersSqlConnection;
 import java.awt.Color;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import model.*;
+import model.User;
 
 /**
  *
  * @author Leyre
  */
-public class InputCalendarName extends javax.swing.JDialog {
+public class InputCalendarName extends javax.swing.JDialog implements usuario{
 
     /**
      * Creates new form InputCalendarName
      */
+    
+    public User userSignedIn;
     public InputCalendarName(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -96,13 +92,19 @@ public class InputCalendarName extends javax.swing.JDialog {
         // TODO add your handling code here:
         
         String CalendarName = calendarName.getText();
-        calendar calendar = new calendar(CalendarName);
+        //calendar calendar = new calendar(CalendarName);
         
-        HerokuUsersSqlConnection conex = HerokuUsersSqlConnection.getInstance();
-        conex.insertCalendar(calendar.getName());
-        
-        
-        
+        //HerokuUsersSqlConnection conex = HerokuUsersSqlConnection.getInstance();
+        HerokuCalendarPermitSqlConnection conex_cal_per = HerokuCalendarPermitSqlConnection.getInstance();
+        HerokuCalendarSqlConnection conex_cal = HerokuCalendarSqlConnection.getInstance();
+        HerokuTaskSqlConnection conex_task = HerokuTaskSqlConnection.getInstance();
+        String new_email_id=CalendarName+userSignedIn.getEmail();
+        conex_cal.insertCalendar(CalendarName,new_email_id);
+        System.out.println("ha llegado");
+        int id_cal_recien_creado=conex_cal.getCalendar(new_email_id);
+        if(id_cal_recien_creado >0)
+            conex_cal_per.insertCalendarPermit(userSignedIn.getId(), id_cal_recien_creado, 1, "Admin");
+       
         /*
         Controlar que no este vacio
         */

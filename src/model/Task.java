@@ -1,22 +1,37 @@
 package model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Date;
 
-public class task {
+public class Task {
     
-    @JsonProperty("name")
     private String name;
+    private String desc;
+    private String hour;
+    private int prior;
     
-    public task () {}
+    public Task () {
+    }
    
-    public task (String name) {
+    public Task (String name, String desc, String hour, int prior) {
         this.name = name;
+        this.desc = desc;
+        this.hour = hour;
+        this.prior = prior;
     }
     
     public String getName() {
         return this.name;
     }
-
+    
+    public String getDesc() {
+        return this.desc;
+    }
+    
+    public String getHour() {
+        return this.hour;
+    }
+    
+    public int getPrior() {
+        return this.prior;
+    }
 }

@@ -12,17 +12,18 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
-import model.user;
+import model.User;
 
 /**
  *
  * @author TESTER
  */
-public class Login extends javax.swing.JFrame {
+public class Login extends javax.swing.JFrame implements usuario{
 
     /**
      * Creates new form Login
      */
+    private User userSingedUp;
     public Login() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -101,6 +102,7 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
+        SignUp.setForeground(new java.awt.Color(51, 102, 255));
         SignUp.setText("Dont have an account? Join free today");
         SignUp.setBorderPainted(false);
         SignUp.setContentAreaFilled(false);
@@ -127,12 +129,11 @@ public class Login extends javax.swing.JFrame {
                             .addComponent(jLabel4)
                             .addComponent(jLabel5)
                             .addComponent(contraseña)
-                            .addComponent(email))
-                        .addGap(38, 38, 38))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(SignUp)
-                        .addGap(75, 75, 75))))
+                            .addComponent(email)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(101, 101, 101)
+                        .addComponent(SignUp)))
+                .addGap(38, 38, 38))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -173,7 +174,7 @@ public class Login extends javax.swing.JFrame {
     private void LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginActionPerformed
         String email_text= email.getText();
         String contraseña_text = String.valueOf(contraseña.getPassword());
-        user user = new user();
+        
         
         /*Pattern pat_email = Pattern.compile("[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,4}");
         Matcher mat_email = pat_email.matcher(email_text);
@@ -200,24 +201,38 @@ public class Login extends javax.swing.JFrame {
         }else{*/
             System.out.println("Email = " + email_text);
             System.out.println("Contraseña = " + contraseña_text);
-            HerokuUsersSqlConnection conex = HerokuUsersSqlConnection.getInstance();
+            HerokuUsersSqlConnection conex_us = HerokuUsersSqlConnection.getInstance();
+            /*this.userSignedIn.setEmail(email_text);
+            this.userSignedIn.setPwd(contraseña_text);*/
+            
+            /*try {
+                this.userSignedIn.setId(conex_us.getUserIdByEmail(email_text));
+                System.out.println("se ha seteado el id del usuario!!");
+            } catch (SQLException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }*/
             try {
-                user.setEmail(email_text);
-                user.setPwd(contraseña_text);
-                user.toString();
-                if(conex.login(user)){
+                userSigned.setEmail(email_text);
+                userSigned.setPwd(contraseña_text);
+                userSigned.setId(conex_us.getUserIdByEmail(email_text));
+                System.out.println("el ide del usuario insertador es: "+userSigned.getId());
+                //this.userSignedIn.toString();
+                userSingedUp=userSigned;
+                if(conex_us.login(this.userSingedUp)){
                     JOptionPane.showMessageDialog(null, "Login correcto");
                     System.out.println("Login correcto");
-                    MainPage mp = new MainPage();
+                    MainPage mp = new MainPage();                     
                     mp.setVisible(true);
                     this.setVisible(false);
                 }else {
-                    JOptionPane.showMessageDialog(null, "Login incorrecto");
-                    System.out.println("Login incorrecto");                    
+                    JOptionPane.showMessageDialog(null, "Este usuario no esta registrado. Por favor, registrese.");
+                    System.out.println("Este usuario no esta registrado. Por favor, registrese.");                    
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            } catch (InterruptedException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
        //  }
     }//GEN-LAST:event_LoginActionPerformed
 

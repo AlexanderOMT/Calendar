@@ -16,7 +16,7 @@ public abstract class SqlConnection {
 
     }
 
-    public Connection getConexion() {
+    public Connection getSqlConnection() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(url, user, pswd);

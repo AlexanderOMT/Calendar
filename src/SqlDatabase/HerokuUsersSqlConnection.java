@@ -5,20 +5,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import model.user;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import model.User;
 
-public class HerokuUsersSqlConnection extends SqlConnection{
+public class HerokuUsersSqlConnection extends SqlConnection {
         
     private static HerokuUsersSqlConnection instance;
     private String emailUser;
     
-    private user user;
+    private User user;
     
     PreparedStatement ps;
     ResultSet rs;
@@ -28,18 +23,18 @@ public class HerokuUsersSqlConnection extends SqlConnection{
     public static synchronized HerokuUsersSqlConnection getInstance(){
         if(instance == null){
             instance = new HerokuUsersSqlConnection();
-            instance.getConexion();
+            instance.getSqlConnection();
         }
         return instance;
     }
 
     public void selectAllUsers() {
         String sql = "SELECT * FROM user";
-        try (Connection conn = this.getConexion();
+        try (Connection conn = this.getSqlConnection();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql)){
             while (rs.next()) {
-            System.out.println(rs.getInt("id_user") + "\t" +
+            System.out.println(rs.getInt("user_id") + "\t" +
                         rs.getString("name") + "\t" +
                         rs.getString("password") + "\t" +
                         rs.getString("email") + "\t" +
@@ -52,17 +47,17 @@ public class HerokuUsersSqlConnection extends SqlConnection{
     }
 
     public void selectUserById(int id) {
-        Connection conn = getConexion();
+        Connection conn = getSqlConnection();
         
         try{
-            ps = conn.prepareStatement("SELECT * FROM user WHERE id_user=" + Integer.toString(id));
+            ps = conn.prepareStatement("SELECT * FROM user WHERE user_id=" + Integer.toString(id));
             ps.setInt(1, id);
             
             rs = ps.executeQuery();
             
             if (rs.next()) {
                 
-                System.out.println(rs.getInt("id_user") + "\t" +
+                System.out.println(rs.getInt("user_id") + "\t" +
                 rs.getString("name") + "\t" +
                 rs.getString("password") + "\t" +
                 rs.getString("email") + "\t" +
@@ -78,8 +73,31 @@ public class HerokuUsersSqlConnection extends SqlConnection{
         }
     }    
     
+    public int getUserIdByEmail(String email) throws SQLException {
+        Connection conn = getSqlConnection();
+        System.out.println("Usuario:" );
+        try{
+            ps = conn.prepareStatement("SELECT * FROM user WHERE email=?");
+            ps.setString(1, email);
+            
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                System.out.println("Usuario:" + rs.getInt("user_id"));
+                return rs.getInt("user_id");
+            } else {
+                System.out.println("No existe ningún usuario con ese email");
+                return -1;
+            }
+            
+        } catch (SQLException e) {
+            System.out.println("Error al seleccionar por id  en la tabla user: " + e.getMessage());
+        }
+        return -1;
+    }   
+    /*este metodo en realidad no es un select, es una comprobación*/
     public boolean selectUserByEmail(String email) throws SQLException {
-        Connection conn = getConexion();
+        Connection conn = getSqlConnection();
         
         try{
             ps = conn.prepareStatement("SELECT * FROM user WHERE email=?");
@@ -89,7 +107,7 @@ public class HerokuUsersSqlConnection extends SqlConnection{
             
             if (rs.next()) {
                 JOptionPane.showMessageDialog(null, "Si existe ningún usuario con ese id");
-                System.out.println("Si existe ningún usuario con ese id");
+                System.out.println("Si existe usuario con ese id");
                 return false;
             } else {
                 JOptionPane.showMessageDialog(null, "No existe ningún usuario con ese id");
@@ -101,14 +119,14 @@ public class HerokuUsersSqlConnection extends SqlConnection{
             System.out.println("Error al seleccionar por id  en la tabla user: " + e.getMessage());
         }
         return false;
-    }   
- 
+    }
+    
     public void deleteUserById(int id) {
         
-        Connection conn = getConexion();
+        Connection conn = getSqlConnection();
         
         try{
-            ps = conn.prepareStatement("DELETE FROM user WHERE id_user=?");
+            ps = conn.prepareStatement("DELETE FROM user WHERE user_id=?");
             ps.setInt(1, id);
             
             int res = ps.executeUpdate();
@@ -150,7 +168,7 @@ public class HerokuUsersSqlConnection extends SqlConnection{
 */
     
     public void insertUser(String name, String pswd, String email, boolean login) {
-        Connection conn = getConexion();        
+        Connection conn = getSqlConnection();        
         try{
             ps = conn.prepareStatement("INSERT INTO user(name, password, email, login) VALUES(?, ?, ?, ?)");
             ps.setString(1, name);
@@ -180,9 +198,9 @@ public class HerokuUsersSqlConnection extends SqlConnection{
         }
     }
     
-    public boolean login(user user) throws SQLException {
+    public boolean login(User user) throws SQLException {
         
-        Connection conn = getConexion();
+        Connection conn = getSqlConnection();
         try{
             ps = conn.prepareStatement("SELECT user_id, name, email, password, login FROM user WHERE email=?");
             ps.setString(1, user.getEmail());
@@ -216,7 +234,7 @@ public class HerokuUsersSqlConnection extends SqlConnection{
     }
 
     public boolean signOut() throws SQLException {
-        Connection conn = getConexion();
+        Connection conn = getSqlConnection();
         try{
             ps = conn.prepareStatement("SELECT user_id, name, email, password, login FROM user WHERE email=?");
             ps.setString(1, emailUser);
@@ -242,8 +260,36 @@ public class HerokuUsersSqlConnection extends SqlConnection{
         return false;
     }
     
+    
+    public boolean signOut2(User userSignedIn) throws SQLException {
+        Connection conn = getSqlConnection();
+        try{
+            ps = conn.prepareStatement("SELECT user_id, name, email, password, login FROM user WHERE email=?");
+            ps.setString(1, userSignedIn.getEmail());
+            rs = ps.executeQuery();
+            System.out.println("1");
+            if (rs.next()) {
+                System.out.println(rs.getString("email"));
+                System.out.println(rs.getString("password"));
+                System.out.println("2");
+                     
+                System.out.println("3");                    
+                ps = conn.prepareStatement("UPDATE user SET login=? WHERE email=?");
+                System.out.println("4");
+                ps.setBoolean(1, false);
+                ps.setString(2, userSignedIn.getEmail());
+                ps.execute();
+                System.out.println("5");
+                return true;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al autentificar en la tabla USERS: " + e.getMessage());
+        }
+        return false;
+    }
+    /*este método no pertenece a esta clase no?
     public void insertCalendar(String name) {
-        Connection conn = getConexion();        
+        Connection conn = getSqlConnection();        
         try{
             ps = conn.prepareStatement("INSERT INTO calendar(name) VALUES(?)");
             ps.setString(1, name);
@@ -256,7 +302,7 @@ public class HerokuUsersSqlConnection extends SqlConnection{
             }else{
                 JOptionPane.showMessageDialog(null, "Usuario insertado incorrectamente");
                 System.out.println("Calendario insertado incorrectamente");
-            }*/
+            }
             
             conn.close();
             
@@ -264,5 +310,5 @@ public class HerokuUsersSqlConnection extends SqlConnection{
             JOptionPane.showMessageDialog(null, "Error al insertar en la tabla calendar: " + e.getMessage());
             System.out.println("Error al insertar en la tabla calendar: " + e.getMessage());
         }
-    }
+    }*/
 }
