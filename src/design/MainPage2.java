@@ -8,6 +8,7 @@ import SqlDatabase.HerokuCalendarPermitSqlConnection;
 import SqlDatabase.HerokuCalendarSqlConnection;
 import SqlDatabase.HerokuTaskSqlConnection;
 import SqlDatabase.HerokuUsersSqlConnection;
+import static design.usuario.userSigned;
 import java.awt.Color;
 import java.awt.Dimension;
 import static java.awt.Frame.MAXIMIZED_BOTH;
@@ -29,7 +30,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
+import model.ButtonCalendar;
 import model.User;
+import model.Calendars;
 
 /**
  *
@@ -39,7 +42,12 @@ public class MainPage2 extends javax.swing.JFrame {
 
     int posicionCalendariox = 6;
     int posicionCalendarioy = 39;
-    
+    HerokuCalendarSqlConnection conex_cal;
+    HerokuUsersSqlConnection conex_us;
+    HerokuCalendarPermitSqlConnection conex_cal_per;
+    Calendars calendars = new Calendars();
+    ArrayList<Integer> aux;
+    int id = 0;
     /**
      * Creates new form MainPage
      */
@@ -50,10 +58,10 @@ public class MainPage2 extends javax.swing.JFrame {
         Color color =new Color(86,47,65);
         this.setLocationRelativeTo(null);
         this.setExtendedState(MAXIMIZED_BOTH);
-        HerokuUsersSqlConnection conex_us = HerokuUsersSqlConnection.getInstance();
-        HerokuCalendarPermitSqlConnection conex_cal_per = HerokuCalendarPermitSqlConnection.getInstance();
+        conex_us = HerokuUsersSqlConnection.getInstance();
+        conex_cal_per = HerokuCalendarPermitSqlConnection.getInstance();
         
-        
+        aux = loadCalendars();
         initCalendars(conex_cal_per);
         userSignedUpmp=new User();
         userSignedUpmp.setEmail("jose");
@@ -281,19 +289,24 @@ public class MainPage2 extends javax.swing.JFrame {
 
 
     private void initCalendars(HerokuCalendarPermitSqlConnection conex_cal_per) throws SQLException{
-        HerokuUsersSqlConnection conex_us = HerokuUsersSqlConnection.getInstance();
-         ArrayList<Integer> calendars=conex_cal_per.selectAllCalendarsIdByIdUser(conex_us.getUserIdByEmail("jose"));
-         HerokuCalendarSqlConnection conex_cal = HerokuCalendarSqlConnection.getInstance();
-         for (int x=0; x<calendars.size(); x++){
-             String calendar_name=conex_cal.getCalendarNameById(calendars.get(x));
-             if(!(calendar_name == null)){
-                 añadirCalendario(calendar_name);
-             }else{
-                 System.out.println("no existe un calendario con ese id");
-             }
-         }
-         
+        conex_cal_per = HerokuCalendarPermitSqlConnection.getInstance();
+        conex_cal = HerokuCalendarSqlConnection.getInstance();
+        for (int x=0; x<aux.size(); x++){
+            String calendar_name=conex_cal.getCalendarNameById(aux.get(x));
+            if(!(calendar_name == null)){
+                añadirCalendario(calendar_name);
+            }else{
+                System.out.println("no existe un calendario con ese id");
+            }
+        }
     }
+    
+    private ArrayList<Integer> loadCalendars(){
+        conex_cal_per = HerokuCalendarPermitSqlConnection.getInstance();
+        ArrayList<Integer> calendarsUser=conex_cal_per.selectAllCalendarsIdByIdUser(userSigned.getId());
+        return calendarsUser;
+    } 
+    
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {
     }                                           
 
@@ -340,6 +353,7 @@ public class MainPage2 extends javax.swing.JFrame {
         
         String calendarName = inputCalendarName.getCalendarName();
         if(!calendarName.equals("")){
+            aux.add(inputCalendarName.getCalendarId());
             añadirCalendario(calendarName);
         }
         
@@ -384,18 +398,32 @@ public class MainPage2 extends javax.swing.JFrame {
         eliminar.setBorder(null);
         eliminar.setBorderPainted(false);
         eliminar.setContentAreaFilled(false);
+        
         jPanel4.add(boton1);
         jPanel4.add(titulo);
         jPanel4.add(eliminar);
+        
+        if(id == aux.size()){
+            id--;
+        }
+        
+        ButtonCalendar calendar = new ButtonCalendar(id, aux.get(id), boton1, titulo, eliminar, posicionCalendariox, posicionCalendarioy);
+        
+        id++;
+        
+        calendars.addCalendar(calendar);
+        
         if(posicionCalendariox > 1235){
             posicionCalendariox=6;
             posicionCalendarioy+=210;
         }else{
             posicionCalendariox+=247;
         }
+        
         boton1.setLocation(posicionCalendariox,posicionCalendarioy);
         titulo.setLocation(posicionCalendariox,posicionCalendarioy-39);
         eliminar.setLocation(posicionCalendariox+160,posicionCalendarioy-39);
+        
         boton1.addActionListener((java.awt.event.ActionEvent e) -> {
             System.out.println("Se ha abierto el calendario " + calendarName);
             calendarView cv = new calendarView();
@@ -403,36 +431,45 @@ public class MainPage2 extends javax.swing.JFrame {
         });
         
         eliminar.addActionListener((java.awt.event.ActionEvent e) -> {
-            if(posicionCalendariox == 6 && posicionCalendarioy == 210){
-                System.out.println("Caso A");
+            /*if(posicionCalendariox == 6 && posicionCalendarioy == 210){
                 posicionCalendariox -= 247;
             } else if(posicionCalendariox != 6){
-                System.out.println("Caso B");
                 posicionCalendariox -= 247;
             } else {
-                System.out.println("Caso C");
                 posicionCalendariox = 1241;
                 posicionCalendarioy -= 210;
-            }
+            }*/
 
             boton1.setVisible(false);
             titulo.setVisible(false);
             eliminar.setVisible(false);
+        
+            ArrayList<ButtonCalendar> a = calendars.getCalendars();
+            int x = 0;
+            for(int i = 0; i < aux.size(); i++){
+                if(a.get(i).getTitulo().getText().equals(titulo.getText())){
+                   x = a.get(i).getId();
+                }
+            }
+            
+            conex_cal.deleteCalendarById(x);
+            aux.remove(aux.indexOf(x));
+         
+            id--;
+            
+            jPanel4.removeAll();
+            jPanel4.updateUI();
+            jPanel4.repaint();
+            
+            posicionCalendariox = 6;
+            posicionCalendarioy = 39;
+
+            try {
+                initCalendars(conex_cal_per);
+            } catch (SQLException ex) {
+                Logger.getLogger(MainPage2.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
-        
-        System.out.println("---------------------------------------------------");
-        
-        System.out.println("Posicion x = " + jButton2.getLocation().getX());
-        System.out.println("Posicion y = " + jButton2.getLocation().getY());
-        
-        System.out.println("Posicion nuevo x = " + boton1.getLocation().getX());
-        System.out.println("Posicion nuevo y = " + boton1.getLocation().getY());
-        
-        System.out.println("Posicion texto nuevo x = " + titulo.getLocation().getX());
-        System.out.println("Posicion texto nuevo = " + titulo.getLocation().getY());
-        
-        System.out.println("Posicion icono nuevo x = " + eliminar.getLocation().getX());
-        System.out.println("Posicion icono nuevo y = " + eliminar.getLocation().getY());
     }
         
     /**
@@ -491,4 +528,3 @@ public class MainPage2 extends javax.swing.JFrame {
     private javax.swing.JButton users1;
     // End of variables declaration                   
 }
-
