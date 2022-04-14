@@ -222,17 +222,6 @@ public class MainPage2 extends javax.swing.JFrame {
                     .addContainerGap(687, Short.MAX_VALUE)))
         );
 
-        jLabel2.setFont(new java.awt.Font("Rockwell", 0, 36)); // NOI18N
-        jLabel2.setText("My Calendars");
-
-        jButton2.setFont(new java.awt.Font("Rockwell", 0, 20)); // NOI18N
-        jButton2.setText("+");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -305,10 +294,7 @@ public class MainPage2 extends javax.swing.JFrame {
         conex_cal_per = HerokuCalendarPermitSqlConnection.getInstance();
         ArrayList<Integer> calendarsUser=conex_cal_per.selectAllCalendarsIdByIdUser(userSigned.getId());
         return calendarsUser;
-    } 
-    
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {
-    }                                           
+    }                                            
 
     private void singoutActionPerformed(java.awt.event.ActionEvent evt) {                                        
         HerokuUsersSqlConnection conex_us = HerokuUsersSqlConnection.getInstance();
@@ -344,21 +330,7 @@ public class MainPage2 extends javax.swing.JFrame {
     private void users1ActionPerformed(java.awt.event.ActionEvent evt) {                                       
         // TODO add your handling code here:
     }                                      
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                             
-        InputCalendarName inputCalendarName = new InputCalendarName();
-        inputCalendarName.userSignedIn=this.userSignedUpmp;
-        inputCalendarName.setVisible(true);
-        
-        
-        String calendarName = inputCalendarName.getCalendarName();
-        if(!calendarName.equals("")){
-            aux.add(inputCalendarName.getCalendarId());
-            añadirCalendario(calendarName);
-        }
-        
-      
-    }              
+         
     
     public void close(){
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
