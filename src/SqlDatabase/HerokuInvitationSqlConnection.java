@@ -32,6 +32,7 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
                         "Id invitación: " +    rs.getInt("invitation_id") + "\t" +
                         "Id usuario origen: " +    rs.getString("origin_user_id") + "\t" +
                         "Id usuario destino: " +    rs.getString("target_user_id") + "\t" +
+                        "Id calendario: " +    rs.getString("target_calendar_id") + "\t" +        
                         "Respuesta: " +  rs.getString("reply")
                 );
             }
@@ -39,6 +40,57 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
             System.out.println("Error al seleccionar todo en la tabla CALENDAR: " + e.getMessage());
         }
     }
+    
+    
+    // TODO
+    public void selectCalendarId() {
+        String sql = "SELECT * FROM invitation";
+        try (Connection conn = this.getSqlConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql)){
+            while (rs.next()) {
+                System.out.println(
+                        "Id invitación: " +    rs.getInt("invitation_id") + "\t" +
+                        "Id usuario origen: " +    rs.getString("origin_user_id") + "\t" +
+                        "Id usuario destino: " +    rs.getString("target_user_id") + "\t" +
+                        "Id calendario: " +    rs.getString("target_calendar_id") + "\t" +        
+                        "Respuesta: " +  rs.getString("reply")
+                );
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al seleccionar todo en la tabla CALENDAR: " + e.getMessage());
+        }
+    }
+    
+    
+    // TODO
+    public void selectAllByCalendarId(Integer target_calendar_id) {
+        Connection conn = getSqlConnection();        
+        try{
+            PreparedStatement ps = conn.prepareStatement("SELECT DISTINCT * FROM invitation WHERE target_calendar_id=?");
+            ps.setInt(1, target_calendar_id);
+
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                
+                System.out.println(
+                        "Id invitación: " +    rs.getInt("invitation_id") + "\t" +
+                        "Id usuario origen: " +    rs.getString("origin_user_id") + "\t" +
+                        "Id usuario destino: " +    rs.getString("target_user_id") + "\t" +
+                        "Id calendario: " +    rs.getString("target_calendar_id") + "\t" +        
+                        "Respuesta: " +  rs.getString("reply")
+                );
+            }
+            
+            conn.close();
+            
+        } catch (SQLException e) {
+            //JOptionPane.showMessageDialog(null, "Error al insertar en la tabla CALENDAR: " + e.getMessage());
+            System.out.println("Error al responder en la tabla INVITATION: " + e.getMessage());
+        }
+    }
+    
     
     public void replyInvitation(int invitation_id, int reply) {
         Connection conn = getSqlConnection();        
@@ -106,6 +158,7 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
                         "Id de la invitación: " + rs.getInt("invitation_id") + "\t" +
                         "Id usuario origen: " + rs.getInt("origin_user_id") + "\t" +
                         "Id usuario destino: " + rs.getInt("target_user_id") + "\t" +
+                        "Id calendario: " +    rs.getString("target_calendar_id") + "\t" + 
                         "Respuesta: " + rs.getString("reply") 
             );
             }
@@ -132,6 +185,7 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
                         "Id de la invitación: " + rs.getInt("invitation_id") + "\t" +
                         "Id usuario origen: " + rs.getInt("origin_user_id") + "\t" +
                         "Id usuario destino: " + rs.getInt("target_user_id") + "\t" +
+                        "Id calendario: " +    rs.getString("target_calendar_id") + "\t" + 
                         "Respuesta: " + rs.getString("reply") 
             );
             }

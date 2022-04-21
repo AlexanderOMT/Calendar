@@ -85,7 +85,8 @@ public class Calendar {
         calPermitConnection.selectUsersPermitsByCalendarId(1);
         System.out.println("-------------------------------------------------");           
         */
-
+        
+        /*
         System.out.println("-------------------------------------------------"); 
         System.out.println("Seleccionar todas las invitaciones:");
         invConnection.selectAllInvitations();
@@ -93,12 +94,19 @@ public class Calendar {
         System.out.println("Seleccionar invitaciones por id:");
         invConnection.selectInvitationById(1);
         System.out.println("-------------------------------------------------"); 
+        
+        */
+
         System.out.println("Seleccionar por id de usuario origen y destino:");
-        invConnection.selectInvitationIdByOriginAndTarget(2, 3);
+        invConnection.selectInvitationIdByOriginAndTarget(1, 2);
         System.out.println("-------------------------------------------------"); 
 
         System.out.println("Responder a invitación por id de invitación:");
         invConnection.replyInvitation(1, 1);
-        System.out.println("-------------------------------------------------");         
+        System.out.println("-------------------------------------------------");    
+        
+        System.out.println("Selecciona todo por id de calendario:");
+        invConnection.selectAllByCalendarId(1);
+        System.out.println("-------------------------------------------------");           
     }
 }
