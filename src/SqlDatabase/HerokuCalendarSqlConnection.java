@@ -49,6 +49,30 @@ public class HerokuCalendarSqlConnection extends SqlConnection {
         
     }
     
+        public boolean selectCalendarIdBySpecialId(String special_id){
+        Connection conn = getSqlConnection();
+        
+        try{
+            PreparedStatement ps = conn.prepareStatement("SELECT calendar_id FROM calendar where special_id=?;");
+            ps.setString(1, special_id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+            System.out.println(
+                    "Id Calendario: " +
+                    rs.getString("calendar_id")
+            );
+            }
+            return true;
+            
+            
+        } catch (SQLException e) {
+            System.out.println("Error al seleccionar id de calendario por nombre"
+                    + " de calendario y por id especial"
+                    + " en la tabla CALENDAR: " + e.getMessage());
+        }
+        return false;
+    }
+    
     public void selectAllCalendars() {
         String sql = "SELECT * FROM calendar";
         try (Connection conn = this.getSqlConnection();
@@ -79,7 +103,7 @@ public class HerokuCalendarSqlConnection extends SqlConnection {
                 //JOptionPane.showMessageDialog(null, "Calendario insertado correctamente");
                 System.out.println("Calendario insertado correctamente");
             }else{
-                //JOptionPane.showMessageDialog(null, "Calendario insertado incorrectamente");
+                JOptionPane.showMessageDialog(null, "El calendario no se ha podido insertar. Inténtelo de nuevo.");
                 System.out.println("Calendario insertado incorrectamente");
             }
             
@@ -88,6 +112,8 @@ public class HerokuCalendarSqlConnection extends SqlConnection {
         } catch (SQLException e) {
             //JOptionPane.showMessageDialog(null, "Error al insertar en la tabla CALENDAR: " + e.getMessage());
             System.out.println("Error al insertar en la tabla CALENDAR: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "El calendario no se ha podido insertar. Inténtelo de nuevo.");
+
         }
     }
     

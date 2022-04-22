@@ -282,9 +282,10 @@ public class MainPage extends javax.swing.JFrame implements usuario{
             inputCalendarName.userSignedIn=userSigned;
             inputCalendarName.setVisible(true);
 
+            
 
             String calendarName = inputCalendarName.getCalendarName();
-            if(!calendarName.equals("")){
+            if(!calendarName.equals("") && inputCalendarName.getIdCalendarCreated() >0 && inputCalendarName.getCalendarExists()==true){
                 aux.add(inputCalendarName.getCalendarId());
                 añadirCalendario(calendarName);
             }

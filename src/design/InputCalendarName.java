@@ -18,7 +18,8 @@ public class InputCalendarName extends javax.swing.JDialog implements usuario{
     /**
      * Creates new form InputCalendarName
      */
-    int id_cal_recien_creado;
+    private int id_cal_recien_creado;
+    private boolean calendarExist=false;
     public User userSignedIn;
     public InputCalendarName(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -95,25 +96,28 @@ public class InputCalendarName extends javax.swing.JDialog implements usuario{
         pack();
     }// </editor-fold>                        
 
-    private void AddCalendarActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        // TODO add your handling code here:
-        
+    public int getIdCalendarCreated(){
+        return this.id_cal_recien_creado;
+    }
+    public boolean getCalendarExists(){
+        return this.calendarExist;
+    }
+    private void AddCalendarActionPerformed(java.awt.event.ActionEvent evt) { 
         String CalendarName = calendarName.getText();
-        //calendar calendar = new calendar(CalendarName);
-        /*
-        Controlar el caso de que el nombre del calendario sea repetido
-        para que no salte el mensaje de error por unique
-        */
-        //HerokuUsersSqlConnection conex = HerokuUsersSqlConnection.getInstance();
         HerokuCalendarPermitSqlConnection conex_cal_per = HerokuCalendarPermitSqlConnection.getInstance();
         HerokuCalendarSqlConnection conex_cal = HerokuCalendarSqlConnection.getInstance();
-        String new_email_id=CalendarName+userSignedIn.getEmail();
-        conex_cal.insertCalendar(CalendarName,new_email_id);
-        id_cal_recien_creado=conex_cal.getCalendar(new_email_id);
-        if(id_cal_recien_creado >0)
-            conex_cal_per.insertCalendarPermitTaskNull(userSignedIn.getId(), id_cal_recien_creado, "Admin");
-
-           this.setVisible(false);
+        String new_email_id=CalendarName.trim()+userSignedIn.getEmail();
+        /*control para que no se cree otro calendario, si ya existe otro con el mismo id*/
+        if(conex_cal.selectCalendarIdBySpecialId(new_email_id)){
+            this.calendarExist=true;
+            JOptionPane.showMessageDialog(null, "El calendario no se ha podido crear porque ya existe uno con el mismo nombre");
+        }else{
+            conex_cal.insertCalendar(CalendarName,new_email_id);
+            id_cal_recien_creado=conex_cal.getCalendar(new_email_id);
+            if(id_cal_recien_creado >0)
+                conex_cal_per.insertCalendarPermitTaskNull(userSignedIn.getId(), id_cal_recien_creado, "Admin");
+        }
+        this.setVisible(false);
 
     }                                           
 
