@@ -22,22 +22,51 @@ public class HerokuCalendarSqlConnection extends SqlConnection {
     }   
     
     
-    public void selectCalendarIdByOwnerNameAndCalendarName(String owner_name, String calendar_name){
-        String sql = "SELECT calendar_id FROM calendar where name='test_calendar' and email_owner='test_owner'";
-        try (Connection conn = this.getSqlConnection();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql)){
+    public void selectCalendarIdByNameAndSpecialId(String name, String special_id){
+        Connection conn = getSqlConnection();
+
+        try{
+            PreparedStatement ps = conn.prepareStatement("SELECT calendar_id FROM calendar where name=? and special_id=?;");
+            ps.setString(1, name);
+            ps.setString(2, special_id);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
             System.out.println(
                     "Id Calendario: " +
                     rs.getString("calendar_id")
             );
             }
+
+            conn.close();
+
+        } catch (SQLException e) {
+            System.out.println("Error al seleccionar id de calendario por nombre"
+                    + " de calendario y por id especial"
+                    + " en la tabla CALENDAR: " + e.getMessage());
+        }
+
+    }
+    
+    public boolean selectCalendarIdBySpecialId(String special_id){
+        Connection conn = getSqlConnection();
+
+        try{
+            PreparedStatement ps = conn.prepareStatement("SELECT calendar_id FROM calendar where special_id=?;");
+            ps.setString(1, special_id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+            System.out.println(
+                    "Id Calendario: " +
+                    rs.getString("calendar_id")
+            );
+            }
+            return true;
         } catch (SQLException e) {
             System.out.println("Error al seleccionar id de calendario por nombre"
                     + " de calendario y nombre de propietario"
                     + " en la tabla CALENDAR: " + e.getMessage());
         }
+        return false;
     }
    
     public void selectAllCalendars() {

@@ -145,27 +145,7 @@ public class HerokuUsersSqlConnection extends SqlConnection {
                 System.out.println("Error al eliminar por id en la tabla user: " + e.getMessage());
             }
     }
-     /*
-    public JSONObject getCalendarById(int id) throws ParseException {
-        String sql = "SELECT calendar FROM USERS WHERE id=" + Integer.toString(id);
-        JSONObject jsonObjectCalendar = null;
-        String stringCalendar = null;
-        try (Connection conn = this.getConexion();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql)){
 
-            if(rs.next()){stringCalendar = rs.getString("calendar");}
-
-            jsonObjectCalendar = (JSONObject) new JSONParser().parse(stringCalendar);
-                        
-        } catch (SQLException e) {
-                System.out.println("Error al obtener calendario por id en la tabla USERS: " + e.getMessage());
-            }
-        
-        return jsonObjectCalendar;
-    }
-
-*/
     
     public void insertUser(String name, String pswd, String email, boolean login) {
         Connection conn = getSqlConnection();        

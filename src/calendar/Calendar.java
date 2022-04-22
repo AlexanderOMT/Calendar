@@ -22,8 +22,8 @@ public class Calendar {
         
         //HerokuUsersSqlConnection userConnection = HerokuUsersSqlConnection.getInstance();
         //HerokuTaskSqlConnection taskConnection = HerokuTaskSqlConnection.getInstance();
-        //HerokuCalendarSqlConnection calConnection = HerokuCalendarSqlConnection.getInstance();
-        //HerokuCalendarPermitSqlConnection calPermitConnection = HerokuCalendarPermitSqlConnection.getInstance();
+        HerokuCalendarSqlConnection calConnection = HerokuCalendarSqlConnection.getInstance();
+        HerokuCalendarPermitSqlConnection calPermitConnection = HerokuCalendarPermitSqlConnection.getInstance();
         HerokuInvitationSqlConnection invConnection = HerokuInvitationSqlConnection.getInstance();
         /*
         User user = new User(1, "pwd1", "email1");
@@ -86,7 +86,7 @@ public class Calendar {
         System.out.println("-------------------------------------------------");           
         */
         
-        /*
+        
         
         System.out.println("-------------------------------------------------"); 
         System.out.println("Seleccionar todas las invitaciones:");
@@ -96,7 +96,7 @@ public class Calendar {
         invConnection.selectInvitationById(1);
         System.out.println("-------------------------------------------------"); 
         
-        */
+        
 
         System.out.println("Seleccionar por id de usuario origen y destino:");
         invConnection.selectInvitationIdByOriginAndTarget(1, 2);
