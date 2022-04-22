@@ -101,6 +101,7 @@ public class Sign_up extends javax.swing.JFrame implements usuario{
             }
         });
 
+        SignUp.setForeground(new java.awt.Color(0, 51, 255));
         SignUp.setText("Already have an account? Log in here!");
         SignUp.setBorderPainted(false);
         SignUp.setContentAreaFilled(false);
