@@ -41,6 +41,35 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
         }
     }
     
+    public void selectAllInvitationIdByUserId(Integer user_id) {
+        Connection conn = getSqlConnection();        
+        try{
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM invitation WHERE ("
+                    + "origin_user_id=? OR target_user_id=?"
+                    + ")");
+            ps.setInt(1, user_id);
+            ps.setInt(2, user_id);
+
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                
+                System.out.println(
+                        "Id invitación: " +    rs.getInt("invitation_id") + "\t" +
+                        "Id usuario origen: " +    rs.getString("origin_user_id") + "\t" +
+                        "Id usuario destino: " +    rs.getString("target_user_id") + "\t" +
+                        "Id calendario: " +    rs.getString("target_calendar_id") + "\t" +        
+                        "Respuesta: " +  rs.getString("reply")
+                );
+            }
+            
+            conn.close();
+            
+        } catch (SQLException e) {
+            //JOptionPane.showMessageDialog(null, "Error al insertar en la tabla CALENDAR: " + e.getMessage());
+            System.out.println("Error al responder en la tabla INVITATION: " + e.getMessage());
+        }
+    }
     
     // TODO
     public void selectCalendarId() {
@@ -63,7 +92,6 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
     }
     
     
-    // TODO
     public void selectAllByCalendarId(Integer target_calendar_id) {
         Connection conn = getSqlConnection();        
         try{

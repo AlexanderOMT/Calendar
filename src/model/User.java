@@ -1,5 +1,7 @@
 package model;
 
+import SqlDatabase.HerokuInvitationSqlConnection;
+
 public class User {
     
     private int id;
@@ -29,12 +31,27 @@ public class User {
         this.email = email;
         this.pwd = pwd;
     }
+    
+    public void replyInvitation(int calendar_id, boolean reply){
+        HerokuInvitationSqlConnection invConnection = HerokuInvitationSqlConnection.getInstance();
+        invConnection.replyInvitation(calendar_id, reply ? 1 : 0);
+    }
+    
+    public void inviteUsertoCalendar(User user, ButtonCalendar calendar){
+        HerokuInvitationSqlConnection invConnection = HerokuInvitationSqlConnection.getInstance();
+        // TODO asegurar que el id de calendario en la BD está en la clase ButtonCalendar
+        invConnection.insertInvitation(this.getId(), user.getId(), calendar.getId());
+    }
+    
+    
     public User getUser(){
         User user = new User();
         user.setEmail(email);
         user.setPwd(pwd);
         return user;
     }
+    
+    
     
     public int getId() {
         return id;

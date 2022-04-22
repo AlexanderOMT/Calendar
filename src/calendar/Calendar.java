@@ -87,6 +87,7 @@ public class Calendar {
         */
         
         /*
+        
         System.out.println("-------------------------------------------------"); 
         System.out.println("Seleccionar todas las invitaciones:");
         invConnection.selectAllInvitations();
@@ -107,6 +108,13 @@ public class Calendar {
         
         System.out.println("Selecciona todo por id de calendario:");
         invConnection.selectAllByCalendarId(1);
-        System.out.println("-------------------------------------------------");           
+        System.out.println("-------------------------------------------------");
+        
+        
+        
+        System.out.println("Selecciona todo por id de usuario:");
+        invConnection.selectAllInvitationIdByUserId(1);
+        System.out.println("-------------------------------------------------");
+        
     }
 }
