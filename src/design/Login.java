@@ -9,6 +9,7 @@ import SqlDatabase.HerokuUsersSqlConnection;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -29,6 +30,8 @@ public final class Login extends javax.swing.JFrame implements usuario{
     private User userSingedUp;
     public Login() {
         initComponents();
+        email.setToolTipText("Enter email");
+        contraseña.setToolTipText("Enter password");
         this.setLocationRelativeTo(null);
         this.setExtendedState(MAXIMIZED_BOTH);
         userSingedUp=userSigned;
@@ -165,7 +168,7 @@ public final class Login extends javax.swing.JFrame implements usuario{
                 .addComponent(Login)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(SignUp)
-                .addContainerGap(379, Short.MAX_VALUE))
+                .addContainerGap(370, Short.MAX_VALUE))
         );
 
         pack();
@@ -251,27 +254,19 @@ public final class Login extends javax.swing.JFrame implements usuario{
     }                                          
 
     private void emailFocusGained(java.awt.event.FocusEvent evt) {                                  
-        /* if(email.getText().equals("Write your email")){
-            email.setText("");
-        }*/
+        
     }                                 
 
     private void contraseñaFocusGained(java.awt.event.FocusEvent evt) {                                       
-        /* if(contraseña.getPassword().equals("jPasswordField1")){
-            contraseña.setText("");
-        } */
+        
     }                                      
 
     private void emailFocusLost(java.awt.event.FocusEvent evt) {                                
-        /* if(email.getText().equals("")){
-            email.setText("Write your email");
-        } */
+        
     }                               
 
     private void contraseñaFocusLost(java.awt.event.FocusEvent evt) {                                     
-        /* if(contraseña.getPassword().equals("")){
-            contraseña.setText("jPasswordField1");
-        } */
+        
     }                                    
 
     private void LoginKeyPressed(java.awt.event.KeyEvent evt) {                                 
@@ -342,6 +337,7 @@ public final class Login extends javax.swing.JFrame implements usuario{
     public void close(){
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 try {
                     confirmarSalida();
@@ -380,22 +376,16 @@ public final class Login extends javax.swing.JFrame implements usuario{
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        
+        //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Login().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Login().setVisible(true);
         });
     }
 
