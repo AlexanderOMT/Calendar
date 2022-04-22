@@ -103,7 +103,7 @@ public class InputCalendarName extends javax.swing.JDialog implements usuario{
         return this.calendarExist;
     }
     private void AddCalendarActionPerformed(java.awt.event.ActionEvent evt) { 
-        String CalendarName = calendarName.getText();
+        String CalendarName = this.calendarName.getText();
         HerokuCalendarPermitSqlConnection conex_cal_per = HerokuCalendarPermitSqlConnection.getInstance();
         HerokuCalendarSqlConnection conex_cal = HerokuCalendarSqlConnection.getInstance();
         String new_email_id=CalendarName.trim()+userSignedIn.getEmail();
@@ -130,8 +130,7 @@ public class InputCalendarName extends javax.swing.JDialog implements usuario{
         id_cal_recien_creado=conex_cal.getCalendar(new_email_id);
         if(id_cal_recien_creado >0)
             conex_cal_per.insertCalendarPermitTaskNull(userSignedIn.getId(), id_cal_recien_creado, "Admin");
-
-           this.setVisible(false);
+        this.setVisible(false);
     }                                      
 
 

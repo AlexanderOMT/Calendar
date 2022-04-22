@@ -425,15 +425,9 @@ public class MainPage extends javax.swing.JFrame implements usuario{
         });
         
         eliminar.addActionListener((java.awt.event.ActionEvent e) -> {
-            /*if(posicionCalendariox == 6 && posicionCalendarioy == 210){
-                posicionCalendariox -= 247;
-            } else if(posicionCalendariox != 6){
-                posicionCalendariox -= 247;
-            } else {
-                posicionCalendariox = 1241;
-                posicionCalendarioy -= 210;
-            }*/
-
+            int input = JOptionPane.showConfirmDialog(null, "¿Quieres eliminar este calendario?");
+        // 0=yes, 1=no, 2=cancel
+            if (input == 0) {
             boton1.setVisible(false);
             titulo.setVisible(false);
             eliminar.setVisible(false);
@@ -459,6 +453,7 @@ public class MainPage extends javax.swing.JFrame implements usuario{
             posicionCalendarioy = 39;
 
             initCalendars();
+            }
         });
         
     }
