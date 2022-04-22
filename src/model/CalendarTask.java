@@ -1,20 +1,19 @@
 package model;
 
+import SqlDatabase.HerokuTaskSqlConnection;
 import java.util.ArrayList;
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.HashMap;
+import java.sql.Timestamp;
 import java.util.Iterator;
-import java.util.Map;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
 public class CalendarTask{
     
-    private final Map<String, List<Task>> dateTasks = new HashMap<>();
+    private final ArrayList<Task> dateTasks = new ArrayList<>();
     private String name;
     private Integer id;
 
@@ -26,51 +25,30 @@ public class CalendarTask{
 
     
     // Método para modificar una tarea
-    public void setTask(String date, Integer position, Task newTask) {
-        Iterator i = dateTasks.entrySet().iterator();
-        List l = new ArrayList<>();
-        while(i.hasNext()) {
-            Map.Entry<String, List<Task>> entry = (Map.Entry)i.next();
-            if (entry.getKey().equals(date)) {
-                l = entry.getValue();
-                l.set(position, newTask);
-            }
+    public void setTask(Integer position, Task newTask) {
+        if(dateTasks.size() > position){
+            dateTasks.set(position, newTask);
         }
     }
     
     // Método para añadir una tarea
-    public void addTask(String date, Task t) {
-        Iterator i = dateTasks.entrySet().iterator();
-        List l = new ArrayList<>();
-        while (i.hasNext()) {
-            Map.Entry<String, List<Task>> entry = (Map.Entry)i.next();
-            if (entry.getKey().equals(date)) {
-                l = entry.getValue();
-                l.add(t);
-                break;
-            }
-        }
-        if (l.isEmpty()) {
-            l.add(t);
-        }
-        dateTasks.put(date, l);
+    public void addTask(Task t) {
+        dateTasks.add(t);
+        HerokuTaskSqlConnection htqc = new HerokuTaskSqlConnection();
+        htqc.insertTaskByTask(t);
     }
     
     // Método para obtener todas las tareas de una fecha
-    public List<Task> getTasks(String date) {
-        Iterator i = dateTasks.entrySet().iterator();
-        List l = new ArrayList<>();
+    public List<Task> getTasks(Timestamp date) {
+        Iterator i = dateTasks.iterator();
+        List<Task> dayTasks = new ArrayList<>();
         while (i.hasNext()) {
-            Map.Entry<String, List<Task>> entry = (Map.Entry)i.next();
-            if (entry.getKey().equals(date)) {
-                l = entry.getValue();
+            Task t = (Task)i.next();
+            if (t.getDate().equals(date)) {
+                dayTasks.add(t);
             }
         }
-        Iterator j = l.iterator();
-        while (j.hasNext()) {
-            Task t = (Task)j.next();
-        }
-        return l;
+        return dayTasks;
     }
     
         
@@ -83,7 +61,6 @@ public class CalendarTask{
         
         CalendarTask mapped = (CalendarTask) objectMapper.readValue(getJson.toJSONString(), CalendarTask.class);
         return mapped;
-        
     }
 
     public Integer getId(){
