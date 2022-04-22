@@ -1,0 +1,16 @@
+
+
+
+
+
+añadir:
+	- columna json para calendario en la tabla user
+		necesitamos subir a versión 5.7 sql
+	- clase de sqlconnection para poder elegir si establecer 	una conexión única y que no tengamos que conectar a 	la base de datos cada vez que hagamos consulta
+	- patron command para consultas sql ¿?
+	- patron observer para las invitaciones al calendario ¿?
+
+	- probar quitar límite de conexiones 
+		GRANT ON base_de_datos TO nombre_usuario WITH MAX_QUERIES_PER_HOUR 0;
+
+
