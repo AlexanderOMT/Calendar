@@ -6,27 +6,17 @@ package design;
 
 import SqlDatabase.HerokuCalendarPermitSqlConnection;
 import SqlDatabase.HerokuCalendarSqlConnection;
-import SqlDatabase.HerokuTaskSqlConnection;
 import SqlDatabase.HerokuUsersSqlConnection;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.event.ActionEvent;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
 import model.ButtonCalendar;
 import model.User;
 import model.Calendars;
@@ -35,7 +25,7 @@ import model.Calendars;
  *
  * @author Leyre
  */
-public class MainPage extends javax.swing.JFrame implements usuario{
+public final class MainPage extends javax.swing.JFrame implements usuario{
 
     int posicionCalendariox = 6;
     int posicionCalendarioy = 39;
@@ -44,7 +34,7 @@ public class MainPage extends javax.swing.JFrame implements usuario{
     HerokuCalendarPermitSqlConnection conex_cal_per;
     Calendars calendars = new Calendars();
     ArrayList<Integer> aux;
-    int id = 0;
+    int posicion = 0;
     /**
      * Creates new form MainPage
      */
@@ -282,10 +272,9 @@ public class MainPage extends javax.swing.JFrame implements usuario{
             inputCalendarName.userSignedIn=userSigned;
             inputCalendarName.setVisible(true);
 
-            
 
             String calendarName = inputCalendarName.getCalendarName();
-            if(!calendarName.equals("") && inputCalendarName.getIdCalendarCreated() >0 && inputCalendarName.getCalendarExists()==true){
+            if(!calendarName.equals("")){
                 aux.add(inputCalendarName.getCalendarId());
                 añadirCalendario(calendarName);
             }
@@ -347,6 +336,7 @@ public class MainPage extends javax.swing.JFrame implements usuario{
     public void close(){
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 confirmarSalida();
             }
@@ -370,22 +360,8 @@ public class MainPage extends javax.swing.JFrame implements usuario{
     }
     
     private void añadirCalendario(String calendarName){
-        /*JButton boton1 = new JButton();
-        boton1.setSize(233, 169);
-        JLabel titulo = new JLabel();
-        titulo.setSize(79, 25);
-        titulo.setText(calendarName);
-        titulo.setBorder(null);
-        JButton eliminar = new JButton();
-        eliminar.setIcon(new ImageIcon(getClass().getResource("/design/imagenes/basura.png"))); 
-        eliminar.setSize(79, 25);
-        eliminar.setBorder(null);
-        eliminar.setBorderPainted(false);
-        eliminar.setContentAreaFilled(false);
         
-        jPanel4.add(boton1);
-        jPanel4.add(titulo);
-        jPanel4.add(eliminar);*/
+        System.out.println("Posicion = " + posicion);
         
         ButtonCalendar calendar_aux = new ButtonCalendar();
      
@@ -397,13 +373,13 @@ public class MainPage extends javax.swing.JFrame implements usuario{
         jPanel4.add(titulo);
         jPanel4.add(eliminar);
         
-        if(id == aux.size()){
-            id--;
+        if(posicion == aux.size()){
+            posicion--;
         }
         
-        ButtonCalendar calendar = new ButtonCalendar(id, aux.get(id), boton1, titulo, eliminar, posicionCalendariox, posicionCalendarioy);
-        
-        id++;
+        ButtonCalendar calendar = new ButtonCalendar(posicion, aux.get(posicion), boton1, titulo, eliminar, posicionCalendariox, posicionCalendarioy);
+        System.out.println("Id del calendario = " + aux.get(posicion));
+        posicion++;
         
         calendars.addCalendar(calendar);
         
@@ -425,9 +401,7 @@ public class MainPage extends javax.swing.JFrame implements usuario{
         });
         
         eliminar.addActionListener((java.awt.event.ActionEvent e) -> {
-            int input = JOptionPane.showConfirmDialog(null, "¿Quieres eliminar este calendario?");
-        // 0=yes, 1=no, 2=cancel
-            if (input == 0) {
+          
             boton1.setVisible(false);
             titulo.setVisible(false);
             eliminar.setVisible(false);
@@ -443,7 +417,10 @@ public class MainPage extends javax.swing.JFrame implements usuario{
             conex_cal.deleteCalendarById(x);
             aux.remove(aux.indexOf(x));
          
-            id--;
+            if(posicion!=0){
+                posicion--;
+            }
+            
             
             jPanel4.removeAll();
             jPanel4.updateUI();
@@ -453,7 +430,6 @@ public class MainPage extends javax.swing.JFrame implements usuario{
             posicionCalendarioy = 39;
 
             initCalendars();
-            }
         });
         
     }
@@ -474,25 +450,19 @@ public class MainPage extends javax.swing.JFrame implements usuario{
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(MainPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        
+        //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    new MainPage().setVisible(true);
-                } catch (SQLException ex) {
-                    Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
+                new MainPage().setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }
