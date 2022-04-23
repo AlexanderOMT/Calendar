@@ -6,29 +6,20 @@ package design;
 
 import SqlDatabase.HerokuCalendarPermitSqlConnection;
 import SqlDatabase.HerokuCalendarSqlConnection;
-import SqlDatabase.HerokuTaskSqlConnection;
 import SqlDatabase.HerokuUsersSqlConnection;
 import static design.usuario.userSigned;
 import java.awt.Color;
-import java.awt.Dimension;
 import static java.awt.Frame.MAXIMIZED_BOTH;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.event.ActionEvent;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import model.ButtonCalendar;
 import model.User;
@@ -38,7 +29,7 @@ import model.Calendars;
  *
  * @author Leyre
  */
-public class MainPage2 extends javax.swing.JFrame {
+public final class MainPage2 extends javax.swing.JFrame {
 
     int posicionCalendariox = 6;
     int posicionCalendarioy = 39;
@@ -47,7 +38,7 @@ public class MainPage2 extends javax.swing.JFrame {
     HerokuCalendarPermitSqlConnection conex_cal_per;
     Calendars calendars = new Calendars();
     ArrayList<Integer> aux;
-    int id = 0;
+    int posicion = 0;
     /**
      * Creates new form MainPage
      */
@@ -102,11 +93,7 @@ public class MainPage2 extends javax.swing.JFrame {
         singout.setBorderPainted(false);
         singout.setContentAreaFilled(false);
         singout.setFocusPainted(false);
-        singout.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                singoutActionPerformed(evt);
-            }
-        });
+        singout.addActionListener((evt) -> this.singoutActionPerformed(evt));
 
         description.setEditable(false);
         description.setBackground(new java.awt.Color(235, 216, 189));
@@ -140,6 +127,7 @@ public class MainPage2 extends javax.swing.JFrame {
         configuration.setContentAreaFilled(false);
         configuration.setFocusable(false);
         configuration.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 configurationActionPerformed(evt);
             }
@@ -150,6 +138,7 @@ public class MainPage2 extends javax.swing.JFrame {
         alert.setContentAreaFilled(false);
         alert.setFocusable(false);
         alert.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 alertActionPerformed(evt);
             }
@@ -160,6 +149,7 @@ public class MainPage2 extends javax.swing.JFrame {
         users1.setContentAreaFilled(false);
         users1.setFocusPainted(false);
         users1.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 users1ActionPerformed(evt);
             }
@@ -297,7 +287,7 @@ public class MainPage2 extends javax.swing.JFrame {
     }                                            
 
     private void singoutActionPerformed(java.awt.event.ActionEvent evt) {                                        
-        HerokuUsersSqlConnection conex_us = HerokuUsersSqlConnection.getInstance();
+        conex_us = HerokuUsersSqlConnection.getInstance();
         try {
             if(conex_us.signOut2(this.userSignedUpmp)){
                 System.out.println("El signOut se ha realizado de forma correcta");
@@ -335,6 +325,7 @@ public class MainPage2 extends javax.swing.JFrame {
     public void close(){
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 confirmarSalida();
             }
@@ -375,13 +366,13 @@ public class MainPage2 extends javax.swing.JFrame {
         jPanel4.add(titulo);
         jPanel4.add(eliminar);
         
-        if(id == aux.size()){
-            id--;
+        if(posicion == aux.size()){
+            posicion--;
         }
         
-        ButtonCalendar calendar = new ButtonCalendar(id, aux.get(id), boton1, titulo, eliminar, posicionCalendariox, posicionCalendarioy);
+        ButtonCalendar calendar = new ButtonCalendar(posicion, aux.get(posicion), boton1, titulo, eliminar, posicionCalendariox, posicionCalendarioy);
         
-        id++;
+        posicion++;
         
         calendars.addCalendar(calendar);
         
@@ -427,7 +418,9 @@ public class MainPage2 extends javax.swing.JFrame {
             conex_cal.deleteCalendarById(x);
             aux.remove(aux.indexOf(x));
          
-            id--;
+            if(posicion!=0){
+                posicion--;
+            }
             
             jPanel4.removeAll();
             jPanel4.updateUI();
@@ -460,25 +453,19 @@ public class MainPage2 extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(MainPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        
+        //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    new MainPage2().setVisible(true);
-                } catch (SQLException ex) {
-                    Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
+                new MainPage2().setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }
