@@ -549,7 +549,8 @@ public final class calendarView extends javax.swing.JFrame {
 
     private ArrayList<Integer> loadTaks() {
         conex_task = HerokuTaskSqlConnection.getInstance();
-        ArrayList<Integer> taksCalendar=conex_task.selectAllTaksIdByIdCalendar(userSigned.getId());
+        ArrayList<Integer> taksCalendar=null;
+        //taksCalendar=conex_task.selectAllTaksIdByIdCalendar(userSigned.getId());
         return taksCalendar;
     }
 }

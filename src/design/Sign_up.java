@@ -114,7 +114,7 @@ public final class Sign_up extends javax.swing.JFrame implements usuario{
             }
         });
 
-        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/design/imagenes/sign_up.jpg"))); // NOI18N
+        //jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/design/imagenes/sign_up.jpg"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
