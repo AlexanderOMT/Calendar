@@ -6,12 +6,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class HerokuCalendarSqlConnection extends SqlConnection {
  
     private static HerokuCalendarSqlConnection instance;
         
-    private HerokuCalendarSqlConnection(){}
+    public HerokuCalendarSqlConnection(){}
     
     public static synchronized HerokuCalendarSqlConnection getInstance(){
         if(instance == null){
@@ -198,10 +200,12 @@ public class HerokuCalendarSqlConnection extends SqlConnection {
                 //JOptionPane.showMessageDialog(null, "No existe ningún usuario con ese id");
                 System.out.println("No existe ningún usuario con ese id");
             }
-            
+            conn.close();
         } catch (SQLException e) {
             System.out.println("Error al seleccionar por id  en la tabla CALENDAR: " + e.getMessage());
+            
         }
+        
         return calendar_name;
     }    
      

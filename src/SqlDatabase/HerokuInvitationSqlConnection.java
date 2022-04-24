@@ -78,7 +78,7 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
         ArrayList<Invitation> invitacion=new ArrayList<Invitation>();
         try{
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM invitation WHERE ("
-                    + "origin_user_id=? OR target_user_id=?"
+                    + "target_user_id=?"
                     + ")");
             ps.setInt(1, user_id);
             ps.setInt(2, user_id);

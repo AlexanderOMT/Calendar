@@ -135,7 +135,11 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
         alert.setFocusable(false);
         alert.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                alertActionPerformed(evt);
+                try {
+                    alertActionPerformed(evt);
+                } catch (SQLException ex) {
+                    Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
 
@@ -322,7 +326,7 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
         
     }                                             
 
-    private void alertActionPerformed(java.awt.event.ActionEvent evt) {                                      
+    private void alertActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {                                      
         // TODO add your handling code here:
         Notification notification = new Notification();
         notification.setVisible(true);

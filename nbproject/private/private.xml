@@ -3,19 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/oscar/Documents/Projects/Project/Calendar/src/SqlDatabase/HerokuTaskSqlConnection.java</file>
-            <file>file:/C:/Users/oscar/Documents/Projects/Project/Calendar/src/SqlDatabase/HerokuCalendarSqlConnection.java</file>
-            <file>file:/C:/Users/oscar/Documents/Projects/Project/Calendar/src/model/CalendarTask.java</file>
-            <file>file:/C:/Users/oscar/Documents/Projects/Project/Calendar/src/calendar/Calendar.java</file>
-            <file>file:/C:/Users/oscar/Documents/Projects/Project/Calendar/src/model/Task.java</file>
-            <file>file:/C:/Users/oscar/Documents/Projects/Project/Calendar/src/design/calendarView.java</file>
-            <file>file:/C:/Users/oscar/Documents/Projects/Project/Calendar/src/SqlDatabase/HerokuUsersSqlConnection.java</file>
-            <file>file:/C:/Users/oscar/Documents/Projects/Project/Calendar/src/SqlDatabase/HerokuCalendarPermitSqlConnection.java</file>
-            <file>file:/C:/Users/oscar/Documents/Projects/Project/Calendar/src/model/Calendars.java</file>
-            <file>file:/C:/Users/oscar/Documents/Projects/Project/Calendar/src/model/User.java</file>
-            <file>file:/C:/Users/oscar/Documents/Projects/Project/Calendar/src/SqlDatabase/HerokuInvitationSqlConnection.java</file>
-            <file>file:/C:/Users/oscar/Documents/Projects/Project/Calendar/src/model/ButtonCalendar.java</file>
-            <file>file:/C:/Users/oscar/Documents/Projects/Project/Calendar/src/design/InputCalendarName.java</file>
+            <file>file:/C:/Users/Minerva/Calendar/src/design/MainPage.java</file>
+            <file>file:/C:/Users/Minerva/Calendar/src/SqlDatabase/HerokuUsersSqlConnection.java</file>
+            <file>file:/C:/Users/Minerva/Calendar/src/design/Notification.java</file>
+            <file>file:/C:/Users/Minerva/Calendar/src/SqlDatabase/HerokuInvitationSqlConnection.java</file>
+            <file>file:/C:/Users/Minerva/Calendar/src/model/ButtonCalendar.java</file>
+            <file>file:/C:/Users/Minerva/Calendar/src/model/InvitationElement.java</file>
         </group>
     </open-files>
 </project-private>
