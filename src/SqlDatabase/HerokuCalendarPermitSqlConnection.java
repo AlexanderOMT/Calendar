@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
+import model.Task;
 
 
 public class HerokuCalendarPermitSqlConnection extends SqlConnection {
@@ -144,29 +146,34 @@ public class HerokuCalendarPermitSqlConnection extends SqlConnection {
         }
     }
 
-    
-    public void selectTaskByCalendarId(int id) {
+    public ArrayList<Task> selectTaskByCalendarId(int calendar_id) {
         Connection conn = getSqlConnection();
-        
+        ArrayList<Task> task = new ArrayList<>();
         try{
             PreparedStatement ps = conn.prepareStatement("SELECT DISTINCT calendar_permit.task_id FROM calendar_permit inner JOIN task\n" +
             "ON calendar_permit.calendar_id = task.task_id \n" +
-            "where task.task_id = " + Integer.toString(id));
+            "where task.task_id = " + Integer.toString(calendar_id));
             
             ResultSet rs = ps.executeQuery();
+            
+            HerokuTaskSqlConnection taskConn = HerokuTaskSqlConnection.getInstance();
             
             while (rs.next()) {
                 
                 System.out.println(
                         "Id de calendario: " +
-                        Integer.toString(id) + "\t" +
+                        Integer.toString(calendar_id) + "\t" +
                         "id de tarea: " +
                         rs.getString("task_id") + "\t"
-            );
+                );
+                task.add(taskConn.selectTaskById(rs.getInt("task_id")));
+ 
             }   
+            return task;
         } catch (SQLException e) {
             System.out.println("Error al seleccionar tarea(s) por id del calendario en la tabla CALENDAR_PERMIT: " + e.getMessage());
         }
+        return null;
 
     } 
 

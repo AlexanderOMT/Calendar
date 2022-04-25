@@ -1,13 +1,17 @@
 
 package SqlDatabase;
 
+import calendar.Calendar;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
+import model.CalendarTask;
 import model.Invitation;
+import model.Task;
 
 
 public class HerokuInvitationSqlConnection extends SqlConnection { 
@@ -90,12 +94,14 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
                         "Id invitación: " +    rs.getInt("invitation_id") + "\t" +
                         "Id usuario origen: " +    rs.getString("origin_user_id") + "\t" +
                         "Id usuario destino: " +    rs.getString("target_user_id") + "\t" +
-                        "Id calendario: " +    rs.getString("target_calendar_id") + "\t" +        
+                        "Id calendario: " +    rs.getString("target_calendar_id") + "\t" +  
+                        "rOL: " +    rs.getString("ROL") + "\t" +   
                         "Respuesta: " +  rs.getString("reply")
                 );
                 Invitation invite= 
                         new Invitation(rs.getInt("invitation_id"), rs.getInt("origin_user_id"),
-                                rs.getInt("target_user_id"), rs.getInt("target_calendar_id"), rs.getString("reply"));    
+                                rs.getInt("target_user_id"), 
+                                rs.getInt("target_calendar_id"), rs.getString("reply"), rs.getString("rol"));    
                 invitacion.add(invite);
                 }
             }
@@ -159,7 +165,8 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
     
     
     public void replyInvitation(int invitation_id, int reply) {
-        Connection conn = getSqlConnection();        
+        Connection conn = getSqlConnection(); 
+
         try{
             PreparedStatement ps = conn.prepareStatement("UPDATE invitation SET reply=? WHERE invitation_id=?");
             ps.setInt(1, reply);
@@ -173,7 +180,32 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
             System.out.println(" -> Respuesta Después de responder: ");
             this.selectReplyByInvitationId(invitation_id);
             
-            // this.deleteInvitationById(invitation_id);
+            
+            System.out.println(" Nota: Invitación eliminada de la BD");
+            this.deleteInvitationById(invitation_id);
+            
+            if(reply == 1){
+                HerokuCalendarPermitSqlConnection calendarPermit = HerokuCalendarPermitSqlConnection.getInstance();
+                HerokuCalendarSqlConnection calendar = HerokuCalendarSqlConnection.getInstance();
+
+                Invitation inv = this.selectInvitationById(invitation_id);
+                CalendarTask cal = calendar.selectCalendarById(inv.getCalendar_id());
+                
+                
+                
+                // TODO recuperar task de BD
+                
+                List<Task> allTasks =  cal.getAllTasks();
+                        
+                allTasks.forEach((task) -> {
+                    calendarPermit.insertCalendarPermit(inv.getOrigin_user(),
+                            inv.getCalendar_id(),
+                            task.getId(),
+                            inv.getRol());
+                });
+                
+                
+            }
             
             conn.close();
             
@@ -183,12 +215,16 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
         }
     }
     
-    public void insertInvitation(int origin_user_id, int target_user_id) {
+    public void insertInvitation(int origin_user_id, int target_user_id, int target_calendar_id, String rol) {
         Connection conn = getSqlConnection();        
         try{
-            PreparedStatement ps = conn.prepareStatement("INSERT INTO invitation(origin_user_id, target_user_id) VALUES(?,?)");
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO invitation(origin_user_id,"
+                    + "target_user_id, target_calendar_id, rol) VALUES(?,?,?,?)"
+            );
             ps.setInt(1, origin_user_id);
             ps.setInt(2, target_user_id);
+            ps.setInt(3, target_calendar_id);
+            ps.setString(4, rol);
             // ps.execute();  
             int res = ps.executeUpdate();
             
@@ -236,13 +272,13 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
 
     }        
     
-    public void selectInvitationById(int id) {
+    public Invitation selectInvitationById(int invitation_id) {
         Connection conn = getSqlConnection();
         
         try{
             PreparedStatement ps = conn.prepareStatement("SELECT DISTINCT * FROM invitation WHERE invitation_id=?");
                        
-            ps.setInt(1, id);
+            ps.setInt(1, invitation_id);
             ResultSet rs = ps.executeQuery();
             
             if (rs.next()) {
@@ -252,13 +288,19 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
                         "Id usuario origen: " + rs.getInt("origin_user_id") + "\t" +
                         "Id usuario destino: " + rs.getInt("target_user_id") + "\t" +
                         "Id calendario: " +    rs.getString("target_calendar_id") + "\t" + 
+                        "Rol: " + rs.getString("rol") + "\t" + 
                         "Respuesta: " + rs.getString("reply") 
-            );
+                );
+                return new Invitation(rs.getInt("invitation_id"), 
+                        rs.getInt("origin_user_id"), 
+                        rs.getInt("target_user_id"), rs.getInt("target_calendar_id"),  
+                        rs.getString("reply"), rs.getString("rol"));
             }
             
         } catch (SQLException e) {
             System.out.println("Error al seleccionar por id en la tabla INVITATION: " + e.getMessage());
         }
+        return null;
 
     }    
 
@@ -284,7 +326,7 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
 
     }
     
-    public void deleteInvitationById(int id) {
+    private void deleteInvitationById(int id) {
         Connection conn = getSqlConnection();
         
         try{

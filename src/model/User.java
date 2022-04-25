@@ -37,11 +37,11 @@ public class User {
         invConnection.replyInvitation(calendar_id, reply ? 1 : 0);
     }
     
-    public void inviteUsertoCalendar(User user, ButtonCalendar calendar){
+    public void inviteUsertoCalendar(User user, CalendarTask calendar, String rol){
         HerokuInvitationSqlConnection invConnection = HerokuInvitationSqlConnection.getInstance();
-        // TODO asegurar que el id de calendario en la BD está en la clase ButtonCalendar
-        //invConnection.insertInvitation(this.getId(), user.getId(), calendar.getId());
+        invConnection.insertInvitation(this.getId(), user.getId(), calendar.getId(), rol);
     }
+    
     
     
     public User getUser(){

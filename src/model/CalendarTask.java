@@ -1,28 +1,33 @@
 package model;
 
+import SqlDatabase.HerokuCalendarPermitSqlConnection;
+import SqlDatabase.HerokuCalendarSqlConnection;
 import SqlDatabase.HerokuTaskSqlConnection;
 import java.util.ArrayList;
 import java.util.List;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.Timestamp;
 import java.util.Iterator;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
 
 public class CalendarTask{
     
-    private final ArrayList<Task> dateTasks = new ArrayList<>();
-    private String name;
+    private ArrayList<Task> dateTasks = new ArrayList<>();
+    private final String name;
     private Integer id;
-
-    public CalendarTask (){}
     
     public CalendarTask (String name) {
         this.name = name;
     }
+    
+    public CalendarTask (String name, int id) {
+        this.name = name;
+        this.id = id;
+    }
 
+    // recuperar todas las task BD
+    public void retrieveTaskFromDB() {
+        HerokuCalendarPermitSqlConnection connToTask = HerokuCalendarPermitSqlConnection.getInstance();
+        dateTasks = connToTask.selectTaskByCalendarId(id);
+    }
     
     // Método para modificar una tarea
     public void setTask(Integer position, Task newTask) {
@@ -36,6 +41,24 @@ public class CalendarTask{
         dateTasks.add(t);
         HerokuTaskSqlConnection htqc = new HerokuTaskSqlConnection();
         htqc.insertTaskByTask(t);
+        // propuesta(Base de Datos desacoplado del modelo):
+        // htqc.insertTask(t.getName(), t.getDate(), t.getTag(), t.getPrior(), t.getDesc());
+
+    }
+    
+    // Método para obtener todas las tareas de un calendario
+    public List<Task> getAllTasks() {
+
+        retrieveTaskFromDB();
+        
+        Iterator i = dateTasks.iterator();
+        List<Task> dayTasks = new ArrayList<>();
+        while (i.hasNext()) {
+            Task t = (Task)i.next();
+            dayTasks.add(t);
+            
+        }
+        return dayTasks;
     }
     
     // Método para obtener todas las tareas de una fecha
@@ -50,18 +73,7 @@ public class CalendarTask{
         }
         return dayTasks;
     }
-    
-        
-    public static CalendarTask getCalendarFromJson(JSONObject jsonObject, String name) throws ParseException, JsonProcessingException{
-        
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-        JSONObject getJson = (JSONObject) jsonObject.get(name);
-        
-        CalendarTask mapped = (CalendarTask) objectMapper.readValue(getJson.toJSONString(), CalendarTask.class);
-        return mapped;
-    }
 
     public Integer getId(){
         return id;

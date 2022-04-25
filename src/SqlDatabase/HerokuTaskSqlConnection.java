@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.List;
 // import model.Tags;
 import model.Task;
 
@@ -39,12 +40,15 @@ public class HerokuTaskSqlConnection  extends SqlConnection {
         }
     }
     
-    public void insertTask(String name) {
+    public void insertTask(String name, Timestamp date, String tag, int priority, String description) {
         Connection conn = getSqlConnection();        
         try{
-            PreparedStatement ps = conn.prepareStatement("INSERT INTO task(name) VALUES(?)");
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO task(name, date, tag, priority, description) VALUES(?, ?, ?, ?, ?)");
             ps.setString(1, name);
-            // ps.execute();  
+            ps.setTimestamp(2, date); 
+            ps.setString(3, tag); 
+            ps.setInt(4, priority);
+            ps.setString(5, description);            
             int res = ps.executeUpdate();
             
             if(res > 0){
@@ -65,7 +69,7 @@ public class HerokuTaskSqlConnection  extends SqlConnection {
     
     public void insertTaskByTask(Task task) {
         Connection conn = getSqlConnection();  
-        System.out.println("Entra en insertar BD");
+        // System.out.println("Entra en insertar BD");
         // Object[] objArray = task.getTag().toArray();
         try{
             PreparedStatement ps = conn.prepareStatement("INSERT INTO task(name, date, tag, priority, description) VALUES(?, ?, ?, ?, ?)");
@@ -94,11 +98,11 @@ public class HerokuTaskSqlConnection  extends SqlConnection {
         }
     }
     
-    public void selectTaskById(int id) {
+    public Task selectTaskById(int task_id) {
         Connection conn = getSqlConnection();
         
         try{
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM task WHERE task_id=" + Integer.toString(id));
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM task WHERE task_id=" + Integer.toString(task_id));
             
             ResultSet rs = ps.executeQuery();
             
@@ -106,7 +110,15 @@ public class HerokuTaskSqlConnection  extends SqlConnection {
                 
                 System.out.println(rs.getInt("task_id") + "\t" +
                 rs.getString("name") + "\t"
-            );
+                );
+                return new Task(
+                        rs.getInt("task_id"),
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getTimestamp("date"),
+                        rs.getInt("priority"),
+                        rs.getString("tag")
+                );
             } else {
                 //JOptionPane.showMessageDialog(null, "No existe ningún usuario con ese id");
                 System.out.println("No existe ningún usuario con ese id");
@@ -115,8 +127,10 @@ public class HerokuTaskSqlConnection  extends SqlConnection {
         } catch (SQLException e) {
             System.out.println("Error al seleccionar por id  en la tabla TASK: " + e.getMessage());
         }
+        return null;
 
-    }            
+    }   
+    
  
     public void deleteTaskById(int id) {
         

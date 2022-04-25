@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.CalendarTask;
 
 public class HerokuCalendarSqlConnection extends SqlConnection {
  
@@ -113,11 +114,11 @@ public class HerokuCalendarSqlConnection extends SqlConnection {
         }
     }
     
-    public void selectCalendarById(int id) {
+    public CalendarTask selectCalendarById(int calendar_id) {
         Connection conn = getSqlConnection();
         
         try{
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM calendar WHERE calendar_id=" + Integer.toString(id));
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM calendar WHERE calendar_id=" + Integer.toString(calendar_id));
             
             ResultSet rs = ps.executeQuery();
             
@@ -125,8 +126,11 @@ public class HerokuCalendarSqlConnection extends SqlConnection {
                 
                 System.out.println(rs.getInt("calendar_id") + "\t" +
                 rs.getString("name") + "\t"
-            );
-            } else {
+                );
+                return new CalendarTask(rs.getString("name"), rs.getInt("calendar_id"));
+            } 
+            
+            else {
                 //JOptionPane.showMessageDialog(null, "No existe ningún usuario con ese id");
                 System.out.println("No existe ningún usuario con ese id");
             }
@@ -134,6 +138,7 @@ public class HerokuCalendarSqlConnection extends SqlConnection {
         } catch (SQLException e) {
             System.out.println("Error al seleccionar por id  en la tabla CALENDAR: " + e.getMessage());
         }
+        return null;
 
     }            
  
