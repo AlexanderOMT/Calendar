@@ -15,13 +15,15 @@ public class Invitation {
     private int target_user;
     private int calendar_id;
     private String reply;
+    private String rol;
 
-    public Invitation(int invitation_id, int origin_user, int target_user, int calendar_id, String reply) {
+    public Invitation(int invitation_id, int origin_user, int target_user, int calendar_id, String reply, String rol) {
         this.invitation_id = invitation_id;
         this.origin_user = origin_user;
         this.target_user = target_user;
         this.calendar_id = calendar_id;
         this.reply = reply;
+        this.rol=rol;
     }
 
     public int getInvitation_id() {
@@ -42,6 +44,14 @@ public class Invitation {
 
     public int getTarget_user() {
         return target_user;
+    }
+
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
     }
 
     public void setTarget_user(int target_user) {

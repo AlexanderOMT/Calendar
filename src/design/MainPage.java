@@ -278,7 +278,7 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
 
 
             String calendarName = inputCalendarName.getCalendarName();
-            if(!calendarName.equals("")){
+            if(!calendarName.equals("")&& inputCalendarName.getIdCalendarCreated() >0 && inputCalendarName.getCalendarExists()==true){
                 aux.add(inputCalendarName.getCalendarId());
                 añadirCalendario(calendarName);
             }
@@ -286,7 +286,7 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
         
         for (int x=0; x<aux.size(); x++){
             String calendar_name=conex_cal.getCalendarNameById(aux.get(x));
-            if(!(calendar_name == null) && inputCalendarName.getIdCalendarCreated() >0 && inputCalendarName.getCalendarExists()==true){
+            if(!(calendar_name == null)){
                 añadirCalendario(calendar_name);
             }else{
                 System.out.println("no existe un calendario con ese id");

@@ -5,6 +5,7 @@
  */
 package design;
 
+import SqlDatabase.HerokuCalendarPermitSqlConnection;
 import SqlDatabase.HerokuCalendarSqlConnection;
 import SqlDatabase.HerokuInvitationSqlConnection;
 import SqlDatabase.HerokuUsersSqlConnection;
@@ -37,6 +38,7 @@ public class Notification extends javax.swing.JDialog implements usuario{
     HerokuUsersSqlConnection conex_user= new HerokuUsersSqlConnection();
     HerokuCalendarSqlConnection conex_cal= new HerokuCalendarSqlConnection();
     HerokuInvitationSqlConnection conex_invite= new HerokuInvitationSqlConnection();
+    HerokuCalendarPermitSqlConnection conex_cal_per= new HerokuCalendarPermitSqlConnection();
     
     public Notification(java.awt.Frame parent, boolean modal) throws SQLException {
         super(parent, modal);
@@ -149,7 +151,7 @@ public class Notification extends javax.swing.JDialog implements usuario{
                 //2. conseguir nombre del calendario
                 String nombre_cal=conex_cal.getCalendarNameById(invite.getCalendar_id());
                 //3.frase <correo> te ha invitado a unirte a <nombre de calendario>
-                String frase_notificacion=correo + " te ha invitado a unirte a " + nombre_cal;
+                String frase_notificacion=correo + " te ha invitado a unirte a " + nombre_cal + "con el rol de " + invite.getRol();
 
                 JButton accept= aux.createButtonNotification(posxb1, posyb1relative);
                 JButton decline= aux.createButtonNotification(posxb2, posyb2relative);
@@ -168,8 +170,9 @@ public class Notification extends javax.swing.JDialog implements usuario{
                     } catch (SQLException ex) {
                         Logger.getLogger(Notification.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    //eliminar de la base de datos
+                    //cambiar en la bd
                     conex_invite.replyInvitation(invite.getInvitation_id(), 1);
+                    conex_cal_per.insertCalendarPermitTaskNull(userSigned.getId(), invite.getCalendar_id(), invite.getRol());
                 });
 
                 decline.addActionListener((java.awt.event.ActionEvent e) -> {

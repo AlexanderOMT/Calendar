@@ -95,7 +95,7 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
                 );
                 Invitation invite= 
                         new Invitation(rs.getInt("invitation_id"), rs.getInt("origin_user_id"),
-                                rs.getInt("target_user_id"), rs.getInt("target_calendar_id"), rs.getString("reply"));    
+                                rs.getInt("target_user_id"), rs.getInt("target_calendar_id"), rs.getString("reply"), rs.getString("rol"));    
                 invitacion.add(invite);
                 }
             }
@@ -121,7 +121,8 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
                         "Id usuario origen: " +    rs.getString("origin_user_id") + "\t" +
                         "Id usuario destino: " +    rs.getString("target_user_id") + "\t" +
                         "Id calendario: " +    rs.getString("target_calendar_id") + "\t" +        
-                        "Respuesta: " +  rs.getString("reply")
+                        "Respuesta: " +  rs.getString("reply") + "\t" +
+                        "Rol: " +  rs.getString("reply")
                 );
             }
         } catch (SQLException e) {

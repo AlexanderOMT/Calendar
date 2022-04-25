@@ -7,12 +7,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-
+/*
+Nombre de los roles de los usuarios en la bd:
+-administrador : "Admin"
+-editor : "Editor"
+-lector : "Lector" 
+*/
 public class HerokuCalendarPermitSqlConnection extends SqlConnection {
     
     private static HerokuCalendarPermitSqlConnection instance;
     
-    private HerokuCalendarPermitSqlConnection(){}
+    public HerokuCalendarPermitSqlConnection(){}
     
     public static synchronized HerokuCalendarPermitSqlConnection getInstance(){
         if(instance == null){
