@@ -7,12 +7,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-
+/*
+Nombre de los roles de los usuarios en la bd:
+-administrador : "Admin"
+-editor : "Editor"
+-lector : "Lector" 
+*/
 public class HerokuCalendarPermitSqlConnection extends SqlConnection {
     
     private static HerokuCalendarPermitSqlConnection instance;
     
-    private HerokuCalendarPermitSqlConnection(){}
+    public HerokuCalendarPermitSqlConnection(){}
     
     public static synchronized HerokuCalendarPermitSqlConnection getInstance(){
         if(instance == null){
@@ -100,20 +105,31 @@ public class HerokuCalendarPermitSqlConnection extends SqlConnection {
             ps.setString(4, rol);
             // ps.execute();  
             int res = ps.executeUpdate();
+
+            //conn.close();
             
-            if(res > 0){
-                //JOptionPane.showMessageDialog(null, "Permiso de calendario al usuario insertado correctamente");
-                System.out.println("Permiso de calendario al usuario insertado correctamente");
-            }else{
-                //JOptionPane.showMessageDialog(null, "Permiso de calendario al usuario insertado incorrectamente");
-                System.out.println("Permiso de calendario al usuario insertado incorrectamente");
-            }
+        } catch (SQLException e) {
+            
+        }
+    }
+    
+    public void insertCalendarPermitTaskNull(Integer user_id, Integer calendar_id, String rol) {
+        Connection conn = getSqlConnection();        
+        try{
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO calendar_permit(user_id, calendar_id, task_id, rol) VALUES(?,?,?,?)");
+            ps.setInt(1, user_id);
+            ps.setInt(2, calendar_id);
+            ps.setInt(3, 1);
+            ps.setString(4, rol);
+            // ps.execute();  
+            int res = ps.executeUpdate();
+            
+           
             
             //conn.close();
             
         } catch (SQLException e) {
-            //JOptionPane.showMessageDialog(null, "Error al insertar en la tabla CALENDAR_PERMIT: " + e.getMessage());
-            System.out.println("Error al insertar en la tabla CALENDAR_PERMIT: " + e.getMessage());
+            
         }
     }
 
@@ -237,13 +253,7 @@ public class HerokuCalendarPermitSqlConnection extends SqlConnection {
             
             int res = ps.executeUpdate();
             
-            if(res > 0){
-                //JOptionPane.showMessageDialog(null, "Usuario eliminado correctamente");
-                System.out.println("Permiso de calendario por id de calendario eliminado correctamente");
-            }else{
-                //JOptionPane.showMessageDialog(null, "Usuario eliminado incorrectamente");
-                System.out.println("Permiso de calendario por id eliminado incorrectamente");
-            }
+           
 
             conn.close();
             

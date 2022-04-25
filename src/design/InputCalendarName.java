@@ -5,6 +5,8 @@ import SqlDatabase.HerokuCalendarSqlConnection;
 import SqlDatabase.HerokuTaskSqlConnection;
 import SqlDatabase.HerokuUsersSqlConnection;
 import java.awt.Color;
+import java.awt.event.KeyEvent;
+import javax.swing.JOptionPane;
 import model.User;
 
 /**
@@ -16,8 +18,11 @@ public class InputCalendarName extends javax.swing.JDialog implements usuario{
     /**
      * Creates new form InputCalendarName
      */
-    
+    private int id_cal_recien_creado;
+    private boolean calendarExist=false;
     public User userSignedIn;
+    private boolean help=false;
+    
     public InputCalendarName(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -39,7 +44,6 @@ public class InputCalendarName extends javax.swing.JDialog implements usuario{
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         calendarName = new javax.swing.JTextField();
         AddCalendar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -51,6 +55,11 @@ public class InputCalendarName extends javax.swing.JDialog implements usuario{
         AddCalendar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AddCalendarActionPerformed(evt);
+            }
+        });
+        AddCalendar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                AddCalendarKeyPressed(evt);
             }
         });
 
@@ -87,30 +96,49 @@ public class InputCalendarName extends javax.swing.JDialog implements usuario{
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void AddCalendarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddCalendarActionPerformed
-        // TODO add your handling code here:
-        
-        String CalendarName = calendarName.getText();
-        //calendar calendar = new calendar(CalendarName);
-        
-        //HerokuUsersSqlConnection conex = HerokuUsersSqlConnection.getInstance();
+    public int getIdCalendarCreated(){
+        return this.id_cal_recien_creado;
+    }
+    public boolean getCalendarExists(){
+        return this.calendarExist;
+    }
+    
+    public boolean gethelp(){
+        return this.help;
+    }
+    
+    private void AddCalendarActionPerformed(java.awt.event.ActionEvent evt) { 
+        String CalendarName = this.calendarName.getText();
         HerokuCalendarPermitSqlConnection conex_cal_per = HerokuCalendarPermitSqlConnection.getInstance();
         HerokuCalendarSqlConnection conex_cal = HerokuCalendarSqlConnection.getInstance();
-        HerokuTaskSqlConnection conex_task = HerokuTaskSqlConnection.getInstance();
+        String new_email_id=CalendarName.trim()+userSignedIn.getEmail();
+        /*control para que no se cree otro calendario, si ya existe otro con el mismo id*/
+        boolean verdadero=conex_cal.selectCalendarIdBySpecialId(new_email_id);
+        if(verdadero == true){
+            this.calendarExist=true;
+            JOptionPane.showMessageDialog(null, "El calendario no se ha podido crear porque ya existe uno con el mismo nombre");
+        }else{
+            conex_cal.insertCalendar(CalendarName,new_email_id);
+            id_cal_recien_creado=conex_cal.getCalendar(new_email_id);
+            if(id_cal_recien_creado >0)
+                conex_cal_per.insertCalendarPermitTaskNull(userSignedIn.getId(), id_cal_recien_creado, "Admin");
+        }
+        this.setVisible(false);
+        this.help=true;
+    }                                   
+
+    private void AddCalendarKeyPressed(java.awt.event.KeyEvent evt) {                                       
+        String CalendarName = calendarName.getText();
+        HerokuCalendarPermitSqlConnection conex_cal_per = HerokuCalendarPermitSqlConnection.getInstance();
+        HerokuCalendarSqlConnection conex_cal = HerokuCalendarSqlConnection.getInstance();
         String new_email_id=CalendarName+userSignedIn.getEmail();
         conex_cal.insertCalendar(CalendarName,new_email_id);
-        System.out.println("ha llegado");
-        int id_cal_recien_creado=conex_cal.getCalendar(new_email_id);
+        id_cal_recien_creado=conex_cal.getCalendar(new_email_id);
         if(id_cal_recien_creado >0)
-            conex_cal_per.insertCalendarPermit(userSignedIn.getId(), id_cal_recien_creado, 1, "Admin");
-       
-        /*
-        Controlar que no este vacio
-        */
+            conex_cal_per.insertCalendarPermitTaskNull(userSignedIn.getId(), id_cal_recien_creado, "Admin");
            this.setVisible(false);
-        
-    }//GEN-LAST:event_AddCalendarActionPerformed
+    }                                      
+
 
     
     
@@ -118,16 +146,14 @@ public class InputCalendarName extends javax.swing.JDialog implements usuario{
         return calendarName.getText();
     }
     
+    public int getCalendarId(){
+        return id_cal_recien_creado;
+    }
     
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {

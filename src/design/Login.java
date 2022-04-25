@@ -6,19 +6,23 @@
 package design;
 
 import SqlDatabase.HerokuUsersSqlConnection;
+import java.awt.Color;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import model.User;
 
 /**
  *
  * @author TESTER
  */
-public class Login extends javax.swing.JFrame implements usuario{
+public final class Login extends javax.swing.JFrame implements usuario{
 
     /**
      * Creates new form Login
@@ -27,7 +31,11 @@ public class Login extends javax.swing.JFrame implements usuario{
     public Login() {
         initComponents();
         this.setLocationRelativeTo(null);
+        Color color = new Color(255,255,255);
+        this.getContentPane().setBackground(color);
         this.setExtendedState(MAXIMIZED_BOTH);
+        userSingedUp=userSigned;
+        close();
     }
 
     /**
@@ -101,8 +109,12 @@ public class Login extends javax.swing.JFrame implements usuario{
                 LoginActionPerformed(evt);
             }
         });
+        Login.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                LoginKeyPressed(evt);
+            }
+        });
 
-        SignUp.setForeground(new java.awt.Color(51, 102, 255));
         SignUp.setText("Dont have an account? Join free today");
         SignUp.setBorderPainted(false);
         SignUp.setContentAreaFilled(false);
@@ -129,11 +141,12 @@ public class Login extends javax.swing.JFrame implements usuario{
                             .addComponent(jLabel4)
                             .addComponent(jLabel5)
                             .addComponent(contraseña)
-                            .addComponent(email)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(101, 101, 101)
-                        .addComponent(SignUp)))
-                .addGap(38, 38, 38))
+                            .addComponent(email))
+                        .addGap(38, 38, 38))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(SignUp)
+                        .addGap(75, 75, 75))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -160,109 +173,103 @@ public class Login extends javax.swing.JFrame implements usuario{
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    private void emailActionPerformed(java.awt.event.ActionEvent evt) {                                      
 
-    private void emailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emailActionPerformed
+    }                                     
 
-    }//GEN-LAST:event_emailActionPerformed
-
-    private void SignUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SignUpActionPerformed
+    private void SignUpActionPerformed(java.awt.event.ActionEvent evt) {                                       
         Sign_up su = new Sign_up();
         su.setVisible(true);
         this.setVisible(false);
-    }//GEN-LAST:event_SignUpActionPerformed
+    }                                      
 
-    private void LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginActionPerformed
+    private void LoginActionPerformed(java.awt.event.ActionEvent evt) {                                      
         String email_text= email.getText();
         String contraseña_text = String.valueOf(contraseña.getPassword());
-        
-        
-        /*Pattern pat_email = Pattern.compile("[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,4}");
-        Matcher mat_email = pat_email.matcher(email_text);
-        Pattern pat_password = Pattern.compile("^(?=\\w*\\d)(?=\\w*[A-Z])(?=\\w*[a-z])\\S{8,15}$");
-        Matcher mat_password = pat_password.matcher(contraseña_text);
-        if(email_text.isEmpty()){
-            JOptionPane.showMessageDialog(null, "El correo es obligatorio");
-            System.out.println("El correo es obligatorio");
-        }else if(!mat_email.matches()){
-            JOptionPane.showMessageDialog(null, "Se esperaba una dirección de correo electrónico");
-            System.out.println("Se esperaba una dirección de correo electrónico");
-        }else if(contraseña_text.isEmpty()){
-            JOptionPane.showMessageDialog(null, "La contraseña es obligatoria");
-            System.out.println("La contraseña es obligatoria");
-        }else if(contraseña_text.length() < 8){
-            JOptionPane.showMessageDialog(null, "La contraseña debe tener más de 8 dígitos");
-            System.out.println("La contraseña debe tener más de 8 dígitos");
-        }else if(contraseña_text.length() > 15){
-            JOptionPane.showMessageDialog(null, "La contraseña debe tener menos de 15 dígitos");
-            System.out.println("La contraseña debe tener menos de 15 dígitos");
-        }else if(!mat_password.matches()){
-            JOptionPane.showMessageDialog(null, "Se esperaba una contraseña con mínimo una minúscula, una masyúscula, un dígito numérico y sin espacios");
-            System.out.println("Se esperaba una contraseña con mínimo una minúscula, una masyúscula, un dígito numérico y sin espacios");
-        }else{*/
-            System.out.println("Email = " + email_text);
-            System.out.println("Contraseña = " + contraseña_text);
-            HerokuUsersSqlConnection conex_us = HerokuUsersSqlConnection.getInstance();
-            /*this.userSignedIn.setEmail(email_text);
-            this.userSignedIn.setPwd(contraseña_text);*/
+
+        HerokuUsersSqlConnection conex_us = HerokuUsersSqlConnection.getInstance();
             
-            /*try {
-                this.userSignedIn.setId(conex_us.getUserIdByEmail(email_text));
-                System.out.println("se ha seteado el id del usuario!!");
-            } catch (SQLException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            }*/
             try {
                 userSigned.setEmail(email_text);
                 userSigned.setPwd(contraseña_text);
                 userSigned.setId(conex_us.getUserIdByEmail(email_text));
-                System.out.println("el ide del usuario insertador es: "+userSigned.getId());
-                //this.userSignedIn.toString();
                 userSingedUp=userSigned;
                 if(conex_us.login(this.userSingedUp)){
-                    JOptionPane.showMessageDialog(null, "Login correcto");
-                    System.out.println("Login correcto");
                     MainPage mp = new MainPage();                     
                     mp.setVisible(true);
                     this.setVisible(false);
-                }else {
-                    JOptionPane.showMessageDialog(null, "Este usuario no esta registrado. Por favor, registrese.");
-                    System.out.println("Este usuario no esta registrado. Por favor, registrese.");                    
                 }
-            } catch (SQLException ex) {
+            }catch (SQLException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InterruptedException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-        }
-       //  }
-    }//GEN-LAST:event_LoginActionPerformed
+            }
 
-    private void contraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contraseñaActionPerformed
+    }                                     
+
+    private void contraseñaActionPerformed(java.awt.event.ActionEvent evt) {                                           
         
-    }//GEN-LAST:event_contraseñaActionPerformed
+    }                                          
 
-    private void emailFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_emailFocusGained
-        /* if(email.getText().equals("Write your email")){
-            email.setText("");
-        }*/
-    }//GEN-LAST:event_emailFocusGained
+    private void emailFocusGained(java.awt.event.FocusEvent evt) {                                  
 
-    private void contraseñaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_contraseñaFocusGained
-        /* if(contraseña.getPassword().equals("jPasswordField1")){
-            contraseña.setText("");
-        } */
-    }//GEN-LAST:event_contraseñaFocusGained
+    }                                 
 
-    private void emailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_emailFocusLost
-        /* if(email.getText().equals("")){
-            email.setText("Write your email");
-        } */
-    }//GEN-LAST:event_emailFocusLost
+    private void contraseñaFocusGained(java.awt.event.FocusEvent evt) {                                       
+    }                                      
 
-    private void contraseñaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_contraseñaFocusLost
-        /* if(contraseña.getPassword().equals("")){
-            contraseña.setText("jPasswordField1");
-        } */
-    }//GEN-LAST:event_contraseñaFocusLost
+    private void emailFocusLost(java.awt.event.FocusEvent evt) {                                
+
+    }                               
+
+    private void contraseñaFocusLost(java.awt.event.FocusEvent evt) {                                     
+
+    }                                    
+
+    private void LoginKeyPressed(java.awt.event.KeyEvent evt) {                                 
+        String email_text= email.getText();
+        String contraseña_text = String.valueOf(contraseña.getPassword());
+
+            HerokuUsersSqlConnection conex_us = HerokuUsersSqlConnection.getInstance();
+
+            try {
+                userSigned.setEmail(email_text);
+                userSigned.setPwd(contraseña_text);
+                userSigned.setId(conex_us.getUserIdByEmail(email_text));
+
+                userSingedUp=userSigned;
+                if(conex_us.login(this.userSingedUp)){
+                    MainPage mp = new MainPage();                     
+                    mp.setVisible(true);
+                    this.setVisible(false);
+                }
+            }catch (SQLException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        //  }
+
+       //  }
+    }                                
+    
+    public void close(){
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                try {
+                    confirmarSalida();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+    }
+    
+    public void confirmarSalida() throws SQLException {
+        HerokuUsersSqlConnection conex = HerokuUsersSqlConnection.getInstance();
+        if(conex.signOut2(userSingedUp)){
+            
+            this.setVisible(false);
+            System.exit(0);
+        }
+    }
     
     /**
      * @param args the command line arguments

@@ -4,6 +4,7 @@ import design.Login;
 
 import SqlDatabase.HerokuCalendarPermitSqlConnection;
 import SqlDatabase.HerokuCalendarSqlConnection;
+import SqlDatabase.HerokuInvitationSqlConnection;
 import SqlDatabase.HerokuTaskSqlConnection;
 import SqlDatabase.HerokuUsersSqlConnection;
 import design.Login;
@@ -23,7 +24,7 @@ public class Calendar {
         //HerokuTaskSqlConnection taskConnection = HerokuTaskSqlConnection.getInstance();
         HerokuCalendarSqlConnection calConnection = HerokuCalendarSqlConnection.getInstance();
         HerokuCalendarPermitSqlConnection calPermitConnection = HerokuCalendarPermitSqlConnection.getInstance();
-        
+        HerokuInvitationSqlConnection invConnection = HerokuInvitationSqlConnection.getInstance();
         /*
         User user = new User(1, "pwd1", "email1");
         Task task = new Task("Tarea1", "Tarea1", "01:10", 1);
@@ -54,7 +55,7 @@ public class Calendar {
         //calPermitConnection.insertCalendarPermit(10, 3, 3, "Admin");
         //calPermitConnection.insertCalendarPermit(10, 1, 2, "Editor");
  
-        
+        /*
         System.out.println("Seleccionar todos permnisos de calendario:");        
         calPermitConnection.selectAllCalendarsPermits();
         System.out.println("-------------------------------------------------");                
@@ -64,7 +65,7 @@ public class Calendar {
         System.out.println("-------------------------------------------------");                
      
         System.out.println("Seleccionar id de un calendario por nombre de propietario y nombre de calendario:");
-        calConnection.selectCalendarIdByOwnerNameAndCalendarName("test_owner", "test_calendar");
+        calConnection.selectCalendarIdByNameAndSpecialId("b", "bnull");
         System.out.println("-------------------------------------------------");
         
         System.out.println("Seleccionar tareas de uno calendario por id de calendario:");
@@ -83,6 +84,37 @@ public class Calendar {
         System.out.println("Seleccionar permisos usuarios por id de calendario:");
         calPermitConnection.selectUsersPermitsByCalendarId(1);
         System.out.println("-------------------------------------------------");           
+        */
+        
+        
+        
+        System.out.println("-------------------------------------------------"); 
+        System.out.println("Seleccionar todas las invitaciones:");
+        invConnection.selectAllInvitations();
+        System.out.println("-------------------------------------------------"); 
+        System.out.println("Seleccionar invitaciones por id:");
+        invConnection.selectInvitationById(1);
+        System.out.println("-------------------------------------------------"); 
+        
+        
+
+        System.out.println("Seleccionar por id de usuario origen y destino:");
+        invConnection.selectInvitationIdByOriginAndTarget(1, 2);
+        System.out.println("-------------------------------------------------"); 
+
+        System.out.println("Responder a invitación por id de invitación:");
+        invConnection.replyInvitation(1, 1);
+        System.out.println("-------------------------------------------------");    
+        
+        System.out.println("Selecciona todo por id de calendario:");
+        invConnection.selectAllByCalendarId(1);
+        System.out.println("-------------------------------------------------");
+        
+        
+        
+        System.out.println("Selecciona todo por id de usuario:");
+        invConnection.selectAllInvitationIdByUserId(1);
+        System.out.println("-------------------------------------------------");
         
     }
 }
