@@ -286,7 +286,7 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
         
         for (int x=0; x<aux.size(); x++){
             String calendar_name=conex_cal.getCalendarNameById(aux.get(x));
-            if(!(calendar_name == null)){
+            if(!(calendar_name == null) && inputCalendarName.getIdCalendarCreated() >0 && inputCalendarName.getCalendarExists()==true){
                 añadirCalendario(calendar_name);
             }else{
                 System.out.println("no existe un calendario con ese id");
@@ -405,35 +405,39 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
         });
         
         eliminar.addActionListener((java.awt.event.ActionEvent e) -> {
-          
-            boton1.setVisible(false);
-            titulo.setVisible(false);
-            eliminar.setVisible(false);
-        
-            ArrayList<ButtonCalendar> a = calendars.getCalendars();
-            int x = 0;
-            for(int i = 0; i < aux.size(); i++){
-                if(a.get(i).getTitulo().getText().equals(titulo.getText())){
-                   x = a.get(i).getId();
-                }
-            }
-            
-            conex_cal.deleteCalendarById(x);
-            aux.remove(aux.indexOf(x));
-         
-            if(posicion!=0){
-                posicion--;
-            }
-            
-            
-            jPanel4.removeAll();
-            jPanel4.updateUI();
-            jPanel4.repaint();
-            
-            posicionCalendariox = 6;
-            posicionCalendarioy = 39;
+           int input = JOptionPane.showConfirmDialog(null, "¿Quieres eliminar este calendario?");
+        // 0=yes, 1=no, 2=cancel
+            if (input == 0) {
 
-            initCalendars();
+                boton1.setVisible(false);
+                titulo.setVisible(false);
+                eliminar.setVisible(false);
+
+                ArrayList<ButtonCalendar> a = calendars.getCalendars();
+                int x = 0;
+                for(int i = 0; i < aux.size(); i++){
+                    if(a.get(i).getTitulo().getText().equals(titulo.getText())){
+                       x = a.get(i).getId();
+                    }
+                }
+
+                conex_cal.deleteCalendarById(x);
+                aux.remove(aux.indexOf(x));
+
+                if(posicion!=0){
+                    posicion--;
+                }
+            
+
+                jPanel4.removeAll();
+                jPanel4.updateUI();
+                jPanel4.repaint();
+
+                posicionCalendariox = 6;
+                posicionCalendarioy = 39;
+
+                initCalendars();
+            }
         });
         
     }
