@@ -81,7 +81,6 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
                     + "target_user_id=?"
                     + ")");
             ps.setInt(1, user_id);
-            ps.setInt(2, user_id);
 
             ResultSet rs = ps.executeQuery();
              

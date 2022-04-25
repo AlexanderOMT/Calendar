@@ -191,19 +191,8 @@ public class Notification extends javax.swing.JDialog implements usuario{
     
     public void getNotifications() throws SQLException{
         //conseguir todas las invitaciones sin responder
-        //invitations = conex_invite.getAllInvitationIdByUserId(userSigned.getId());
-        //invitations = conex_invite.getAllInvitationIdByUserId(4);
-        //loadNotifications();
-        String frase_notificacion="minervaqf8 te ha invitado a unirte a EXAMENES";
-        ButtonCalendar aux= new ButtonCalendar();
-                JButton accept= aux.createButtonNotification(posxb1, 15);
-               accept.setText("Join");
-               accept.setBackground(new Color(1011322298));
-                    JButton decline= aux.createButtonNotification(posxb2, 15);
-                 decline.setText("Decline");
-                    JScrollPane text = aux.createTextFieldNotification(posxtext,10, frase_notificacion);
-                    
-                    jPanel2.add(accept); jPanel2.add(decline); jPanel2.add(text);
+        invitations = conex_invite.getAllInvitationIdByUserId(userSigned.getId());
+        loadNotifications();
     }
        
         
