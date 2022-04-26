@@ -68,9 +68,7 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
                         "Respuesta: " +  rs.getString("reply")
                 );
             }
-            
-            conn.close();
-            
+                        
         } catch (SQLException e) {
             //JOptionPane.showMessageDialog(null, "Error al insertar en la tabla CALENDAR: " + e.getMessage());
             System.out.println("Error al responder en la tabla INVITATION: " + e.getMessage());
@@ -95,7 +93,7 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
                         "Id usuario origen: " +    rs.getString("origin_user_id") + "\t" +
                         "Id usuario destino: " +    rs.getString("target_user_id") + "\t" +
                         "Id calendario: " +    rs.getString("target_calendar_id") + "\t" +  
-                        "rOL: " +    rs.getString("ROL") + "\t" +   
+                        "Rol: " +    rs.getString("rol") + "\t" +   
                         "Respuesta: " +  rs.getString("reply")
                 );
                 Invitation invite= 
@@ -105,9 +103,7 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
                 invitacion.add(invite);
                 }
             }
-            
-            conn.close();
-            
+                        
             
         } catch (SQLException e) {
             //JOptionPane.showMessageDialog(null, "Error al insertar en la tabla CALENDAR: " + e.getMessage());
@@ -126,7 +122,8 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
                         "Id invitación: " +    rs.getInt("invitation_id") + "\t" +
                         "Id usuario origen: " +    rs.getString("origin_user_id") + "\t" +
                         "Id usuario destino: " +    rs.getString("target_user_id") + "\t" +
-                        "Id calendario: " +    rs.getString("target_calendar_id") + "\t" +        
+                        "Id calendario: " +    rs.getString("target_calendar_id") + "\t" +  
+                        "Rol: " +    rs.getString("rol") + "\t" +   
                         "Respuesta: " +  rs.getString("reply")
                 );
             }
@@ -154,9 +151,7 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
                         "Respuesta: " +  rs.getString("reply")
                 );
             }
-            
-            conn.close();
-            
+                        
         } catch (SQLException e) {
             //JOptionPane.showMessageDialog(null, "Error al insertar en la tabla CALENDAR: " + e.getMessage());
             System.out.println("Error al responder en la tabla INVITATION: " + e.getMessage());
@@ -190,9 +185,7 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
 
                 Invitation inv = this.selectInvitationById(invitation_id);
                 CalendarTask cal = calendar.selectCalendarById(inv.getCalendar_id());
-                
-                
-                
+
                 // TODO recuperar task de BD
                 
                 List<Task> allTasks =  cal.getAllTasks();
@@ -203,11 +196,9 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
                             task.getId(),
                             inv.getRol());
                 });
-                
-                
+      
             }
             
-            conn.close();
             
         } catch (SQLException e) {
             //JOptionPane.showMessageDialog(null, "Error al insertar en la tabla CALENDAR: " + e.getMessage());
@@ -235,9 +226,7 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
                 //JOptionPane.showMessageDialog(null, "Calendario insertado incorrectamente");
                 System.out.println("Invitación insertado incorrectamente");
             }
-            
-            conn.close();
-            
+                        
         } catch (SQLException e) {
             //JOptionPane.showMessageDialog(null, "Error al insertar en la tabla CALENDAR: " + e.getMessage());
             System.out.println("Error al insertar en la tabla INVITATION: " + e.getMessage());
@@ -262,7 +251,7 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
                         "Id usuario destino: " + rs.getInt("target_user_id") + "\t" +
                         "Id calendario: " +    rs.getString("target_calendar_id") + "\t" + 
                         "Respuesta: " + rs.getString("reply") 
-            );
+                );
             }
             
             
@@ -316,9 +305,8 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
                 
                 System.out.println(
                         "Respuesta: " + rs.getString("reply") 
-            );
+                );
             }
-            conn.close();
             
         } catch (SQLException e) {
             System.out.println("Error al seleccionar Respuesta por id de invitación en la tabla INVITATION: " + e.getMessage());
@@ -326,12 +314,12 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
 
     }
     
-    private void deleteInvitationById(int id) {
+    private void deleteInvitationById(int invitation_id) {
         Connection conn = getSqlConnection();
         
         try{
-            PreparedStatement ps = conn.prepareStatement("DELETE FROM calendar WHERE invitation_id=?");
-            ps.setInt(1, id);
+            PreparedStatement ps = conn.prepareStatement("DELETE FROM invitation WHERE invitation_id=?");
+            ps.setInt(1, invitation_id);
             int res = ps.executeUpdate();
                         
             if(res > 0){
@@ -341,11 +329,9 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
                 //JOptionPane.showMessageDialog(null, "Usuario eliminado incorrectamente");
                 System.out.println("Invitación eliminado incorrectamente");
             }
-            
-            conn.close();
-            
+                        
         } catch (SQLException e) {
-            System.out.println("Error al eliminar por id en la tabla INVITATION: " + e.getMessage());
+            System.out.println("Error al eliminar por id en la tabla INVITATION: " + e.getMessage() + "(Valor del id: "+ invitation_id +" )");
         }
 
     }    
