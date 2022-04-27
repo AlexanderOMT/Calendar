@@ -23,8 +23,7 @@ public class Invitation {
         this.target_user = target_user;
         this.calendar_id = calendar_id;
         this.reply = reply;
-        this.rol = rol;
-
+        this.rol=rol;
     }
 
     public int getInvitation_id() {
@@ -47,6 +46,14 @@ public class Invitation {
         return target_user;
     }
 
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
+    }
+
     public void setTarget_user(int target_user) {
         this.target_user = target_user;
     }
@@ -66,11 +73,5 @@ public class Invitation {
     public void setReply(String reply) {
         this.reply = reply;
     }
-    public String getRol() {
-        return rol;
-    }
-
-    public void setRol(String rol) {
-        this.reply = rol;
-    }        
+            
 }

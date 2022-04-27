@@ -1,0 +1,24 @@
+
+
+Mysql Database 8.0.23 (Json support):
+
+        user: e3uv1gsfsu6r8v6j
+
+        password: ud6g593tlbsh3knw
+
+        hosting: i54jns50s3z6gbjt.chr7pe7iynqr.eu-west-1.rds.amazonaws.com
+
+        database: iy5jkxqnaep9jd04
+
+
+Mysql Database 5.65:
+
+	user: b75ef6e13a3c31
+
+	password: 81304c03 
+
+	hosting: eu-cdbr-west-02.cleardb.net
+	
+	database: heroku_fc7dd2b1a888efb
+
+

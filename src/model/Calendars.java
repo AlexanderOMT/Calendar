@@ -22,6 +22,14 @@ public class Calendars {
         calendars.add(calendar);
     }
     
+    public void remove(ButtonCalendar posicion){
+        calendars.remove(posicion);
+    }
+    
+    public void clearCalendar(){
+        calendars.clear();
+    }
+    
     @Override
     public String toString(){
         String result = "";

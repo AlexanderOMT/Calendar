@@ -1,8 +1,18 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
 package design;
 
+import SqlDatabase.HerokuCalendarPermitSqlConnection;
+import SqlDatabase.HerokuCalendarSqlConnection;
+import SqlDatabase.HerokuInvitationSqlConnection;
 import SqlDatabase.HerokuTaskSqlConnection;
 import SqlDatabase.HerokuUsersSqlConnection;
 import static design.usuario.userSigned;
+import java.awt.Color;
+import java.awt.Point;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
@@ -14,6 +24,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import model.CalendarTask;
 import model.Task;
@@ -21,85 +32,112 @@ import model.User;
 import model.Tags;
 
 public final class calendarView extends javax.swing.JFrame {
-    
+
     private int actualMonth;
     private int actualYear;
     private CalendarTask actualCalendar;
     private User userSignedUpmp;
+    private HerokuTaskSqlConnection conex_task;
+    private HerokuCalendarPermitSqlConnection conex_calendarPermit;
+    public int idCalendar;
+    public float idRandom;
     Calendar cl = new GregorianCalendar();
     Tags tag; 
     ArrayList<Integer> aux;
-    HerokuTaskSqlConnection conex_task;
+
     
     // Constructor
-    public calendarView() {
+    public calendarView(CalendarTask actualCalendar) {
+        this.actualCalendar = actualCalendar;
+        //setIdRandom();
+        //setIdCalendar(actualCalendar.getId());
         initComponents();
         initTags();
-        aux = loadTaks();
-        initTaks();
-        // test();
+        loadTask();
+       //initTaks();
+        //test();
         this.setLocationRelativeTo(null);
         this.setExtendedState(MAXIMIZED_BOTH);
+        Color color = new Color(255,255,255);
+        this.getContentPane().setBackground(color);
         actualMonth = cl.get(Calendar.MONTH);
         actualYear = cl.get(Calendar.YEAR);
         updateTasks();
+        doubleClickDay();
         userSignedUpmp=userSigned;
         close();
+    }
+    
+    
+    // Method to access with double click to the day view
+    public void doubleClickDay () {
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent me) {
+                JTable table =(JTable) me.getSource();
+                Point p = me.getPoint();
+                int row = table.rowAtPoint(p);
+                if (me.getClickCount() == 2) {
+                    String[] tasks = (String[])jTable1.getValueAt
+                        (jTable1.getSelectedRow(), jTable1.getSelectedColumn());
+                    int day = Integer.parseInt(tasks[0]);
+                    Timestamp date = new Timestamp (actualYear-1900, actualMonth, day, 0, 0, 0, 0);
+                    dayView dia = new dayView(actualCalendar, date);
+                    dia.setVisible(true);
+                    setVisible(false);
+                }
+            }
+        });
     }
     
     // Test para añadir tareas al calendario
     public void test() {
         CalendarTask c = new CalendarTask("prueba");
-        Timestamp fecha2 = new Timestamp(1900-116, 5,3, 0, 0, 0, 0);
+        Timestamp fecha2 = new Timestamp(2022-1900, 4,3, 0, 0, 0, 0);
         // ArrayList<Tags> tags = new ArrayList<>();
         tag = Tags.BIRTHDAY;
         // tags.add(tag);
         Task t = new Task(1, "Esto es una prueba", "This is the description", fecha2, 3, tag.toString());
         c.addTask(t);
-        t = new Task(2, "Esto es una prueba1", "This is the description", new Timestamp(2022, 3,23, 0, 0, 0, 0), 3, tag.toString());
+        t = new Task(2, "Esto es una prueba1", "This is the description", new Timestamp(2022-1900, 4, 23, 0, 0, 0, 0), 3, tag.toString());
         c.addTask(t);
         tag = Tags.SCHOOL;
         // tags.add(tag);
-        t = new Task(3, "Esto es una prueba2", "This is the description",new Timestamp(2022, 3,23, 0, 0, 0, 0), 3, tag.toString());
+        t = new Task(3, "Esto es una prueba2", "This is the description", new Timestamp(2022-1900, 4, 23, 0, 0, 0, 0), 3, tag.toString());
         c.addTask(t);
-        t = new Task(4, "Esto es una prueba3", "This is the description", new Timestamp(2022, 3,23, 0, 0, 0, 0), 3, tag.toString());
+        t = new Task(4, "Esto es una prueba3", "This is the description", new Timestamp(2022-1900, 4, 23, 0, 0, 0, 0), 3, tag.toString());
         c.addTask(t);
         tag = Tags.HOUSE;
         // tags.add(tag);
-        t = new Task(5, "Esto es una prueba1", "This is the description", new Timestamp(2022, 3,24, 0, 0, 0, 0), 3, tag.toString());
+        t = new Task(5, "Esto es una prueba1", "This is the description", new Timestamp(2022-1900, 4, 24, 0, 0, 0, 0), 3, tag.toString());
         c.addTask(t);
         //List l = c.getTasks(date);
         //l = c.getTasks(date);
         this.actualCalendar = c;
     }
     
-    // Método para formatear la tabla y actualizar las tareas
+    // Method to modify the table and update the tasks
     public void updateTasks() {
         jTable1.setRowHeight(100);
-        Object mes [][] = calculateDate(actualMonth, actualYear);
+        Object mes [][] = calculateDate(this.actualMonth, this.actualYear);
         for (Object[] me : mes) {
             for (int j = 0; j<mes[0].length; j++) {
                 if (me[j] == null) {
                     me[j] = new String[]{""};
                 } else {
                     int day = (Integer) me[j];
-                    String date = "";
-                    if (actualMonth <= 9) {
-                        date = actualYear + "-0" + (actualMonth+1);
+                    Timestamp d = new Timestamp(this.actualYear-1900, 
+                            this.actualMonth,day, 0, 0, 0, 0);
+                    List<Task> tasks = this.actualCalendar.getTasks(d);
+                    String[] content = new String[1];
+                    if (tasks == null) {
+                        content[0] = Integer.toString(day);
                     } else {
-                        date = actualYear + "-" + (actualMonth+1);
-                    }
-                    if (day <= 9) {
-                        date += "-0" + day;
-                    } else {
-                        date += "-" + day;
-                    }
-                    Timestamp d = new Timestamp(actualYear, actualMonth+1,day, 0, 0, 0, 0);
-                    List<Task> tasks = actualCalendar.getTasks(d);
-                    String[] content = new String[tasks.size()+1];
-                    content[0] = Integer.toString(day);
-                    for (int k = 1; k < content.length; k++) {
-                        content[k] = tasks.get(k-1).getName();
+                        content = new String[tasks.size()+1];
+                        content[0] = Integer.toString(day);
+                        for (int k = 1; k < content.length; k++) {
+                            content[k] = tasks.get(k-1).getName();
+                        }
                     }
                     me[j] = content;
                 }
@@ -109,7 +147,7 @@ public final class calendarView extends javax.swing.JFrame {
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             mes,
             new String [] {
-                "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"
+                "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
             }));
        MultiLineTableCellRenderer renderer = new MultiLineTableCellRenderer();
        jTable1.setDefaultRenderer(String[].class, renderer);
@@ -118,10 +156,10 @@ public final class calendarView extends javax.swing.JFrame {
        }
     }
     
-    // Método para calcular la fecha en la que se encuentra el usuario actualmente
+    // Method to calculate the actual date
     private Object[][] calculateDate (int month, int year) {
-        String months[] = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
-            "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
+        String months[] = {"January", "February", "March", "April", "May", "June", 
+            "July", "August", "September", "October", "November", "December"};
         Calendar c1 = new GregorianCalendar(year, month, 1);
         Object mesAux [][] = getMonth(c1.get(Calendar.DAY_OF_MONTH), c1.get(Calendar.DAY_OF_WEEK), 
                 c1.getActualMaximum(Calendar.DAY_OF_MONTH));
@@ -131,7 +169,7 @@ public final class calendarView extends javax.swing.JFrame {
         return mesAux;
     }
     
-    // Método para conseguir el mes entero de la fecha
+    // Method to get the month of the date
     private Object [][] getMonth(int dayM, int dayOfWeek, int maxDayOfMonth) {
         Object mes[][] = {
                 {null, null, null, null, null, null, null},
@@ -157,14 +195,14 @@ public final class calendarView extends javax.swing.JFrame {
         }
         return mes;
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         addTaskInternal = new javax.swing.JInternalFrame();
@@ -175,16 +213,22 @@ public final class calendarView extends javax.swing.JFrame {
         hourBox = new javax.swing.JComboBox<>();
         minBox = new javax.swing.JComboBox<>();
         jComboBoxTag = new javax.swing.JComboBox<>();
-        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        jButton2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jButton3 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
 
+        addTaskInternal.setBackground(new java.awt.Color(255, 255, 255));
+        addTaskInternal.setBorder(null);
         addTaskInternal.setVisible(true);
 
         jLabel5.setText("Time");
@@ -231,7 +275,7 @@ public final class calendarView extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setText("Tag:");
+        jLabel3.setText("Tag:");
 
         javax.swing.GroupLayout addTaskInternalLayout = new javax.swing.GroupLayout(addTaskInternal.getContentPane());
         addTaskInternal.getContentPane().setLayout(addTaskInternalLayout);
@@ -245,7 +289,7 @@ public final class calendarView extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(addTaskInternalLayout.createSequentialGroup()
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
                         .addGroup(addTaskInternalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(addTaskInternalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addGroup(addTaskInternalLayout.createSequentialGroup()
@@ -255,7 +299,7 @@ public final class calendarView extends javax.swing.JFrame {
                                     .addGap(18, 18, 18)
                                     .addComponent(minBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addComponent(jComboBoxTag, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jLabel2))
+                            .addComponent(jLabel3))
                         .addGap(175, 175, 175))))
         );
         addTaskInternalLayout.setVerticalGroup(
@@ -266,7 +310,7 @@ public final class calendarView extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(addTaskInternalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(addTaskInternalLayout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
                         .addGap(131, 131, 131))
                     .addGroup(addTaskInternalLayout.createSequentialGroup()
                         .addGroup(addTaskInternalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -274,7 +318,7 @@ public final class calendarView extends javax.swing.JFrame {
                             .addComponent(hourBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(minBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel2)
+                        .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jComboBoxTag, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
@@ -286,6 +330,13 @@ public final class calendarView extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jButton2.setText("Previous");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         jLabel1.setText("jLabel1");
 
         jButton1.setText("Next");
@@ -295,10 +346,26 @@ public final class calendarView extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Previous");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jLabel2.setText("Filters:");
+
+        jButton3.setText("Week");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Day");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jButton5.setText("Add a task");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
             }
         });
 
@@ -315,67 +382,71 @@ public final class calendarView extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        jButton3.setText("Add a title");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        jButton6.setText("Share");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                jButton6ActionPerformed(evt);
             }
         });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(70, 70, 70)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton2)
-                        .addGap(254, 254, 254)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton1))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 765, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
-                .addContainerGap())
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 855, Short.MAX_VALUE))
+                .addGap(59, 59, 59)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton5)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton6)
+                        .addGap(10, 10, 10)))
+                .addGap(38, 38, 38))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1)
-                        .addComponent(jButton1)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3)
                 .addGap(18, 18, 18)
+                .addComponent(jButton4)
+                .addContainerGap(649, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(23, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton5)
+                    .addComponent(jButton1)
+                    .addComponent(jLabel1)
+                    .addComponent(jButton2))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 537, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton3)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 595, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(74, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(71, 71, 71)
+                        .addComponent(jButton6)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         pack();
-    }// </editor-fold>                        
+    }// </editor-fold>//GEN-END:initComponents
 
-    // Botón de avanzar al siguiente mes
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
-        if (this.actualMonth + 1 == 12) {
-            this.actualMonth = 0;
-            this.actualYear += 1;
-        } else {
-            this.actualMonth += 1;
-        }
-        updateTasks();
-    }                                        
-
-    // Botón de retroceder al anterior mes
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         if (this.actualMonth - 1 == -1) {
             this.actualMonth = 11;
             this.actualYear -= 1;
@@ -383,15 +454,28 @@ public final class calendarView extends javax.swing.JFrame {
             this.actualMonth -= 1;
         }
         updateTasks();
-    }                                        
+    }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-         // TODO add your handling code here:
+    // Botón de avanzar al siguiente mes
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if (this.actualMonth + 1 == 12) {
+            this.actualMonth = 0;
+            this.actualYear += 1;
+        } else {
+            this.actualMonth += 1;
+        }
+        updateTasks();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+// TODO add your handling code here:
+        //this.actualCalendar = actualCalendar;
         if (jTable1.getSelectedRow() == -1 || jTable1.getSelectedColumn() == -1) {
             JOptionPane.showConfirmDialog(null,"Select a date.","", JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION);
             return;
         }
         int option = JOptionPane.showConfirmDialog(null,addTaskInternal,"", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION, null);
+         
         switch (option) {
             case JOptionPane.OK_OPTION:
                 String[] tasks = (String[]) jTable1.getValueAt
@@ -400,30 +484,23 @@ public final class calendarView extends javax.swing.JFrame {
                 Radio button o checkbox para las tags, y las que esten seleccionadas, 
                 insertarlas en el array (último atributo de la clase Task
                 */
-                String month = "";
-                if (this.actualMonth < 10) {
-                    month = "0" + this.actualMonth;
-                } else {
-                    month = Integer.toString(this.actualMonth);
-                }
-                String day = "";
-                if (Integer.parseInt(tasks[0]) < 10) {
-                    day = "0" + tasks[0];
-                } else {
-                    day = tasks[0];
-                }
-
-                Timestamp fecha = new Timestamp(this.actualYear-1900, actualMonth,Integer.parseInt (day), Integer.valueOf(minBox.getSelectedItem().toString()), Integer.valueOf(minBox.getSelectedItem().toString()), 0, 0);
+                Timestamp fecha = new Timestamp(this.actualYear-1900, this.actualMonth,Integer.parseInt (tasks[0]), Integer.valueOf(minBox.getSelectedItem().toString()), Integer.valueOf(minBox.getSelectedItem().toString()), 0, 0);
                 // ArrayList<Tags> tags = new ArrayList<>();
                 // tags.add(tag);
                 Task t = new Task(1, nameField.getText(), descriptionField.getText(), fecha, 3, jComboBoxTag.getSelectedItem().toString());
+
+                //Task t1 = new Task(nameField.getText(), descriptionField.getText(), fecha, 3, jComboBoxTag.getSelectedItem().toString(),Float.toString(getIdRandom()));
+                //addTask(t1);
                 this.actualCalendar.addTask(t);
+                //System.out.println("El valor del ID de actual calendar: " +getIdCalendar());
+                
+                
                 
                 updateTasks();
                 
-                Timestamp fecha2 = new Timestamp(this.actualYear-1900, Integer.parseInt(month),Integer.parseInt (day), Integer.parseInt((String) hourBox.getSelectedItem()), Integer.parseInt((String) minBox.getSelectedItem()), 0, 0);
-                List l = actualCalendar.getTasks(fecha2);
-                t = (Task)l.get(l.size()-1);
+                //Timestamp fecha2 = new Timestamp(this.actualYear-1900, Integer.parseInt(month),Integer.parseInt (day), Integer.parseInt((String) hourBox.getSelectedItem()), Integer.parseInt((String) minBox.getSelectedItem()), 0, 0);
+                //List l = actualCalendar.getTasks(fecha2);
+                //t = (Task)l.get(l.size()-1);
                 nameField.setText("Add a title");
                 descriptionField.setText("Add a description");
                 hourBox.setSelectedIndex(0);
@@ -432,36 +509,110 @@ public final class calendarView extends javax.swing.JFrame {
             case JOptionPane.CANCEL_OPTION:
                 break;
         }
-    }                                        
-
-    private void minBoxActionPerformed(java.awt.event.ActionEvent evt) {                                       
+    }//GEN-LAST:event_jButton5ActionPerformed
+    
+    private void setIdRandom(){
+        idRandom = (float) Math.random();
+        
+    }
+    
+    private float getIdRandom(){
+        return idRandom;
+        
+    }
+    
+    private void setIdCalendar(int id){
+        idCalendar = id;
+        
+    }
+    
+    private int getIdCalendar(){
+        return idCalendar;
+        
+    }
+    
+    private void addTask(Task t){
+        System.out.println("ENTRA AQUI JODIA FRIKI");
+        conex_calendarPermit = HerokuCalendarPermitSqlConnection.getInstance();
+        conex_task = HerokuTaskSqlConnection.getInstance();
+        conex_task.insertTaskByTask(t);
+        ArrayList<String> specialId = conex_task.selectSpecialIdTasks(t.getName());
+        System.out.println(specialId);
+        System.out.println(t.getSpecialId());
+        for(int i = 0; i < specialId.size(); i++){      //sacar el id por el getSpecialId();
+            if(specialId.get(i).equals(t.getSpecialId())){
+                System.out.println("Id del calendario: " + t.getSpecialId());
+                int id = conex_task.selectIdBySpecialIdTasks(t.getSpecialId());
+                System.out.println("Id del calendario: " + getIdCalendar());
+                conex_calendarPermit.insertCalendarPermit(userSignedUpmp.getId(), getIdCalendar(), id, "Admin");     //FIJO ADMIN POR EL MOMENTO
+            }
+        }
+        
+        loadTask();      
+        
+    } 
+    
+    
+    
+    
+    
+    
+    private void nameFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_nameFieldFocusGained
         // TODO add your handling code here:
-    }                                      
-
-    private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {                                          
-        // TODO add your handling code here:
-    }                                         
-
-    private void nameFieldFocusGained(java.awt.event.FocusEvent evt) {                                      
         if(nameField.getText().equals("Add a title")) nameField.setText("");
-    }                                     
+    }//GEN-LAST:event_nameFieldFocusGained
 
-    private void nameFieldFocusLost(java.awt.event.FocusEvent evt) {                                    
-        if(nameField.getText().equals("")) nameField.setText("Add a title");
-    }                                   
-
-    private void descriptionFieldFocusGained(java.awt.event.FocusEvent evt) {                                             
-        if(descriptionField.getText().equals("Add a description")) descriptionField.setText("");
-    }                                            
-
-    private void descriptionFieldFocusLost(java.awt.event.FocusEvent evt) {                                           
-        if(descriptionField.getText().equals("")) descriptionField.setText("Add a description");
-    }                                          
-
-    private void hourBoxActionPerformed(java.awt.event.ActionEvent evt) {                                        
+    private void nameFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_nameFieldFocusLost
         // TODO add your handling code here:
-    }                                       
+        if(nameField.getText().equals("")) nameField.setText("Add a title");
+    }//GEN-LAST:event_nameFieldFocusLost
 
+    private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nameFieldActionPerformed
+
+    private void descriptionFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_descriptionFieldFocusGained
+        // TODO add your handling code here:
+         if(descriptionField.getText().equals("Add a description")) descriptionField.setText("");
+    }//GEN-LAST:event_descriptionFieldFocusGained
+
+    private void descriptionFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_descriptionFieldFocusLost
+        // TODO add your handling code here:
+        if(descriptionField.getText().equals("")) descriptionField.setText("Add a description");
+    }//GEN-LAST:event_descriptionFieldFocusLost
+
+    private void hourBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hourBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_hourBoxActionPerformed
+
+    private void minBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_minBoxActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        weekView week = new weekView(this.actualMonth,this.actualYear,this.actualCalendar);
+        week.setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        dayView week = new dayView(this.actualCalendar, new Timestamp(this.actualYear-1900,this.actualMonth,1,0,0,0,0));
+        week.setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        Share compartir;
+        try {
+            compartir = new Share(this.actualCalendar);
+            compartir.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(calendarView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }//GEN-LAST:event_jButton6ActionPerformed
     public void close(){
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
@@ -488,6 +639,36 @@ public final class calendarView extends javax.swing.JFrame {
         }
     }
     
+    private void initTags() {
+        for (Tags myVar : Tags.values()) {
+            jComboBoxTag.addItem(myVar.toString()); 
+        }   
+    }
+
+    private void initTaks() {
+
+        
+    }
+    
+    private void loadTask(){
+        conex_calendarPermit = HerokuCalendarPermitSqlConnection.getInstance();
+        HerokuCalendarSqlConnection conex_cal = HerokuCalendarSqlConnection.getInstance();
+        conex_task = HerokuTaskSqlConnection.getInstance();
+        actualCalendar.getId();
+        System.out.println(actualCalendar.getId());
+        
+        ArrayList<Integer> calendarsTask=conex_calendarPermit.selectAllTaskIdByIdCalendar(actualCalendar.getId());
+        CalendarTask c = new CalendarTask();
+        
+        for(int i = 0; i < calendarsTask.size(); i++){
+            Task t = conex_task.getTaskById(calendarsTask.get(i));
+            c.addTask(t);
+        }
+        this.actualCalendar = c;
+    } 
+
+   
+    
     /**
      * @param args the command line arguments
      */
@@ -508,25 +689,31 @@ public final class calendarView extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(calendarView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
         
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new calendarView().setVisible(true);
+            new calendarView(new CalendarTask()).setVisible(true);
         });
     }
 
-    // Variables declaration - do not modify                     
+    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JInternalFrame addTaskInternal;
     private javax.swing.JTextArea descriptionField;
     private javax.swing.JComboBox<String> hourBox;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JComboBox<String> jComboBoxTag;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -535,22 +722,5 @@ public final class calendarView extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JComboBox<String> minBox;
     private javax.swing.JTextField nameField;
-    // End of variables declaration                   
-
-    private void initTags() {
-        for (Tags myVar : Tags.values()) {
-            jComboBoxTag.addItem(myVar.toString()); 
-        }   
-    }
-
-    private void initTaks() {
-        
-    }
-
-    private ArrayList<Integer> loadTaks() {
-        conex_task = HerokuTaskSqlConnection.getInstance();
-        ArrayList<Integer> taksCalendar=null;
-        //taksCalendar=conex_task.selectAllTaksIdByIdCalendar(userSigned.getId());
-        return taksCalendar;
-    }
+    // End of variables declaration//GEN-END:variables
 }

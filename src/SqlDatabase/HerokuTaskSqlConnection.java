@@ -7,13 +7,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.ArrayList;
 // import model.Tags;
 import model.Task;
 
 public class HerokuTaskSqlConnection  extends SqlConnection {
     
     private static HerokuTaskSqlConnection instance;
+    PreparedStatement ps;
+    ResultSet rs;
     
     public HerokuTaskSqlConnection(){}
     
@@ -30,106 +32,136 @@ public class HerokuTaskSqlConnection  extends SqlConnection {
         try (Connection conn = this.getSqlConnection();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql)){
-            while (rs.next()) {
-            System.out.println(rs.getInt("task_id") + "\t" +
-                        rs.getString("name") + "\t"
-            );
-            }
         } catch (SQLException e) {
-            System.out.println("Error al seleccionar todo en la tabla TASK: " + e.getMessage());
         }
     }
     
-    public void insertTask(String name, Timestamp date, String tag, int priority, String description) {
+    public ArrayList<String> selectSpecialIdTasks(String name) {
+         Connection conn = getSqlConnection();
+         ArrayList<String> specialId = new ArrayList<>();
+        try{
+            ps = conn.prepareStatement("SELECT special_id FROM task WHERE name=?");
+            ps.setString(1, name);
+            
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+
+                //conn.close();
+                specialId.add(rs.getString("special_id"));
+            } 
+            
+        } catch (SQLException e) {
+        }
+        //conn.close();
+        return specialId;
+        
+        
+    }
+    
+    public int selectIdBySpecialIdTasks(String special_Id) {
+        
+        Connection conn = getSqlConnection();
+         int task_id = 0;
+        try{
+            
+            System.out.println("Entra en el try de permit");
+            ps = conn.prepareStatement("SELECT DISTINCT task_id FROM task WHERE special_id=?");
+            ps.setString(1, special_Id);
+            
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+
+                //conn.close();
+                task_id = rs.getInt("task_id");
+            } 
+            
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        //conn.close();
+        return task_id;
+        
+        
+         
+        
+    }
+    
+    
+    
+    
+    public void insertTask(String name) {
         Connection conn = getSqlConnection();        
         try{
-            PreparedStatement ps = conn.prepareStatement("INSERT INTO task(name, date, tag, priority, description) VALUES(?, ?, ?, ?, ?)");
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO task(name) VALUES(?)");
             ps.setString(1, name);
-            ps.setTimestamp(2, date); 
-            ps.setString(3, tag); 
-            ps.setInt(4, priority);
-            ps.setString(5, description);            
             int res = ps.executeUpdate();
-            
-            if(res > 0){
-                //JOptionPane.showMessageDialog(null, "Tarea insertado correctamente");
-                System.out.println("Tarea insertado correctamente");
-            }else{
-                //JOptionPane.showMessageDialog(null, "Tarea insertado incorrectamente");
-                System.out.println("Tarea insertado incorrectamente");
-            }
             
             conn.close();
             
         } catch (SQLException e) {
-            //JOptionPane.showMessageDialog(null, "Error al insertar en la tabla TASK: " + e.getMessage());
-            System.out.println("Error al insertar en la tabla TASK: " + e.getMessage());
         }
     }
     
+    
     public void insertTaskByTask(Task task) {
         Connection conn = getSqlConnection();  
-        // System.out.println("Entra en insertar BD");
-        // Object[] objArray = task.getTag().toArray();
+        System.out.println("Entra en insertar BD");
         try{
-            PreparedStatement ps = conn.prepareStatement("INSERT INTO task(name, date, tag, priority, description) VALUES(?, ?, ?, ?, ?)");
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO task(name, date, tag, priority, description, special_id) VALUES(?, ?, ?, ?, ?, ?)");
             ps.setString(1, task.getName());
             ps.setTimestamp(2, (Timestamp) task.getDate()); 
             ps.setString(3, task.getTag()); 
             ps.setInt(4, task.getPrior());
             ps.setString(5, task.getDesc());
+            ps.setString(6, task.getSpecialId());
             
-            // ps.execute();  
             int res = ps.executeUpdate();
             
-            if(res > 0){
-                //JOptionPane.showMessageDialog(null, "Tarea insertado correctamente");
-                System.out.println("Tarea insertado correctamente");
-            }else{
-                //JOptionPane.showMessageDialog(null, "Tarea insertado incorrectamente");
-                System.out.println("Tarea insertado incorrectamente");
-            }
             
             conn.close();
             
         } catch (SQLException e) {
-            //JOptionPane.showMessageDialog(null, "Error al insertar en la tabla TASK: " + e.getMessage());
-            System.out.println("Error al insertar en la tabla TASK: " + e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
     
-    public Task selectTaskById(int task_id) {
+    public void selectTaskById(int id) {
         Connection conn = getSqlConnection();
         
         try{
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM task WHERE task_id=" + Integer.toString(task_id));
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM task WHERE task_id=" + Integer.toString(id));
             
             ResultSet rs = ps.executeQuery();
             
-            if (rs.next()) {
-                
-                System.out.println(rs.getInt("task_id") + "\t" +
-                rs.getString("name") + "\t"
-                );
-                return new Task(
-                        rs.getInt("task_id"),
-                        rs.getString("name"),
-                        rs.getString("description"),
-                        rs.getTimestamp("date"),
-                        rs.getInt("priority"),
-                        rs.getString("tag")
-                );
-            } else {
-                //JOptionPane.showMessageDialog(null, "No existe ningún usuario con ese id");
-                System.out.println("No existe ningún usuario con ese id");
+            
+        } catch (SQLException e) {
+        }
+
+    }     
+    
+    public Task getTaskById(int id) {
+        Connection conn = getSqlConnection();
+        Task task = new Task();
+        try{
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM task WHERE task_id=" + Integer.toString(id));
+            
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                task.setId(rs.getInt("task_id"));
+                task.setName(rs.getString("name"));
+                task.setDate(rs.getTimestamp("date"));
+                task.setTag(rs.getString("tag"));
+                task.setPrior(rs.getInt("priority"));
+                task.setDesc(rs.getString("description"));
             }
             
         } catch (SQLException e) {
-            System.out.println("Error al seleccionar por id  en la tabla TASK: " + e.getMessage());
         }
-        return null;
+        return task;
 
-    }   
+    }
     
  
     public void deleteTaskById(int id) {
@@ -142,18 +174,10 @@ public class HerokuTaskSqlConnection  extends SqlConnection {
             
             int res = ps.executeUpdate();
             
-            if(res > 0){
-                //JOptionPane.showMessageDialog(null, "Usuario eliminado correctamente");
-                System.out.println("Tarea eliminado correctamente");
-            }else{
-                //JOptionPane.showMessageDialog(null, "Usuario eliminado incorrectamente");
-                System.out.println("Tarea eliminado incorrectamente");
-            }
 
             conn.close();
             
         }catch (SQLException e) {
-                System.out.println("Error al eliminar por id en la tabla TASK: " + e.getMessage());
-            }
+        }
     }
 }

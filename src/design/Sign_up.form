@@ -131,9 +131,6 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="email">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="enter your email..."/>
-          </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="emailActionPerformed"/>
           </Events>
@@ -144,9 +141,6 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JPasswordField" name="password">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="jPasswordField1"/>
-          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
@@ -154,9 +148,6 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="nameUser">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="enter your user name"/>
-          </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="nameUserActionPerformed"/>
           </Events>
