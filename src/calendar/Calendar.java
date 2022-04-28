@@ -15,10 +15,10 @@ import model.CalendarTask;
 public class Calendar {
 
     public static void main(String[] args) {
-        /*
+        
         Login lg = new Login();
         lg.setVisible(true);
-        */
+        
         
         //HerokuUsersSqlConnection userConnection = HerokuUsersSqlConnection.getInstance();
         //HerokuTaskSqlConnection taskConnection = HerokuTaskSqlConnection.getInstance();
@@ -26,6 +26,12 @@ public class Calendar {
         //HerokuCalendarPermitSqlConnection calPermitConnection = HerokuCalendarPermitSqlConnection.getInstance();
         //HerokuInvitationSqlConnection invConnection = HerokuInvitationSqlConnection.getInstance();
         /*
+        calPermitConnection.insertCalendarPermit(7, 27,8,"Admin");
+        calPermitConnection.insertCalendarPermit(7, 27,9,"Admin");
+        calPermitConnection.insertCalendarPermit(7, 27,11,"Admin");
+        calPermitConnection.insertCalendarPermit(7, 27,15,"Admin");
+        calPermitConnection.insertCalendarPermit(7, 27,23,"Admin");
+        
         User user = new User(1, "pwd1", "email1");
         Task task = new Task("Tarea1", "Tarea1", "01:10", 1);
         CalendarTask calendar = new CalendarTask("Calendar1");
@@ -84,10 +90,10 @@ public class Calendar {
         System.out.println("Seleccionar permisos usuarios por id de calendario:");
         calPermitConnection.selectUsersPermitsByCalendarId(1);
         System.out.println("-------------------------------------------------");           
-        */
         
         
-        /*
+        
+        
         System.out.println("-------------------------------------------------"); 
         System.out.println("Seleccionar todas las invitaciones:");
         invConnection.selectAllInvitations();
@@ -102,16 +108,12 @@ public class Calendar {
         invConnection.selectInvitationIdByOriginAndTarget(1, 2);
         System.out.println("-------------------------------------------------"); 
 
-        
-
         System.out.println("Responder a invitación por id de invitación:");
         invConnection.replyInvitation(1, 1);
         System.out.println("-------------------------------------------------");    
         
-        
-        
         System.out.println("Selecciona todo por id de calendario:");
-        invConnection.selectAllByCalendarId(2);
+        invConnection.selectAllByCalendarId(1);
         System.out.println("-------------------------------------------------");
         
         
@@ -119,8 +121,8 @@ public class Calendar {
         System.out.println("Selecciona todo por id de usuario:");
         invConnection.selectAllInvitationIdByUserId(1);
         System.out.println("-------------------------------------------------");
+        
         */
         
-                
     }
 }

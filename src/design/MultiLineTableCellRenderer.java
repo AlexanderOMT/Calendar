@@ -8,7 +8,6 @@ import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JList;
 import javax.swing.JTable;
-import javax.swing.UIManager;
 import javax.swing.table.TableCellRenderer;
 
 public class MultiLineTableCellRenderer extends JList<String> implements TableCellRenderer {

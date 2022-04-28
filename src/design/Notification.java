@@ -4,18 +4,20 @@
  * and open the template in the editor.
  */
 package design;
-
+import SqlDatabase.HerokuCalendarPermitSqlConnection;
 import SqlDatabase.HerokuCalendarSqlConnection;
 import SqlDatabase.HerokuInvitationSqlConnection;
 import SqlDatabase.HerokuUsersSqlConnection;
 import java.awt.Color;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import model.ButtonCalendar;
 import model.Invitation;
 
@@ -34,8 +36,10 @@ public class Notification extends javax.swing.JDialog implements usuario{
     private int posxtext=10;
     private int posytext=10;
     private ArrayList<Invitation> invitations; //lista local de las invitaciones
+    private MainPage mn = new MainPage();
     HerokuUsersSqlConnection conex_user= new HerokuUsersSqlConnection();
     HerokuCalendarSqlConnection conex_cal= new HerokuCalendarSqlConnection();
+    HerokuCalendarPermitSqlConnection conex_cal_per= new HerokuCalendarPermitSqlConnection();
     HerokuInvitationSqlConnection conex_invite= new HerokuInvitationSqlConnection();
     
     public Notification(java.awt.Frame parent, boolean modal) throws SQLException {
@@ -44,12 +48,14 @@ public class Notification extends javax.swing.JDialog implements usuario{
         getNotifications();
     }
     
-    public Notification() throws SQLException{
+    public Notification(MainPage main) throws SQLException{
         initComponents();
+        this.mn=main;
         Color color = new Color(36,47,35);
         this.getContentPane().setBackground(color);
         this.setLocationRelativeTo(null);
         getNotifications();
+        close();
     }
 
     /**
@@ -74,8 +80,7 @@ public class Notification extends javax.swing.JDialog implements usuario{
         jLabel1.setFont(new java.awt.Font("Rockwell", 0, 25)); // NOI18N
         jLabel1.setText("You have received an invitation!");
 
-        jPanel2.setBackground(new java.awt.Color(233, 224, 194));
-        jPanel2.setForeground(new java.awt.Color(243, 231, 175));
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -170,6 +175,8 @@ public class Notification extends javax.swing.JDialog implements usuario{
                     }
                     //eliminar de la base de datos
                     conex_invite.replyInvitation(invite.getInvitation_id(), 1);
+                    conex_cal_per.insertCalendarPermitTaskNull(userSigned.getId(), invite.getCalendar_id(), invite.getRol());
+                    
                 });
 
                 decline.addActionListener((java.awt.event.ActionEvent e) -> {
@@ -191,11 +198,23 @@ public class Notification extends javax.swing.JDialog implements usuario{
     
     public void getNotifications() throws SQLException{
         //conseguir todas las invitaciones sin responder
+        System.out.println(userSigned.getId()+ "ES EL IDE DEL USER SIGNED");
         invitations = conex_invite.getAllInvitationIdByUserId(userSigned.getId());
         loadNotifications();
     }
        
-        
+    public void close(){
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+               reloadMainPage();
+            }
+        });
+    }  
+     public void reloadMainPage(){
+        this.mn.reload();
+    }   
                  
     
     
@@ -215,32 +234,26 @@ public class Notification extends javax.swing.JDialog implements usuario{
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Notification.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Notification.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Notification.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Notification.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        
+        //</editor-fold>
 
         /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    Notification dialog = new Notification(new javax.swing.JFrame(), true);
-                    dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                        @Override
-                        public void windowClosing(java.awt.event.WindowEvent e) {
-                            System.exit(0);
-                        }
-                    });
-                    dialog.setVisible(true);
-                } catch (SQLException ex) {
-                    Logger.getLogger(Notification.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
+                Notification dialog = new Notification(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(Notification.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }
