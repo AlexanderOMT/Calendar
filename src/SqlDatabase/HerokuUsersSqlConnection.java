@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import javax.swing.JOptionPane;
 import model.User;
 
 public class HerokuUsersSqlConnection extends SqlConnection {
@@ -18,7 +17,7 @@ public class HerokuUsersSqlConnection extends SqlConnection {
     PreparedStatement ps;
     ResultSet rs;
     
-    private HerokuUsersSqlConnection(){}
+    public HerokuUsersSqlConnection(){}
     
     public static synchronized HerokuUsersSqlConnection getInstance(){
         if(instance == null){
@@ -33,7 +32,9 @@ public class HerokuUsersSqlConnection extends SqlConnection {
         try (Connection conn = this.getSqlConnection();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql)){
+            conn.close();
         } catch (SQLException e) {
+            System.err.println(e);
         }
     }
 
@@ -45,9 +46,14 @@ public class HerokuUsersSqlConnection extends SqlConnection {
             ps.setInt(1, id);
             
             rs = ps.executeQuery();
-            
-            
-        } catch (SQLException e) {
+        }catch (SQLException e) {
+            System.err.println(e);
+        } finally{
+            try{
+                conn.close();
+            } catch (SQLException e) {
+                System.err.println(e);
+            }
         }
     }    
     
@@ -61,15 +67,51 @@ public class HerokuUsersSqlConnection extends SqlConnection {
             rs = ps.executeQuery();
             
             if (rs.next()) {
-                return rs.getInt("user_id");
+                int aux=rs.getInt("user_id");
+                return aux;
             } else {
                 return -1;
             }
             
         } catch (SQLException e) {
+            System.err.println(e);
+            return -1;
+        } finally{
+            try{
+                conn.close();
+            } catch (SQLException e) {
+                System.err.println(e);
+            }
         }
-        return -1;
-    }   
+    } 
+    
+    public String getEmailByUserId(int id) throws SQLException {
+        Connection conn = getSqlConnection();
+        try{
+            ps = conn.prepareStatement("SELECT * FROM user WHERE user_id=?");
+            ps.setInt(1, id);
+            
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                String aux= rs.getString("email");
+                return aux;
+            } else {
+                return null;
+            }
+            
+        } catch (SQLException e) {
+            System.err.println(e);
+            return null;
+        } finally{
+            try{
+                conn.close();
+            } catch (SQLException e) {
+                System.err.println(e);
+            }
+        }
+    } 
+    
     /*este metodo en realidad no es un select, es una comprobación*/
     public boolean selectUserByEmail(String email) throws SQLException {
         Connection conn = getSqlConnection();
@@ -87,6 +129,13 @@ public class HerokuUsersSqlConnection extends SqlConnection {
             }
             
         } catch (SQLException e) {
+            System.err.println(e);
+        } finally{
+            try{
+                conn.close();
+            } catch (SQLException e) {
+                System.err.println(e);
+            }
         }
         return false;
     }
@@ -98,15 +147,20 @@ public class HerokuUsersSqlConnection extends SqlConnection {
         try{
             ps = conn.prepareStatement("DELETE FROM user WHERE user_id=?");
             ps.setInt(1, id);
-            
-            int res = ps.executeUpdate();
-            
-            conn.close();
-            
+            ps.execute();
+                        
         }catch (SQLException e) {
+            System.err.println(e);
+        } finally{
+            try{
+                conn.close();
+            } catch (SQLException e) {
+                System.err.println(e);
+            }
         }
+        
     }
-    
+
     
     public void insertUser(String name, String pswd, String email, boolean login) {
         Connection conn = getSqlConnection();        
@@ -116,24 +170,53 @@ public class HerokuUsersSqlConnection extends SqlConnection {
             ps.setString(2, pswd);
             ps.setString(3, email);
             ps.setBoolean(4, login);
-            int res = ps.executeUpdate();
+            ps.execute();
             /*
             Sirve para guardar el email como variable local para identificar el usuario en toda la sesión
             */
             emailUser = email;
-            
-            
-            conn.close();
-            
+
         } catch (SQLException e) {
+            System.err.println(e);
+        } finally{
+            try{
+                conn.close();
+            } catch (SQLException e) {
+                System.err.println(e);
+            }
         }
+    }
+    
+    public boolean updateUser(User user){
+        
+        Connection conn = getSqlConnection();
+                
+        try{
+            ps = conn.prepareStatement("UPDATE user SET name=?, description=? where email=?");
+            System.out.println("Nombre del usuario al modificar = " + user.getName());
+            ps.setString(1, user.getName());
+            System.out.println("Descripción del usuario al modificar = " + user.getDescription());
+            ps.setString(2, user.getDescription());
+            ps.setString(3, user.getEmail());
+            ps.execute();
+            return true;
+        }catch (SQLException e) {
+            System.err.println(e);
+            return false;
+        } finally{
+            try{
+                conn.close();
+            } catch (SQLException e) {
+                System.err.println(e);
+            }
+        }        
     }
     
     public boolean login(User user) throws SQLException {
         
         Connection conn = getSqlConnection();
         try{
-            ps = conn.prepareStatement("SELECT user_id, name, email, password, login FROM user WHERE email=?");
+            ps = conn.prepareStatement("SELECT user_id, name, email, password, login, description FROM user WHERE email=?");
             ps.setString(1, user.getEmail());
             rs = ps.executeQuery();
             if (rs.next()) {
@@ -149,14 +232,24 @@ public class HerokuUsersSqlConnection extends SqlConnection {
                         user.setEmail(rs.getString(3));
                         user.setPwd(rs.getString(4));
                         user.setLogin(rs.getBoolean(5));
+                        user.setDescription(rs.getString(6));
                                                 
                         emailUser = user.getEmail();
+                        conn.close();
                         return true;
                     }else{
                     }
                 }
             }
+            
         }catch (SQLException e) {
+            System.err.println(e);
+        } finally{
+            try{
+                conn.close();
+            } catch (SQLException e) {
+                System.err.println(e);
+            }
         }
         return false;
     }
@@ -172,10 +265,12 @@ public class HerokuUsersSqlConnection extends SqlConnection {
                 ps.setBoolean(1, false);
                 ps.setString(2, emailUser);
                 ps.execute();
+                conn.close();
                 return true;
             }
         } catch (SQLException e) {
         }
+        conn.close();
         return false;
     }
     
@@ -191,10 +286,12 @@ public class HerokuUsersSqlConnection extends SqlConnection {
                 ps.setBoolean(1, false);
                 ps.setString(2, userSignedIn.getEmail());
                 ps.execute();
+                conn.close();
                 return true;
             }
         } catch (SQLException e) {
         }
+        conn.close();
         return false;
     }
 }
