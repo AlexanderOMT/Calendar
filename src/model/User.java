@@ -9,9 +9,21 @@ public class User {
     private String pwd;
     private String email;
     private boolean login;
+    private String description;
+    private int modo;
     
     public User(){
         
+    }
+    
+    public User(int id, String name, String pwd, String email, boolean login, String description, int modo) {
+        this.id = id;
+        this.name = name;
+        this.pwd = pwd;
+        this.email = email;
+        this.login = login;
+        this.description = description;
+        this.modo = modo;
     }
     
     public User(int id, String name, String pwd, String email, boolean login) {
@@ -40,9 +52,8 @@ public class User {
     public void inviteUsertoCalendar(User user, ButtonCalendar calendar){
         HerokuInvitationSqlConnection invConnection = HerokuInvitationSqlConnection.getInstance();
         // TODO asegurar que el id de calendario en la BD está en la clase ButtonCalendar
-        invConnection.insertInvitation(this.getId(), user.getId(), calendar.getId());
+        //invConnection.insertInvitation(this.getId(), user.getId(), calendar.getId());
     }
-    
     
     public User getUser(){
         User user = new User();
@@ -68,7 +79,19 @@ public class User {
     public String getEmail() {
         return email;
     }
+    
+    public boolean isLogin() {
+        return login;
+    }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public int getModo() {
+        return modo;
+    }
+    
     public void setId(int id) {
         this.id = id;
     }
@@ -87,6 +110,14 @@ public class User {
 
     public void setLogin(boolean login) {
         this.login = login;
+    }
+    
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setModo(int modo) {
+        this.modo = modo;
     }
 
     @Override
