@@ -2,21 +2,27 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.HashMap;
+import java.sql.Timestamp;
 import java.util.Iterator;
-import java.util.Map;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
 public class CalendarTask{
     
-    private final Map<String, List<Task>> dateTasks = new HashMap<>();
+    private final ArrayList<Task> dateTasks = new ArrayList<>();
     private String name;
-    private Integer id;
+    private int id;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public CalendarTask (){}
     
@@ -24,53 +30,61 @@ public class CalendarTask{
         this.name = name;
     }
 
+    public CalendarTask (String name, int id){
+        this.name=name;
+        this.id=id;
+    }
+    // Method to add a task
+    public void addTask(Task t) {
+        dateTasks.add(t);
+        //HerokuTaskSqlConnection htqc = new HerokuTaskSqlConnection();
+        //htqc.insertTaskByTask(t);
+    }
     
-    // Método para modificar una tarea
-    public void setTask(String date, Integer position, Task newTask) {
-        Iterator i = dateTasks.entrySet().iterator();
-        List l = new ArrayList<>();
+    // Method to modify a task
+    public void setTask(Integer position, Task newTask) {
+        if(dateTasks.size() > position){
+            dateTasks.set(position, newTask);
+        }
+    }
+    
+    //Method to delete a task
+    public void deleteTask(Integer id) {
+        Iterator i = dateTasks.iterator();
+        Task tDel = new Task();
         while(i.hasNext()) {
-            Map.Entry<String, List<Task>> entry = (Map.Entry)i.next();
-            if (entry.getKey().equals(date)) {
-                l = entry.getValue();
-                l.set(position, newTask);
+            Task t = (Task)i.next();
+            if (t.getId() == id) {
+                tDel = t;
             }
         }
+        dateTasks.remove(tDel);
     }
     
-    // Método para añadir una tarea
-    public void addTask(String date, Task t) {
-        Iterator i = dateTasks.entrySet().iterator();
-        List l = new ArrayList<>();
+    // Method to get all tasks
+    public List<Task> getTasks(Timestamp date) {
+        if (dateTasks == null) {
+            return null;
+        }
+        Iterator i = dateTasks.iterator();
+        List<Task> dayTasks = new ArrayList<>();
         while (i.hasNext()) {
-            Map.Entry<String, List<Task>> entry = (Map.Entry)i.next();
-            if (entry.getKey().equals(date)) {
-                l = entry.getValue();
-                l.add(t);
-                break;
+            Task t = (Task)i.next();
+            System.out.println("a: " + t.getDate().getDate());
+            System.out.println("b: " +date.getDate());
+            if (t.getDate().getYear() == date.getYear() 
+                    && t.getDate().getMonth() == date.getMonth() 
+                    && t.getDate().getDate() == date.getDate()) {
+                dayTasks.add(t);
             }
         }
-        if (l.isEmpty()) {
-            l.add(t);
-        }
-        dateTasks.put(date, l);
+        return dayTasks;
     }
     
-    // Método para obtener todas las tareas de una fecha
-    public List<Task> getTasks(String date) {
-        Iterator i = dateTasks.entrySet().iterator();
-        List l = new ArrayList<>();
-        while (i.hasNext()) {
-            Map.Entry<String, List<Task>> entry = (Map.Entry)i.next();
-            if (entry.getKey().equals(date)) {
-                l = entry.getValue();
-            }
-        }
-        Iterator j = l.iterator();
-        while (j.hasNext()) {
-            Task t = (Task)j.next();
-        }
-        return l;
+    // Method to get a task
+    public Task getTask(int id) {
+        Task t = dateTasks.get(id);
+        return t;
     }
     
         
@@ -83,7 +97,6 @@ public class CalendarTask{
         
         CalendarTask mapped = (CalendarTask) objectMapper.readValue(getJson.toJSONString(), CalendarTask.class);
         return mapped;
-        
     }
 
     public Integer getId(){
