@@ -6,6 +6,7 @@
 package design;
 
 import SqlDatabase.HerokuUsersSqlConnection;
+import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
@@ -19,7 +20,7 @@ import model.User;
 
 /**
  *
- * @author TESTER
+ * @author Selene
  */
 public final class Login extends javax.swing.JFrame implements usuario{
 
@@ -29,7 +30,11 @@ public final class Login extends javax.swing.JFrame implements usuario{
     private User userSingedUp;
     public Login() {
         initComponents();
+        email.setToolTipText("Enter email");
+        contraseña.setToolTipText("Enter password");
         this.setLocationRelativeTo(null);
+        Color color = new Color(255,255,255);
+        this.getContentPane().setBackground(color);
         this.setExtendedState(MAXIMIZED_BOTH);
         userSingedUp=userSigned;
         close();
@@ -170,7 +175,6 @@ public final class Login extends javax.swing.JFrame implements usuario{
 
         pack();
     }// </editor-fold>                        
-
     private void emailActionPerformed(java.awt.event.ActionEvent evt) {                                      
 
     }                                     
@@ -185,8 +189,7 @@ public final class Login extends javax.swing.JFrame implements usuario{
         String email_text= email.getText();
         String contraseña_text = String.valueOf(contraseña.getPassword());
         
-        
-        /*Pattern pat_email = Pattern.compile("[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,4}");
+        Pattern pat_email = Pattern.compile("[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,4}");
         Matcher mat_email = pat_email.matcher(email_text);
         Pattern pat_password = Pattern.compile("^(?=\\w*\\d)(?=\\w*[A-Z])(?=\\w*[a-z])\\S{8,15}$");
         Matcher mat_password = pat_password.matcher(contraseña_text);
@@ -208,127 +211,71 @@ public final class Login extends javax.swing.JFrame implements usuario{
         }else if(!mat_password.matches()){
             JOptionPane.showMessageDialog(null, "Se esperaba una contraseña con mínimo una minúscula, una masyúscula, un dígito numérico y sin espacios");
             System.out.println("Se esperaba una contraseña con mínimo una minúscula, una masyúscula, un dígito numérico y sin espacios");
-        }else{*/
-            System.out.println("Email = " + email_text);
-            System.out.println("Contraseña = " + contraseña_text);
+        }else{
             HerokuUsersSqlConnection conex_us = HerokuUsersSqlConnection.getInstance();
-            /*this.userSignedIn.setEmail(email_text);
-            this.userSignedIn.setPwd(contraseña_text);*/
+            this.userSigned.setEmail(email_text);
+            this.userSigned.setPwd(contraseña_text);
             
-            /*try {
-                this.userSignedIn.setId(conex_us.getUserIdByEmail(email_text));
+            try {
+                this.userSigned.setId(conex_us.getUserIdByEmail(email_text));
                 System.out.println("se ha seteado el id del usuario!!");
             } catch (SQLException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            }*/
+            }
             try {
                 userSigned.setEmail(email_text);
                 userSigned.setPwd(contraseña_text);
                 userSigned.setId(conex_us.getUserIdByEmail(email_text));
-                System.out.println("el ide del usuario insertador es: "+userSigned.getId());
-                //this.userSignedIn.toString();
+                userSigned.setModo(0);
                 userSingedUp=userSigned;
                 if(conex_us.login(this.userSingedUp)){
-
-                    System.out.println("Login correcto");
                     MainPage mp = new MainPage();                     
                     mp.setVisible(true);
                     this.setVisible(false);
-                }else {
-                    
-                    System.out.println("Login incorrecto");                    
+                }else {                  
                 }
             }catch (SQLException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
-        //  }
+        }
 
-       //  }
-    }                                     
+    }                               
 
     private void contraseñaActionPerformed(java.awt.event.ActionEvent evt) {                                           
         
     }                                          
 
     private void emailFocusGained(java.awt.event.FocusEvent evt) {                                  
-        /* if(email.getText().equals("Write your email")){
-            email.setText("");
-        }*/
+
     }                                 
 
     private void contraseñaFocusGained(java.awt.event.FocusEvent evt) {                                       
-        /* if(contraseña.getPassword().equals("jPasswordField1")){
-            contraseña.setText("");
-        } */
     }                                      
 
     private void emailFocusLost(java.awt.event.FocusEvent evt) {                                
-        /* if(email.getText().equals("")){
-            email.setText("Write your email");
-        } */
+
     }                               
 
     private void contraseñaFocusLost(java.awt.event.FocusEvent evt) {                                     
-        /* if(contraseña.getPassword().equals("")){
-            contraseña.setText("jPasswordField1");
-        } */
+
     }                                    
 
     private void LoginKeyPressed(java.awt.event.KeyEvent evt) {                                 
         String email_text= email.getText();
         String contraseña_text = String.valueOf(contraseña.getPassword());
-        
-        
-        /*Pattern pat_email = Pattern.compile("[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,4}");
-        Matcher mat_email = pat_email.matcher(email_text);
-        Pattern pat_password = Pattern.compile("^(?=\\w*\\d)(?=\\w*[A-Z])(?=\\w*[a-z])\\S{8,15}$");
-        Matcher mat_password = pat_password.matcher(contraseña_text);
-        if(email_text.isEmpty()){
-            JOptionPane.showMessageDialog(null, "El correo es obligatorio");
-            System.out.println("El correo es obligatorio");
-        }else if(!mat_email.matches()){
-            JOptionPane.showMessageDialog(null, "Se esperaba una dirección de correo electrónico");
-            System.out.println("Se esperaba una dirección de correo electrónico");
-        }else if(contraseña_text.isEmpty()){
-            JOptionPane.showMessageDialog(null, "La contraseña es obligatoria");
-            System.out.println("La contraseña es obligatoria");
-        }else if(contraseña_text.length() < 8){
-            JOptionPane.showMessageDialog(null, "La contraseña debe tener más de 8 dígitos");
-            System.out.println("La contraseña debe tener más de 8 dígitos");
-        }else if(contraseña_text.length() > 15){
-            JOptionPane.showMessageDialog(null, "La contraseña debe tener menos de 15 dígitos");
-            System.out.println("La contraseña debe tener menos de 15 dígitos");
-        }else if(!mat_password.matches()){
-            JOptionPane.showMessageDialog(null, "Se esperaba una contraseña con mínimo una minúscula, una masyúscula, un dígito numérico y sin espacios");
-            System.out.println("Se esperaba una contraseña con mínimo una minúscula, una masyúscula, un dígito numérico y sin espacios");
-        }else{*/
-            System.out.println("Email = " + email_text);
-            System.out.println("Contraseña = " + contraseña_text);
+
             HerokuUsersSqlConnection conex_us = HerokuUsersSqlConnection.getInstance();
-            /*this.userSignedIn.setEmail(email_text);
-            this.userSignedIn.setPwd(contraseña_text);*/
-            
-            /*try {
-                this.userSignedIn.setId(conex_us.getUserIdByEmail(email_text));
-                System.out.println("se ha seteado el id del usuario!!");
-            } catch (SQLException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            }*/
+
             try {
                 userSigned.setEmail(email_text);
                 userSigned.setPwd(contraseña_text);
                 userSigned.setId(conex_us.getUserIdByEmail(email_text));
-                System.out.println("el ide del usuario insertador es: "+userSigned.getId());
-                //this.userSignedIn.toString();
+
                 userSingedUp=userSigned;
                 if(conex_us.login(this.userSingedUp)){
-
-                    System.out.println("Login correcto");
                     MainPage mp = new MainPage();                     
                     mp.setVisible(true);
                     this.setVisible(false);
-                }else {
-                    System.out.println("Login incorrecto");                    
                 }
             }catch (SQLException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
@@ -341,6 +288,7 @@ public final class Login extends javax.swing.JFrame implements usuario{
     public void close(){
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 try {
                     confirmarSalida();
@@ -354,12 +302,9 @@ public final class Login extends javax.swing.JFrame implements usuario{
     public void confirmarSalida() throws SQLException {
         HerokuUsersSqlConnection conex = HerokuUsersSqlConnection.getInstance();
         if(conex.signOut2(userSingedUp)){
-            System.out.println("El signOut se ha realizado de forma correcta");
+            
             this.setVisible(false);
             System.exit(0);
-        }else {
-
-            System.out.println("El signOut ha fallado");
         }
     }
     
@@ -379,22 +324,16 @@ public final class Login extends javax.swing.JFrame implements usuario{
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        
+        //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Login().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Login().setVisible(true);
         });
     }
 
