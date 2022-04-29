@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -29,6 +30,12 @@ import model.Calendars;
  */
 public final class MainPage extends javax.swing.JFrame implements usuario{
 
+    JButton jButton2;
+    
+    ArrayList<JButton> botones = new ArrayList<>();
+    ArrayList<JLabel> titulos = new ArrayList<>();
+    ArrayList<JButton> eliminars = new ArrayList<>();
+    
     int posicionCalendariox = 6;
     int posicionCalendarioy = 39;
     HerokuCalendarSqlConnection conex_cal;
@@ -45,8 +52,9 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
     private User userSignedUpmp;
     public MainPage() throws SQLException {
         initComponents();
-        //Color color = new Color(255,255,255);
-        //this.getContentPane().setBackground(color);
+                
+        Color color = new Color(255,255,255);
+        this.getContentPane().setBackground(color);
         //userSigned.setEmail("leyre");
         //userSigned.setId(1);
         this.setLocationRelativeTo(null);
@@ -90,13 +98,13 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
         jPanel2 = new javax.swing.JPanel();
         singout = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        description = new javax.swing.JTextPane();
+        description = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextPane2 = new javax.swing.JTextPane();
         configuration = new javax.swing.JButton();
         alert = new javax.swing.JButton();
         users1 = new javax.swing.JButton();
+        jTextPane2 = new javax.swing.JTextField();
+        jCheckBox1 = new javax.swing.JCheckBox();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
@@ -118,28 +126,12 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
 
         description.setEditable(false);
         description.setBackground(new java.awt.Color(235, 216, 189));
+        description.setForeground(new java.awt.Color(250, 250, 250));
         description.setBorder(null);
-        description.setForeground(new java.awt.Color(235, 216, 189));
-        description.setCaretColor(new java.awt.Color(235, 216, 189));
-        description.setDisabledTextColor(new java.awt.Color(235, 216, 189));
-        description.setFocusable(false);
-        description.setRequestFocusEnabled(false);
-        description.setVerifyInputWhenFocusTarget(false);
         jScrollPane1.setViewportView(description);
 
         jLabel1.setFont(new java.awt.Font("Rockwell", 0, 20)); // NOI18N
         jLabel1.setText("Description");
-
-        jTextPane2.setEditable(false);
-        jTextPane2.setBackground(new java.awt.Color(235, 216, 189));
-        jTextPane2.setBorder(null);
-        jTextPane2.setForeground(new java.awt.Color(235, 216, 189));
-        jTextPane2.setCaretColor(new java.awt.Color(235, 216, 189));
-        jTextPane2.setDisabledTextColor(new java.awt.Color(235, 216, 189));
-        jTextPane2.setFocusable(false);
-        jTextPane2.setRequestFocusEnabled(false);
-        jTextPane2.setVerifyInputWhenFocusTarget(false);
-        jScrollPane2.setViewportView(jTextPane2);
 
         configuration.setFont(new java.awt.Font("Rockwell", 0, 20)); // NOI18N
         configuration.setIcon(new javax.swing.ImageIcon(getClass().getResource("/design/imagenes/configuration.png"))); // NOI18N
@@ -173,31 +165,40 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
             }
         });
 
+        jTextPane2.setEditable(false);
+        jTextPane2.setBackground(new java.awt.Color(235, 216, 189));
+        jTextPane2.setForeground(new java.awt.Color(250, 250, 250));
+        jTextPane2.setBorder(null);
+
+        jCheckBox1.setText("Modo oscuro");
+        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(alert, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(138, 138, 138))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(configuration, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(128, 128, 128)
+                        .addComponent(singout, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(48, 48, 48)
+                        .addComponent(jCheckBox1))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(38, 38, 38)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(128, 128, 128)
-                        .addComponent(singout, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jTextPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(alert, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1))))
                 .addContainerGap(38, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel2Layout.createSequentialGroup()
-                    .addGap(37, 37, 37)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(186, Short.MAX_VALUE)))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addGap(41, 41, 41)
@@ -208,21 +209,22 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(39, 39, 39)
-                .addComponent(singout)
-                .addGap(50, 50, 50)
-                .addComponent(alert, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(singout)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jCheckBox1)))
+                .addGap(60, 60, 60)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(alert, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 347, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 362, Short.MAX_VALUE)
                 .addComponent(configuration, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel2Layout.createSequentialGroup()
-                    .addGap(133, 133, 133)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(610, Short.MAX_VALUE)))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addGap(23, 23, 23)
@@ -230,8 +232,12 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
                     .addContainerGap(687, Short.MAX_VALUE)))
         );
 
+        jPanel1.setBackground(new java.awt.Color(250, 250, 250));
+
         jLabel2.setFont(new java.awt.Font("Rockwell", 0, 36)); // NOI18N
         jLabel2.setText("My Calendars");
+
+        jPanel4.setBackground(new java.awt.Color(250, 250, 250));
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -241,7 +247,7 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 695, Short.MAX_VALUE)
+            .addGap(0, 724, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -282,7 +288,7 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
     }// </editor-fold>                        
 
     private void users1ActionPerformed(java.awt.event.ActionEvent evt) {                                       
-        ChangeUser cu = new ChangeUser();
+        ChangeUser cu = new ChangeUser(jCheckBox1.isSelected());
         cu.setVisible(true);
         System.out.println("Nombre del usuario = " + userSignedUpmp.getName());
         jTextPane2.setText(userSignedUpmp.getName());
@@ -293,7 +299,7 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
     private void alertActionPerformed(java.awt.event.ActionEvent evt) {                                      
         Notification notification = null;
         try {
-            notification = new Notification(this);
+            notification = new Notification(this, jCheckBox1.isSelected());
         } catch (SQLException ex) {
             Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -301,7 +307,7 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
     }                                     
 
     private void configurationActionPerformed(java.awt.event.ActionEvent evt) {                                              
-        Configuration configuration = new Configuration();
+        Configuration configuration = new Configuration(jCheckBox1.isSelected());
         configuration.setVisible(true);
     }                                             
 
@@ -318,19 +324,70 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
         }
     }                                       
 
+    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {                                           
+        if(jCheckBox1.isSelected()){
+            jPanel1.setBackground(Color.decode("#000000"));
+            jPanel2.setBackground(Color.decode("#7D8E9A"));
+            jPanel4.setBackground(Color.decode("#000000"));
+
+            description.setBackground(Color.decode("#7D8E9A"));
+            description.setForeground(Color.decode("#FFFFFF"));
+
+            
+            jTextPane2.setBackground(Color.decode("#7D8E9A"));
+            jTextPane2.setForeground(Color.decode("#FFFFFF"));
+
+            jLabel1.setForeground(Color.decode("#FFFFFF"));
+            jLabel2.setForeground(Color.decode("#FFFFFF"));
+            this.getContentPane().setBackground(Color.decode("#000000"));
+        
+            for(int i = 0; i < botones.size(); i++){
+                botones.get(i).setBackground(Color.decode("#000000"));
+                titulos.get(i).setForeground(Color.decode("#FFFFFF"));
+                eliminars.get(i).setIcon(new ImageIcon(getClass().getResource("/design/imagenes/basura_blanco.png")));
+            }
+        
+            jButton2.setBackground(Color.decode("#848B81"));
+            jButton2.setForeground(Color.decode("#474040"));
+        }else{
+            jPanel1.setBackground(Color.decode("#FFFFFF"));
+            jPanel2.setBackground(Color.decode("#EBD8BD"));
+            jPanel4.setBackground(Color.decode("#FFFFFF"));
+            
+            description.setBackground(Color.decode("#EBD8BD"));
+            description.setForeground(Color.decode("#000000"));
+
+            jTextPane2.setBackground(Color.decode("#EBD8BD"));
+            jTextPane2.setForeground(Color.decode("#000000"));
+
+            jLabel2.setForeground(Color.decode("#000000"));
+            jLabel2.setForeground(Color.decode("#000000"));
+            this.getContentPane().setBackground(Color.decode("#FFFFFF"));
+        
+            for(int i = 0; i < botones.size(); i++){
+                botones.get(i).setBackground(new Color(203,239,255));
+                titulos.get(i).setForeground(Color.decode("#000000"));
+                eliminars.get(i).setIcon(new ImageIcon(getClass().getResource("/design/imagenes/basura.png"))); 
+            }
+        
+            jButton2.setBackground(new Color(203,239,255));
+            jButton2.setForeground(Color.decode("#000000"));
+        }
+    }                                          
+
 
     private void initCalendars(){
         conex_cal_per = HerokuCalendarPermitSqlConnection.getInstance();
         conex_cal = HerokuCalendarSqlConnection.getInstance();
         
         ButtonCalendar bc = new ButtonCalendar();
-        JButton jButton2 = bc.createButtonPrincipal(posicionCalendariox, posicionCalendarioy);
-        jButton2.setBackground(new Color(203,239,255));
+        jButton2 = bc.createButtonPrincipal(posicionCalendariox, posicionCalendarioy);
+        // jButton2.setBackground(new Color(203,239,255));
         jPanel4.add(jButton2);
         
         jButton2.addActionListener((java.awt.event.ActionEvent e) -> {
 
-            InputCalendarName inputCalendarName = new InputCalendarName();
+            InputCalendarName inputCalendarName = new InputCalendarName(jCheckBox1.isSelected());
             inputCalendarName.userSignedIn=userSigned;
             inputCalendarName.setVisible(true);
 
@@ -361,6 +418,7 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
     public void close(){
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 confirmarSalida();
             }
@@ -384,18 +442,32 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
         ButtonCalendar calendar_aux = new ButtonCalendar();
      
         JButton boton1 = calendar_aux.createButton(posicionCalendariox, posicionCalendarioy);
+        botones.add(boton1);
         JLabel titulo = calendar_aux.createTitle(calendarName, posicionCalendariox, posicionCalendarioy);
+        titulos.add(titulo);
         JButton eliminar = calendar_aux.createDelete(posicionCalendariox, posicionCalendarioy);
-        boton1.setBackground(new Color(203,239,255));
+        eliminars.add(eliminar);
         jPanel4.add(boton1);
         jPanel4.add(titulo);
         jPanel4.add(eliminar);
+        if(jCheckBox1.isSelected()){
+            System.out.println("Seleccionado");
+            boton1.setBackground(Color.decode("#000000"));
+            titulo.setForeground(Color.decode("#FFFFFF"));
+            eliminar.setIcon(new ImageIcon(getClass().getResource("/design/imagenes/basura_blanco.png")));
+        }else {
+            System.out.println("No Seleccionado");
+            boton1.setBackground(new Color(203,239,255));
+            titulo.setForeground(Color.decode("#000000"));
+            eliminar.setIcon(new ImageIcon(getClass().getResource("/design/imagenes/basura.png")));
+        }
         
          if(posicion == aux.size()){
             posicion--;
         }
         
-        ButtonCalendar calendar = new ButtonCalendar(posicion, aux.get(posicion), boton1, titulo, eliminar, posicionCalendariox, posicionCalendarioy);
+        ButtonCalendar calendar = new ButtonCalendar(posicion, aux.get(posicion), boton1, titulo, eliminar, posicionCalendariox, posicionCalendarioy);        
+        
         System.out.println("Id del calendario = " + aux.get(posicion));
         posicion++;
         System.out.println("La longitude calendars al añadir:**** " + calendars.getCalendars().size());
@@ -442,6 +514,11 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
                    a.remove(calendar);
                    calendars.remove(calendar);
                    aux.remove(aux.indexOf(x));
+                   
+                   botones.remove(i);
+                   titulos.remove(i);
+                   eliminars.remove(i);
+                   
                    if(conex_cal_per.selectUserfromSameCalendar(x)){
                        conex_cal_per.deleteOnlyCalendarPermitfromOneUser(x,userSigned.getId());
                    }else{
@@ -450,7 +527,6 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
                    
                    break;
                 } 
-                                
             }
             
             if(posicion!=0){
@@ -501,15 +577,15 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
     // Variables declaration - do not modify                     
     private javax.swing.JButton alert;
     private javax.swing.JButton configuration;
-    private javax.swing.JTextPane description;
+    private javax.swing.JTextField description;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextPane jTextPane2;
+    private javax.swing.JTextField jTextPane2;
     private javax.swing.JButton singout;
     private javax.swing.JButton users1;
     // End of variables declaration                   
