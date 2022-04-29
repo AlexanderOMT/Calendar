@@ -25,13 +25,40 @@ public class ChangeUser extends javax.swing.JDialog {
         initComponents();
     }
     
-    public ChangeUser(){
+    public ChangeUser(boolean modo){
         initComponents();
         Color color = new Color(36,47,35);
         this.getContentPane().setBackground(color);
         setModal(true);
         this.setLocationRelativeTo(null);
         userSignedUpmp=userSigned;
+        
+        changeColor(modo);
+    }
+    
+    public void changeColor(boolean modo){
+        if(modo){
+            jPanel1.setBackground(Color.decode("#000000"));
+            jLabel1.setForeground(Color.decode("#FFFFFF"));
+            jLabel2.setForeground(Color.decode("#FFFFFF"));
+            jLabel3.setForeground(Color.decode("#FFFFFF"));
+            jTextField2.setBackground(Color.decode("#9EB8C2"));
+            jTextField2.setForeground(Color.decode("#FFFFFF"));
+            jTextArea1.setBackground(Color.decode("#9EB8C2"));
+            jTextArea1.setForeground(Color.decode("#FFFFFF"));
+            jButton1.setBackground(Color.decode("#6E8198"));
+        }else{
+            jPanel1.setBackground(Color.decode("#FFFFFF"));
+            jLabel1.setForeground(Color.decode("#000000"));
+            jLabel2.setForeground(Color.decode("#000000"));
+            jLabel3.setForeground(Color.decode("#000000"));
+            jTextField2.setBackground(Color.decode("#CBEFFF"));
+            jTextField2.setForeground(Color.decode("#000000"));
+            jTextArea1.setBackground(Color.decode("#CBEFFF"));
+            jTextArea1.setForeground(Color.decode("#000000"));
+            jButton1.setBackground(Color.decode("#859EBC"));
+        }
+        
     }
 
     /**
