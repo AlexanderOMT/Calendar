@@ -24,7 +24,7 @@ public class Configuration extends javax.swing.JDialog {
         initComponents();
     }
     
-    public Configuration(){
+    public Configuration(boolean modo){
         initComponents();
         Color color = new Color(36,47,35);
         this.getContentPane().setBackground(color);
@@ -33,6 +33,30 @@ public class Configuration extends javax.swing.JDialog {
         userSignedUpmp=userSigned;
         jTextPane2.setText(userSignedUpmp.getName());
         description.setText(userSignedUpmp.getDescription());
+        changeColor(modo);
+    }
+    
+    public void changeColor(boolean modo){
+        if(modo){
+            jPanel1.setBackground(Color.decode("#000000"));
+            jLabel1.setForeground(Color.decode("#FFFFFF"));
+            jTextPane2.setBackground(Color.decode("#000000"));
+            jTextPane2.setForeground(Color.decode("#FFFFFF"));
+            description.setBackground(Color.decode("#000000"));
+            description.setForeground(Color.decode("#FFFFFF"));
+            jButton1.setBackground(Color.decode("#AE7171")); 
+            jButton1.setForeground(Color.decode("#FFFFFF"));
+        }else {
+            jPanel1.setBackground(Color.decode("#FFFFFF"));
+            jLabel1.setForeground(Color.decode("#000000"));
+            jTextPane2.setBackground(Color.decode("#FFFFFF"));
+            jTextPane2.setForeground(Color.decode("#000000"));
+            description.setBackground(Color.decode("#FFFFFF"));
+            description.setForeground(Color.decode("#000000"));
+            jButton1.setBackground(Color.decode("#FB9696")); 
+            jButton1.setForeground(Color.decode("#000000"));
+        }
+        
     }
 
     /**
@@ -45,38 +69,23 @@ public class Configuration extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextPane2 = new javax.swing.JTextPane();
         jScrollPane1 = new javax.swing.JScrollPane();
-        description = new javax.swing.JTextPane();
+        description = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jTextPane2 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jTextPane2.setEditable(false);
-        jTextPane2.setBorder(null);
-        jTextPane2.setForeground(new java.awt.Color(204, 204, 204));
-        jTextPane2.setText("UserName");
-        jTextPane2.setCaretColor(new java.awt.Color(235, 216, 189));
-        jTextPane2.setDisabledTextColor(new java.awt.Color(235, 216, 189));
-        jTextPane2.setFocusable(false);
-        jTextPane2.setRequestFocusEnabled(false);
-        jTextPane2.setVerifyInputWhenFocusTarget(false);
-        jScrollPane2.setViewportView(jTextPane2);
+        jScrollPane1.setBorder(null);
 
         description.setEditable(false);
-        description.setBorder(null);
-        description.setFont(new java.awt.Font("Rockwell", 0, 11)); // NOI18N
+        description.setBackground(new java.awt.Color(255, 255, 255));
         description.setForeground(new java.awt.Color(204, 204, 204));
-        description.setText("Short Description");
-        description.setCaretColor(new java.awt.Color(235, 216, 189));
-        description.setDisabledTextColor(new java.awt.Color(235, 216, 189));
-        description.setFocusable(false);
-        description.setRequestFocusEnabled(false);
-        description.setVerifyInputWhenFocusTarget(false);
+        description.setBorder(null);
+        description.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         jScrollPane1.setViewportView(description);
 
         jLabel1.setFont(new java.awt.Font("Rockwell", 0, 20)); // NOI18N
@@ -88,6 +97,17 @@ public class Configuration extends javax.swing.JDialog {
         jButton1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton1.setBorderPainted(false);
         jButton1.setFocusable(false);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jTextPane2.setEditable(false);
+        jTextPane2.setBackground(new java.awt.Color(255, 255, 255));
+        jTextPane2.setForeground(new java.awt.Color(204, 204, 204));
+        jTextPane2.setBorder(null);
+        jTextPane2.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -95,25 +115,26 @@ public class Configuration extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(54, 54, 54)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE))
-                .addContainerGap(74, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+                        .addComponent(jLabel1)))
+                .addContainerGap(84, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(58, 58, 58)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
+                .addGap(79, 79, 79)
+                .addComponent(jTextPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(30, 30, 30)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(42, 42, 42)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(51, Short.MAX_VALUE))
+                .addGap(38, 38, 38))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -129,6 +150,10 @@ public class Configuration extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>                        
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        // TODO add your handling code here:
+    }                                        
 
     /**
      * @param args the command line arguments
@@ -171,12 +196,11 @@ public class Configuration extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify                     
-    private javax.swing.JTextPane description;
+    private javax.swing.JTextField description;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextPane jTextPane2;
+    private javax.swing.JTextField jTextPane2;
     // End of variables declaration                   
 }
