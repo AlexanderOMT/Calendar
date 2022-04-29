@@ -2,10 +2,7 @@ package design;
 
 import SqlDatabase.HerokuCalendarPermitSqlConnection;
 import SqlDatabase.HerokuCalendarSqlConnection;
-import SqlDatabase.HerokuTaskSqlConnection;
-import SqlDatabase.HerokuUsersSqlConnection;
 import java.awt.Color;
-import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import model.User;
 
@@ -18,19 +15,43 @@ public class InputCalendarName extends javax.swing.JDialog implements usuario{
     /**
      * Creates new form InputCalendarName
      */
-    int id_cal_recien_creado;
+    private int id_cal_recien_creado;
+    private boolean calendarExist=false;
     public User userSignedIn;
+    private boolean help=false;
+    
     public InputCalendarName(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
     
-    public InputCalendarName(){
+    public InputCalendarName(boolean modo){
         initComponents();
         Color color = new Color(255,255,255);
         this.getContentPane().setBackground(color);
         setModal(true);
         this.setLocationRelativeTo(null);
+        
+        changeColor(modo);
+    }
+    
+    public void changeColor(boolean modo){
+        if(modo){
+            jPanel1.setBackground(Color.decode("#000000"));
+            calendarName.setForeground(Color.decode("#FFFFFF"));
+            calendarName.setBackground(Color.decode("#9EB8C2"));
+            AddCalendar.setBackground(Color.decode("#859EBC"));
+            jLabel1.setBackground(Color.decode("#CBEFFF"));
+            jLabel1.setForeground(Color.decode("#FFFFFF"));
+        }else{
+            jPanel1.setBackground(Color.decode("#FFFFFF"));
+            calendarName.setForeground(Color.decode("#000000"));
+            calendarName.setBackground(Color.decode("#FFFFFF"));
+            AddCalendar.setBackground(Color.decode("#66CCFF"));
+            jLabel1.setBackground(Color.decode("#FFFFFF"));
+            jLabel1.setForeground(Color.decode("#000000"));
+        }
+        
     }
 
     /**
@@ -42,11 +63,18 @@ public class InputCalendarName extends javax.swing.JDialog implements usuario{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
         calendarName = new javax.swing.JTextField();
         AddCalendar = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(250, 250, 250));
+
+        jLabel1.setBackground(new java.awt.Color(250, 250, 250));
+        jLabel1.setFont(new java.awt.Font("Rockwell", 0, 14)); // NOI18N
+        jLabel1.setText("Enter the name of your calendar");
 
         AddCalendar.setBackground(new java.awt.Color(102, 204, 255));
         AddCalendar.setText("Add");
@@ -55,67 +83,76 @@ public class InputCalendarName extends javax.swing.JDialog implements usuario{
                 AddCalendarActionPerformed(evt);
             }
         });
-        AddCalendar.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                AddCalendarKeyPressed(evt);
-            }
-        });
 
-        jLabel1.setFont(new java.awt.Font("Rockwell", 0, 14)); // NOI18N
-        jLabel1.setText("Enter the name of your calendar");
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(calendarName, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(AddCalendar, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(calendarName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(AddCalendar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(24, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(calendarName, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(AddCalendar, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(18, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(calendarName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(AddCalendar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>                        
-
-    private void AddCalendarActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        // TODO add your handling code here:
-        
-        String CalendarName = calendarName.getText();
-        //calendar calendar = new calendar(CalendarName);
-        /*
-        Controlar el caso de que el nombre del calendario sea repetido
-        para que no salte el mensaje de error por unique
-        */
-        //HerokuUsersSqlConnection conex = HerokuUsersSqlConnection.getInstance();
+    public int getIdCalendarCreated(){
+        return this.id_cal_recien_creado;
+    }
+    public boolean getCalendarExists(){
+        return this.calendarExist;
+    }
+    
+    public boolean gethelp(){
+        return this.help;
+    }
+    
+    private void AddCalendarActionPerformed(java.awt.event.ActionEvent evt) { 
+        String CalendarName = this.calendarName.getText();
         HerokuCalendarPermitSqlConnection conex_cal_per = HerokuCalendarPermitSqlConnection.getInstance();
         HerokuCalendarSqlConnection conex_cal = HerokuCalendarSqlConnection.getInstance();
-        String new_email_id=CalendarName+userSignedIn.getEmail();
-        conex_cal.insertCalendar(CalendarName,new_email_id);
-        id_cal_recien_creado=conex_cal.getCalendar(new_email_id);
-        if(id_cal_recien_creado >0)
-            conex_cal_per.insertCalendarPermitTaskNull(userSignedIn.getId(), id_cal_recien_creado, "Admin");
-
-           this.setVisible(false);
-
-    }                                           
+        String new_email_id=CalendarName.trim()+userSignedIn.getEmail();
+        /*control para que no se cree otro calendario, si ya existe otro con el mismo id*/
+        boolean verdadero=conex_cal.selectCalendarIdBySpecialId(new_email_id);
+        if(verdadero == true){
+            this.calendarExist=true;
+            JOptionPane.showMessageDialog(null, "El calendario no se ha podido crear porque ya existe uno con el mismo nombre");
+        }else{
+            conex_cal.insertCalendar(CalendarName,new_email_id);
+            id_cal_recien_creado=conex_cal.getCalendar(new_email_id);
+            if(id_cal_recien_creado >0)
+                conex_cal_per.insertCalendarPermitTaskNull(userSignedIn.getId(), id_cal_recien_creado, "Admin");
+        }
+        this.setVisible(false);
+        this.help=true;
+    }                                   
 
     private void AddCalendarKeyPressed(java.awt.event.KeyEvent evt) {                                       
         String CalendarName = calendarName.getText();
@@ -126,7 +163,6 @@ public class InputCalendarName extends javax.swing.JDialog implements usuario{
         id_cal_recien_creado=conex_cal.getCalendar(new_email_id);
         if(id_cal_recien_creado >0)
             conex_cal_per.insertCalendarPermitTaskNull(userSignedIn.getId(), id_cal_recien_creado, "Admin");
-
            this.setVisible(false);
     }                                      
 
@@ -145,11 +181,6 @@ public class InputCalendarName extends javax.swing.JDialog implements usuario{
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -157,30 +188,25 @@ public class InputCalendarName extends javax.swing.JDialog implements usuario{
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(InputCalendarName.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(InputCalendarName.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(InputCalendarName.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(InputCalendarName.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
+        
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                InputCalendarName dialog = new InputCalendarName(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            InputCalendarName dialog = new InputCalendarName(new javax.swing.JFrame(), true);
+            dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e) {
+                    System.exit(0);
+                }
+            });
+            dialog.setVisible(true);
         });
     }
 
@@ -188,5 +214,6 @@ public class InputCalendarName extends javax.swing.JDialog implements usuario{
     private javax.swing.JButton AddCalendar;
     private javax.swing.JTextField calendarName;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
     // End of variables declaration                   
 }
