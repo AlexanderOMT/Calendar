@@ -11,6 +11,7 @@ import SqlDatabase.HerokuInvitationSqlConnection;
 import SqlDatabase.HerokuUsersSqlConnection;
 import static design.usuario.userSigned;
 import java.awt.Color;
+import java.awt.Component;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -52,19 +53,22 @@ public class Share extends javax.swing.JDialog implements usuario{
         super(parent, modal);
         initComponents();
         getNotifications();
+        //changetoNightMode();
     }
     
     public Share(CalendarTask actualCalendar) throws SQLException{
         this.actualCalendar=actualCalendar;
         System.out.println("ID DEL ACTUAL CALENDAR ESSS: "+ this.actualCalendar.getId());
         initComponents();
-        changeColor();
+        //changeColor();
         Color color = new Color(36,47,35);
         this.getContentPane().setBackground(color);
         setModal(true);
         this.setLocationRelativeTo(null);
         Rol.setEditable(false);
         getNotifications();
+        //changetoNightMode();
+        
     }
 
     public void changeColor(){
@@ -77,6 +81,22 @@ public class Share extends javax.swing.JDialog implements usuario{
         Rol.setForeground(Color.decode("#FFFFFF"));
         jButton1.setBackground(Color.decode("#859EBC"));
         jPanel2.setBackground(Color.decode("#000000"));
+    }
+    public void changetoNightMode(){
+        Component[] components=jPanel2.getComponents();
+        
+        for (Component component : components) {
+          System.out.println(component.getClass().getSimpleName());
+              component.setForeground(Color.white);
+              component.setBackground(Color.red);
+          if (component.getClass().getSimpleName().equals("JComboBox")){
+              JComboBox a= (JComboBox) component;
+              a.setForeground(Color.red);
+              System.out.print("asdfa");
+          }
+          
+        }
+         paint(getGraphics());
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -93,7 +113,7 @@ public class Share extends javax.swing.JDialog implements usuario{
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
+        jTextPane1 = new javax.swing.JTextField();
         Rol = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanel2 = new javax.swing.JPanel();
@@ -113,10 +133,8 @@ public class Share extends javax.swing.JDialog implements usuario{
         jTextField1.setBackground(new java.awt.Color(203, 239, 255));
         jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextField1.setText("Introduce un email");
-        jTextField1.setAlignmentX(JTextField.CENTER);
         jTextField1.setBorder(null);
         jTextField1.setCaretColor(new java.awt.Color(203, 239, 255));
-        jTextField1.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         jTextField1.setFocusable(false);
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -138,6 +156,7 @@ public class Share extends javax.swing.JDialog implements usuario{
             }
         });
 
+        jTextPane1.setBorder(null);
         jScrollPane1.setViewportView(jTextPane1);
 
         Rol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Editor", "Lector"}));
@@ -171,14 +190,15 @@ public class Share extends javax.swing.JDialog implements usuario{
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(25, 25, 25)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(Rol, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(30, 30, 30)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel2)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(31, 31, 31)
+                                    .addComponent(Rol, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(165, 165, 165)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -192,18 +212,18 @@ public class Share extends javax.swing.JDialog implements usuario{
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(43, 43, 43)
                 .addComponent(jLabel1)
-                .addGap(40, 40, 40)
+                .addGap(61, 61, 61)
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(Rol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(34, 34, 34)
-                .addComponent(jScrollPane2)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
                 .addGap(28, 28, 28))
         );
 
@@ -211,11 +231,13 @@ public class Share extends javax.swing.JDialog implements usuario{
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -361,6 +383,7 @@ public class Share extends javax.swing.JDialog implements usuario{
     
     public void getNotifications() throws SQLException{
         //conseguir todas las invitaciones sin responder
+        //invitations = conex_invite.getInvitationsAccepted(474);
         invitations = conex_invite.getInvitationsAccepted(actualCalendar.getId());
         loadNotifications();
     }
@@ -421,6 +444,6 @@ public class Share extends javax.swing.JDialog implements usuario{
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextPane jTextPane1;
+    private javax.swing.JTextField jTextPane1;
     // End of variables declaration//GEN-END:variables
 }

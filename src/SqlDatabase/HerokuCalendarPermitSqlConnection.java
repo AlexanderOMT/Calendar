@@ -422,4 +422,24 @@ public class HerokuCalendarPermitSqlConnection extends SqlConnection {
             System.out.println("Error al seleccionar todo en la tabla INVITATION: " + e.getMessage());
         }
     }
+    
+    public String selectRolfromUser(int us_id, int cal_id) {
+        Connection conn = getSqlConnection();
+        String rol=new String();
+        try{
+            PreparedStatement ps = conn.prepareStatement("SELECT DISTINCT rol FROM calendar_permit WHERE user_id=? AND calendar_id=?");
+            ps.setInt(1, us_id);
+            ps.setInt(2, cal_id);
+            
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                  rol=rs.getString("rol");
+            }
+            conn.close();
+            return rol;            
+        }catch (SQLException e) {
+                System.out.println("Error al seleccionar el rol en la tabla CALENDAR_PERMIT: " + e.getMessage());
+        }
+        return rol;
+    }
 }
