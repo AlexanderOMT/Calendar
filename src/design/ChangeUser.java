@@ -25,7 +25,7 @@ public class ChangeUser extends javax.swing.JDialog {
         initComponents();
     }
     
-    public ChangeUser(boolean modo){
+    public ChangeUser(){
         initComponents();
         Color color = new Color(36,47,35);
         this.getContentPane().setBackground(color);
@@ -33,11 +33,11 @@ public class ChangeUser extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
         userSignedUpmp=userSigned;
         
-        changeColor(modo);
+        changeColor();
     }
     
-    public void changeColor(boolean modo){
-        if(modo){
+    public void changeColor(){
+        if(userSignedUpmp.getModo() == 1){
             jPanel1.setBackground(Color.decode("#000000"));
             jLabel1.setForeground(Color.decode("#FFFFFF"));
             jLabel2.setForeground(Color.decode("#FFFFFF"));
