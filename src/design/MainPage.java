@@ -30,14 +30,14 @@ import model.Calendars;
  */
 public final class MainPage extends javax.swing.JFrame implements usuario{
 
-    JButton jButton2;
-    
     ArrayList<JButton> botones = new ArrayList<>();
     ArrayList<JLabel> titulos = new ArrayList<>();
     ArrayList<JButton> eliminars = new ArrayList<>();
     
     int posicionCalendariox = 6;
     int posicionCalendarioy = 39;
+    ButtonCalendar bc = new ButtonCalendar();
+    JButton  jButton2 = bc.createButtonPrincipal(posicionCalendariox, posicionCalendarioy);
     HerokuCalendarSqlConnection conex_cal;
     HerokuUsersSqlConnection conex_us;
     HerokuCalendarPermitSqlConnection conex_cal_per;
@@ -55,23 +55,45 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
                 
         Color color = new Color(255,255,255);
         this.getContentPane().setBackground(color);
-        //userSigned.setEmail("minerva@gmail.com");
-        //userSigned.setId(20);
-        userSigned.setEmail("selene3");
-        userSigned.setId(7);
+        // userSigned.setEmail("selene@gmail.com");
+        // userSigned.setId(1);
         this.setLocationRelativeTo(null);
         this.setExtendedState(MAXIMIZED_BOTH);
         userSignedUpmp=userSigned;
         
-        System.out.println("Nombre del usuario = " + userSignedUpmp.getName());
-        jTextPane2.setText(userSignedUpmp.getName());
-        System.out.println("Descripción del usuario = " + userSignedUpmp.getDescription());
-        description.setText(userSignedUpmp.getDescription());
+        if(userSignedUpmp.getModo() == 1){
+            jCheckBox1.setSelected(true);
+            
+            userSignedUpmp.setModo(1);
+            jPanel1.setBackground(Color.decode("#000000"));
+            jPanel2.setBackground(Color.decode("#7D8E9A"));
+            jPanel4.setBackground(Color.decode("#000000"));
+
+            description.setBackground(Color.decode("#7D8E9A"));
+            description.setForeground(Color.decode("#FFFFFF"));
+
+            jTextPane2.setBackground(Color.decode("#7D8E9A"));
+            jTextPane2.setForeground(Color.decode("#FFFFFF"));
+
+            jLabel1.setForeground(Color.decode("#FFFFFF"));
+            jLabel2.setForeground(Color.decode("#FFFFFF"));
+            this.getContentPane().setBackground(Color.decode("#000000"));
         
+            for(int i = 0; i < botones.size(); i++){
+                botones.get(i).setBackground(Color.decode("#000000"));
+                titulos.get(i).setForeground(Color.decode("#FFFFFF"));
+                eliminars.get(i).setIcon(new ImageIcon(getClass().getResource("/design/imagenes/basura_blanco.png")));
+            }
+        
+            jButton2.setBackground(Color.decode("#848B81"));
+            jButton2.setForeground(Color.decode("#474040"));
+        }
+        
+        jTextPane2.setText(userSignedUpmp.getName());
+        description.setText(userSignedUpmp.getDescription());
         
         conex_us = HerokuUsersSqlConnection.getInstance();
         conex_cal = HerokuCalendarSqlConnection.getInstance();
-        System.out.println("el usuario se llama " +userSigned.getEmail());
         aux = loadCalendars();
         initCalendars();
         
@@ -81,12 +103,17 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
     public void reload(){
         // System.out.println("YUJUUU");
          //aux.clear();
-         //aux = loadCalendars();
+         
         
         jPanel4.removeAll();
-        initCalendars();
         jPanel4.updateUI();
-        jPanel4.revalidate();
+        jPanel4.repaint();
+
+        posicionCalendariox = 6;
+        posicionCalendarioy = 39;
+
+        aux = loadCalendars();
+        initCalendars();
      }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -290,26 +317,33 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
     }// </editor-fold>                        
 
     private void users1ActionPerformed(java.awt.event.ActionEvent evt) {                                       
-        ChangeUser cu = new ChangeUser(jCheckBox1.isSelected());
+        ChangeUser cu = new ChangeUser();
         cu.setVisible(true);
-        System.out.println("Nombre del usuario = " + userSignedUpmp.getName());
         jTextPane2.setText(userSignedUpmp.getName());
-        System.out.println("Descripción del usuario = " + userSignedUpmp.getDescription());
         description.setText(userSignedUpmp.getDescription());
     }                                      
 
     private void alertActionPerformed(java.awt.event.ActionEvent evt) {                                      
         Notification notification = null;
         try {
-            notification = new Notification(this, jCheckBox1.isSelected());
+            notification = new Notification(this);
+            notification.setVisible(true);
+            
+            
         } catch (SQLException ex) {
             Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            if(notification.acceptNotf()){
+                System.out.println("HA ACEPTADO");
+                reload();
+            }
         }
-        notification.setVisible(true);
+        
+        
     }                                     
 
     private void configurationActionPerformed(java.awt.event.ActionEvent evt) {                                              
-        Configuration configuration = new Configuration(jCheckBox1.isSelected());
+        Configuration configuration = new Configuration();
         configuration.setVisible(true);
     }                                             
 
@@ -328,6 +362,7 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {                                           
         if(jCheckBox1.isSelected()){
+            userSignedUpmp.setModo(1);
             jPanel1.setBackground(Color.decode("#000000"));
             jPanel2.setBackground(Color.decode("#7D8E9A"));
             jPanel4.setBackground(Color.decode("#000000"));
@@ -335,7 +370,6 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
             description.setBackground(Color.decode("#7D8E9A"));
             description.setForeground(Color.decode("#FFFFFF"));
 
-            
             jTextPane2.setBackground(Color.decode("#7D8E9A"));
             jTextPane2.setForeground(Color.decode("#FFFFFF"));
 
@@ -352,6 +386,7 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
             jButton2.setBackground(Color.decode("#848B81"));
             jButton2.setForeground(Color.decode("#474040"));
         }else{
+            userSignedUpmp.setModo(0);
             jPanel1.setBackground(Color.decode("#FFFFFF"));
             jPanel2.setBackground(Color.decode("#EBD8BD"));
             jPanel4.setBackground(Color.decode("#FFFFFF"));
@@ -389,7 +424,7 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
         
         jButton2.addActionListener((java.awt.event.ActionEvent e) -> {
 
-            InputCalendarName inputCalendarName = new InputCalendarName(jCheckBox1.isSelected());
+            InputCalendarName inputCalendarName = new InputCalendarName();
             inputCalendarName.userSignedIn=userSigned;
             inputCalendarName.setVisible(true);
 
@@ -405,10 +440,8 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
             if(!(calendar_name == null)){
                 añadirCalendario(calendar_name);
             }else{
-                System.out.println("no existe un calendario con ese id");
             }
         }
-         
     }
     
     private ArrayList<Integer> loadCalendars(){
@@ -453,12 +486,10 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
         jPanel4.add(titulo);
         jPanel4.add(eliminar);
         if(jCheckBox1.isSelected()){
-            System.out.println("Seleccionado");
             boton1.setBackground(Color.decode("#000000"));
             titulo.setForeground(Color.decode("#FFFFFF"));
             eliminar.setIcon(new ImageIcon(getClass().getResource("/design/imagenes/basura_blanco.png")));
         }else {
-            System.out.println("No Seleccionado");
             boton1.setBackground(new Color(203,239,255));
             titulo.setForeground(Color.decode("#000000"));
             eliminar.setIcon(new ImageIcon(getClass().getResource("/design/imagenes/basura.png")));
@@ -470,11 +501,8 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
         
         ButtonCalendar calendar = new ButtonCalendar(posicion, aux.get(posicion), boton1, titulo, eliminar, posicionCalendariox, posicionCalendarioy);        
         
-        System.out.println("Id del calendario = " + aux.get(posicion));
         posicion++;
-        System.out.println("La longitude calendars al añadir:**** " + calendars.getCalendars().size());
         calendars.addCalendar(calendar);
-        System.out.println("La longitude calendars al añadir: " + calendars.getCalendars().size());
         
         if(posicionCalendariox > 1235){
             posicionCalendariox=6;
@@ -521,17 +549,14 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
                    titulos.remove(i);
                    eliminars.remove(i);
                    
-                   //ELIMINAR EL CALENDARIO DE LA BASE DE DATOS
                    if(conex_cal_per.selectRolfromUser(userSigned.getId(),x).equals("Admin")){
-                       /*se borra tanto el calendario como las conexiones de cualquier usuario con él*/
-                       conex_cal.deleteCalendarById(x);
+                   conex_cal.deleteCalendarById(x);
                        conex_cal_per.deleteCalendarPermitById(x);
-                       
+
                    }else{
                        /*se borra solo la conexión con el usuario*/
                        conex_cal_per.deleteOnlyCalendarPermitfromOneUser(x,userSigned.getId());
                    }
-                   
                    break;
                 } 
             }
