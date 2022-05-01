@@ -5,6 +5,7 @@
  */
 package model;
 
+import java.awt.Color;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -150,7 +151,6 @@ public class ButtonCalendar {
         javax.swing.JComboBox<String> botonAux=new javax.swing.JComboBox<>();
         botonAux.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Editor", "Lector"}));
         botonAux.setSize(85, 25);
-        
         botonAux.setLocation(posicionCalendarioxAux,posicionCalendarioyAux);
         return botonAux;
     }

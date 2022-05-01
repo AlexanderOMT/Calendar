@@ -55,8 +55,10 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
                 
         Color color = new Color(255,255,255);
         this.getContentPane().setBackground(color);
-        //userSigned.setEmail("leyre");
-        //userSigned.setId(1);
+        //userSigned.setEmail("minerva@gmail.com");
+        //userSigned.setId(20);
+        userSigned.setEmail("selene3");
+        userSigned.setId(7);
         this.setLocationRelativeTo(null);
         this.setExtendedState(MAXIMIZED_BOTH);
         userSignedUpmp=userSigned;
@@ -519,10 +521,15 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
                    titulos.remove(i);
                    eliminars.remove(i);
                    
-                   if(conex_cal_per.selectUserfromSameCalendar(x)){
-                       conex_cal_per.deleteOnlyCalendarPermitfromOneUser(x,userSigned.getId());
-                   }else{
+                   //ELIMINAR EL CALENDARIO DE LA BASE DE DATOS
+                   if(conex_cal_per.selectRolfromUser(userSigned.getId(),x).equals("Admin")){
+                       /*se borra tanto el calendario como las conexiones de cualquier usuario con él*/
                        conex_cal.deleteCalendarById(x);
+                       conex_cal_per.deleteCalendarPermitById(x);
+                       
+                   }else{
+                       /*se borra solo la conexión con el usuario*/
+                       conex_cal_per.deleteOnlyCalendarPermitfromOneUser(x,userSigned.getId());
                    }
                    
                    break;
