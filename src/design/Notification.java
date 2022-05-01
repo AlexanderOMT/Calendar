@@ -9,6 +9,7 @@ import SqlDatabase.HerokuCalendarSqlConnection;
 import SqlDatabase.HerokuInvitationSqlConnection;
 import SqlDatabase.HerokuUsersSqlConnection;
 import java.awt.Color;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
@@ -20,6 +21,7 @@ import javax.swing.JScrollPane;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import model.ButtonCalendar;
 import model.Invitation;
+import model.User;
 
 /**
  *
@@ -30,18 +32,22 @@ public class Notification extends javax.swing.JDialog implements usuario{
     /**
      * Creates new form Notification
      */
+    // JButton accept;
+    // JButton decline;
+    int acceptB;
+    private User userSignedUpmp;
     private int posxb1=570;
     private int posxb2=635;
     private int posy=10;
     private int posxtext=10;
     private int posytext=10;
     private ArrayList<Invitation> invitations; //lista local de las invitaciones
-    private MainPage mn = new MainPage();
-    boolean modo2; 
     HerokuUsersSqlConnection conex_user= new HerokuUsersSqlConnection();
     HerokuCalendarSqlConnection conex_cal= new HerokuCalendarSqlConnection();
     HerokuCalendarPermitSqlConnection conex_cal_per= new HerokuCalendarPermitSqlConnection();
     HerokuInvitationSqlConnection conex_invite= new HerokuInvitationSqlConnection();
+    private MainPage m2;
+    
     
     public Notification(java.awt.Frame parent, boolean modal) throws SQLException {
         super(parent, modal);
@@ -49,19 +55,18 @@ public class Notification extends javax.swing.JDialog implements usuario{
         getNotifications();
     }
     
-    public Notification(MainPage main, boolean modo) throws SQLException{
+    public Notification(MainPage main) throws SQLException{
         initComponents();
-        modo2=modo;
-        changeColor(modo);
-        
-        this.mn=main;
+        userSignedUpmp=userSigned;
+        changeColor();
+        m2 = main;
         this.setLocationRelativeTo(null);
         getNotifications();
         close();
     }
 
-    public void changeColor(boolean modo){
-        if(modo){
+    public void changeColor(){
+        if(userSignedUpmp.getModo() == 1){
             jPanel1.setBackground(Color.decode("#000000"));
             jLabel1.setForeground(Color.decode("#FFFFFF"));
             jPanel2.setBackground(Color.decode("#000000"));
@@ -163,8 +168,6 @@ public class Notification extends javax.swing.JDialog implements usuario{
             int posytextorelative=10;
             for (int x=0; x<invitations.size(); x++){
                 Invitation invite=invitations.get(x);
-                if(invite == null)
-                    System.out.println("invitacion es null");
                 //1.conseguir correo de origin_user
                 String correo=conex_user.getEmailByUserId(invite.getOrigin_user());
                 //2. conseguir nombre del calendario
@@ -181,21 +184,20 @@ public class Notification extends javax.swing.JDialog implements usuario{
                     posyb2relative+=60;
                     posytextorelative+=60;
                 
-                    
-                // Cambiar color
-                if(modo2){
-                    // Poner fondo del panel en azul como el perfil, y el boton de join más claro 
+                if(userSignedUpmp.getModo() == 1){
                     accept.setBackground(Color.decode("#000000"));
                     accept.setForeground(Color.decode("#FFFFFF"));
-                    decline.setBackground(Color.decode("#000000"));
-                    decline.setForeground(Color.decode("#FFFFFF"));
+                    decline.setBackground(Color.decode("#F0F0F0"));
+                    decline.setForeground(Color.decode("#000000"));
                     text.setForeground(Color.decode("#FFFFFF"));
+                    text.setBackground(Color.decode("#9EB8C2"));
                 }else{
                     accept.setBackground(new Color(1011322298));
                     accept.setForeground(Color.decode("#000000"));
                     decline.setBackground(Color.decode("#CDCDCD"));
                     decline.setForeground(Color.decode("#000000"));
                     text.setForeground(Color.decode("#000000"));
+                    text.setBackground(Color.decode("#FFFFFF"));
                 }
                 
             //ACCIONES PARA LOS BOTONES DE ACEPTAR Y RECHAZAR
@@ -210,6 +212,8 @@ public class Notification extends javax.swing.JDialog implements usuario{
                     conex_invite.replyInvitation(invite.getInvitation_id(), 1);
                     conex_cal_per.insertCalendarPermitTaskNull(userSigned.getId(), invite.getCalendar_id(), invite.getRol());
                    
+                    System.out.println("SE HA ACEPTADO");
+                    acceptB = 1;
                 });
 
                 decline.addActionListener((java.awt.event.ActionEvent e) -> {
@@ -221,6 +225,7 @@ public class Notification extends javax.swing.JDialog implements usuario{
                     }
                     //eliminar de la base de datos
                     conex_invite.replyInvitation(invite.getInvitation_id(), 0);
+                    acceptB = 0;
                 });
             }
         
@@ -231,7 +236,6 @@ public class Notification extends javax.swing.JDialog implements usuario{
     
     public void getNotifications() throws SQLException{
         //conseguir todas las invitaciones sin responder
-        System.out.println(userSigned.getId()+ "ES EL IDE DEL USER SIGNED");
         invitations = conex_invite.getAllInvitationIdByUserId(userSigned.getId());
         loadNotifications();
     }
@@ -241,22 +245,30 @@ public class Notification extends javax.swing.JDialog implements usuario{
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                try {
-                    reloadMainPage();
-                } catch (SQLException ex) {
-                    Logger.getLogger(Notification.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                // reloadMainPage();
+                prueba();
             }
         });
     }  
-     public void reloadMainPage() throws SQLException{
-        // Conseguir pasar el modo, ya que al eliminarlo, siempre acciona los colores originales
-        MainPage mn2 = new MainPage();
-        mn2.setVisible(true);
-        this.mn.setVisible(false);
-    }   
-                 
     
+    public void prueba(){
+        if(acceptB == 1){
+            m2.reload();
+            System.out.println("HOLA");
+        }
+        m2.setVisible(true);
+    }
+    
+     public void reloadMainPage() throws SQLException{
+        MainPage mn = new MainPage();
+        // mn2.setVisible(true);
+        mn.setVisible(false);
+    }   
+    
+     
+    boolean acceptNotf() {
+        return acceptB == 1;
+    }
     
     /**
      * @param args the command line arguments
@@ -304,4 +316,5 @@ public class Notification extends javax.swing.JDialog implements usuario{
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration                   
+
 }
