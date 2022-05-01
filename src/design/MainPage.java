@@ -1,83 +1,120 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package design;
+
 import SqlDatabase.HerokuCalendarPermitSqlConnection;
 import SqlDatabase.HerokuCalendarSqlConnection;
-import SqlDatabase.HerokuInvitationSqlConnection;
 import SqlDatabase.HerokuUsersSqlConnection;
 import java.awt.Color;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.event.ActionEvent;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JScrollPane;
-import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import model.ButtonCalendar;
-import model.Invitation;
+import model.CalendarTask;
 import model.User;
+import model.Calendars;
 
 /**
  *
  * @author Leyre
  */
-public class Notification extends javax.swing.JDialog implements usuario{
+public final class MainPage extends javax.swing.JFrame implements usuario{
 
+    ArrayList<JButton> botones = new ArrayList<>();
+    ArrayList<JLabel> titulos = new ArrayList<>();
+    ArrayList<JButton> eliminars = new ArrayList<>();
+    
+    int posicionCalendariox = 6;
+    int posicionCalendarioy = 39;
+    ButtonCalendar bc = new ButtonCalendar();
+    JButton  jButton2 = bc.createButtonPrincipal(posicionCalendariox, posicionCalendarioy);
+    HerokuCalendarSqlConnection conex_cal;
+    HerokuUsersSqlConnection conex_us;
+    HerokuCalendarPermitSqlConnection conex_cal_per;
+    Calendars calendars = new Calendars();
+    ArrayList<Integer> aux;
+    int id = 0;
+    int posicion = 0;
     /**
-     * Creates new form Notification
+     * Creates new form MainPage
      */
-    // JButton accept;
-    // JButton decline;
-    int acceptB;
+    
     private User userSignedUpmp;
-    private int posxb1=570;
-    private int posxb2=635;
-    private int posy=10;
-    private int posxtext=10;
-    private int posytext=10;
-    private ArrayList<Invitation> invitations; //lista local de las invitaciones
-    HerokuUsersSqlConnection conex_user= new HerokuUsersSqlConnection();
-    HerokuCalendarSqlConnection conex_cal= new HerokuCalendarSqlConnection();
-    HerokuCalendarPermitSqlConnection conex_cal_per= new HerokuCalendarPermitSqlConnection();
-    HerokuInvitationSqlConnection conex_invite= new HerokuInvitationSqlConnection();
-    private MainPage m2;
-    
-    
-    public Notification(java.awt.Frame parent, boolean modal) throws SQLException {
-        super(parent, modal);
+    public MainPage() throws SQLException {
         initComponents();
-        getNotifications();
-    }
-    
-    public Notification(MainPage main) throws SQLException{
-        initComponents();
-        userSignedUpmp=userSigned;
-        changeColor();
-        m2 = main;
+                
+        Color color = new Color(255,255,255);
+        this.getContentPane().setBackground(color);
+        // userSigned.setEmail("selene@gmail.com");
+        // userSigned.setId(1);
         this.setLocationRelativeTo(null);
-        getNotifications();
-        close();
-    }
-
-    public void changeColor(){
+        this.setExtendedState(MAXIMIZED_BOTH);
+        userSignedUpmp=userSigned;
+        
         if(userSignedUpmp.getModo() == 1){
+            jCheckBox1.setSelected(true);
+            
+            userSignedUpmp.setModo(1);
             jPanel1.setBackground(Color.decode("#000000"));
+            jPanel2.setBackground(Color.decode("#7D8E9A"));
+            jPanel4.setBackground(Color.decode("#000000"));
+
+            description.setBackground(Color.decode("#7D8E9A"));
+            description.setForeground(Color.decode("#FFFFFF"));
+
+            jTextPane2.setBackground(Color.decode("#7D8E9A"));
+            jTextPane2.setForeground(Color.decode("#FFFFFF"));
+
             jLabel1.setForeground(Color.decode("#FFFFFF"));
-            jPanel2.setBackground(Color.decode("#000000"));
-        }else{
-            jPanel1.setBackground(Color.decode("#FFFFFF"));
-            jLabel1.setForeground(Color.decode("#000000"));
-            jPanel2.setBackground(Color.decode("#FFFFFF"));
+            jLabel2.setForeground(Color.decode("#FFFFFF"));
+            this.getContentPane().setBackground(Color.decode("#000000"));
+        
+            for(int i = 0; i < botones.size(); i++){
+                botones.get(i).setBackground(Color.decode("#000000"));
+                titulos.get(i).setForeground(Color.decode("#FFFFFF"));
+                eliminars.get(i).setIcon(new ImageIcon(getClass().getResource("/design/imagenes/basura_blanco.png")));
+            }
+        
+            jButton2.setBackground(Color.decode("#848B81"));
+            jButton2.setForeground(Color.decode("#474040"));
         }
         
+        jTextPane2.setText(userSignedUpmp.getName());
+        description.setText(userSignedUpmp.getDescription());
+        
+        conex_us = HerokuUsersSqlConnection.getInstance();
+        conex_cal = HerokuCalendarSqlConnection.getInstance();
+        aux = loadCalendars();
+        initCalendars();
+        
+        close();
     }
     
+    public void reload(){
+        // System.out.println("YUJUUU");
+         //aux.clear();
+         
+        
+        jPanel4.removeAll();
+        jPanel4.updateUI();
+        jPanel4.repaint();
+
+        posicionCalendariox = 6;
+        posicionCalendarioy = 39;
+
+        aux = loadCalendars();
+        initCalendars();
+     }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -87,190 +124,464 @@ public class Notification extends javax.swing.JDialog implements usuario{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
         jPanel2 = new javax.swing.JPanel();
+        singout = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        description = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        configuration = new javax.swing.JButton();
+        alert = new javax.swing.JButton();
+        users1 = new javax.swing.JButton();
+        jTextPane2 = new javax.swing.JTextField();
+        jCheckBox1 = new javax.swing.JCheckBox();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setFocusable(false);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setForeground(new java.awt.Color(242, 236, 191));
+        jPanel2.setBackground(new java.awt.Color(235, 216, 189));
 
-        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel1.setFont(new java.awt.Font("Rockwell", 0, 25)); // NOI18N
-        jLabel1.setText("You have received an invitation!");
+        singout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/design/imagenes/singOut.png"))); // NOI18N
+        singout.setBorderPainted(false);
+        singout.setContentAreaFilled(false);
+        singout.setFocusPainted(false);
+        singout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                singoutActionPerformed(evt);
+            }
+        });
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        description.setEditable(false);
+        description.setBackground(new java.awt.Color(235, 216, 189));
+        description.setForeground(new java.awt.Color(250, 250, 250));
+        description.setBorder(null);
+        jScrollPane1.setViewportView(description);
+
+        jLabel1.setFont(new java.awt.Font("Rockwell", 0, 20)); // NOI18N
+        jLabel1.setText("Description");
+
+        configuration.setFont(new java.awt.Font("Rockwell", 0, 20)); // NOI18N
+        configuration.setIcon(new javax.swing.ImageIcon(getClass().getResource("/design/imagenes/configuration.png"))); // NOI18N
+        configuration.setText("Configuration");
+        configuration.setBorderPainted(false);
+        configuration.setContentAreaFilled(false);
+        configuration.setFocusable(false);
+        configuration.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                configurationActionPerformed(evt);
+            }
+        });
+
+        alert.setIcon(new javax.swing.ImageIcon(getClass().getResource("/design/imagenes/alert.png"))); // NOI18N
+        alert.setBorderPainted(false);
+        alert.setContentAreaFilled(false);
+        alert.setFocusable(false);
+        alert.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                alertActionPerformed(evt);
+            }
+        });
+
+        users1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/design/imagenes/user.png"))); // NOI18N
+        users1.setBorderPainted(false);
+        users1.setContentAreaFilled(false);
+        users1.setFocusPainted(false);
+        users1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                users1ActionPerformed(evt);
+            }
+        });
+
+        jTextPane2.setEditable(false);
+        jTextPane2.setBackground(new java.awt.Color(235, 216, 189));
+        jTextPane2.setForeground(new java.awt.Color(250, 250, 250));
+        jTextPane2.setBorder(null);
+
+        jCheckBox1.setText("Modo oscuro");
+        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 754, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(configuration, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(128, 128, 128)
+                        .addComponent(singout, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(48, 48, 48)
+                        .addComponent(jCheckBox1))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(38, 38, 38)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jTextPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(alert, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1))))
+                .addContainerGap(38, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGap(41, 41, 41)
+                    .addComponent(users1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(251, Short.MAX_VALUE)))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 479, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(39, 39, 39)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(singout)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jCheckBox1)))
+                .addGap(60, 60, 60)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(alert, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 362, Short.MAX_VALUE)
+                .addComponent(configuration, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGap(23, 23, 23)
+                    .addComponent(users1, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(687, Short.MAX_VALUE)))
         );
 
-        jScrollPane1.setViewportView(jPanel2);
+        jPanel1.setBackground(new java.awt.Color(250, 250, 250));
+
+        jLabel2.setFont(new java.awt.Font("Rockwell", 0, 36)); // NOI18N
+        jLabel2.setText("My Calendars");
+
+        jPanel4.setBackground(new java.awt.Color(250, 250, 250));
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1262, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 724, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(45, 45, 45)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 756, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addContainerGap(1017, Short.MAX_VALUE))
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(jLabel2)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1)
-                .addGap(40, 40, 40))
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>                        
 
-    
-    //metodo que se encargará de cargar las invitaciones pendientes
-    public void loadNotifications() throws SQLException{
-        jPanel2.removeAll();
-        jPanel2.updateUI();
-        jPanel2.revalidate();
+    private void users1ActionPerformed(java.awt.event.ActionEvent evt) {                                       
+        ChangeUser cu = new ChangeUser();
+        cu.setVisible(true);
+        jTextPane2.setText(userSignedUpmp.getName());
+        description.setText(userSignedUpmp.getDescription());
+    }                                      
+
+    private void alertActionPerformed(java.awt.event.ActionEvent evt) {                                      
+        Notification notification = null;
+        try {
+            notification = new Notification(this);
+            notification.setVisible(true);
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            if(notification.acceptNotf()){
+                System.out.println("HA ACEPTADO");
+                reload();
+            }
+        }
         
-        if(invitations.size() >0){ //revisar la necesidad de este if!!!!
-            ButtonCalendar aux= new ButtonCalendar();
-            int posyb1relative=15;
-            int posyb2relative=15;
-            int posytextorelative=10;
-            for (int x=0; x<invitations.size(); x++){
-                Invitation invite=invitations.get(x);
-                //1.conseguir correo de origin_user
-                String correo=conex_user.getEmailByUserId(invite.getOrigin_user());
-                //2. conseguir nombre del calendario
-                String nombre_cal=conex_cal.getCalendarNameById(invite.getCalendar_id());
-                //3.frase <correo> te ha invitado a unirte a <nombre de calendario>
-                String frase_notificacion=correo + " te ha invitado a unirte a " + nombre_cal;
+        
+    }                                     
 
-                JButton accept= aux.createButtonNotification(posxb1, posyb1relative);
-                JButton decline= aux.createButtonNotification(posxb2, posyb2relative);
-                JScrollPane text = aux.createTextFieldNotification(posxtext,posytextorelative, frase_notificacion);
-                decline.setText("Decline");accept.setText("Join");
-                    jPanel2.add(accept); jPanel2.add(decline); jPanel2.add(text);
-                    posyb1relative+=60;
-                    posyb2relative+=60;
-                    posytextorelative+=60;
-                
-                if(userSignedUpmp.getModo() == 1){
-                    accept.setBackground(Color.decode("#000000"));
-                    accept.setForeground(Color.decode("#FFFFFF"));
-                    decline.setBackground(Color.decode("#F0F0F0"));
-                    decline.setForeground(Color.decode("#000000"));
-                    text.setForeground(Color.decode("#FFFFFF"));
-                    text.setBackground(Color.decode("#9EB8C2"));
-                }else{
-                    accept.setBackground(new Color(1011322298));
-                    accept.setForeground(Color.decode("#000000"));
-                    decline.setBackground(Color.decode("#CDCDCD"));
-                    decline.setForeground(Color.decode("#000000"));
-                    text.setForeground(Color.decode("#000000"));
-                    text.setBackground(Color.decode("#FFFFFF"));
-                }
-                
-            //ACCIONES PARA LOS BOTONES DE ACEPTAR Y RECHAZAR
-                accept.addActionListener((java.awt.event.ActionEvent e) -> {
-                    invitations.remove(invite);
-                    try {
-                        loadNotifications();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(Notification.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    //eliminar de la base de datos
-                    conex_invite.replyInvitation(invite.getInvitation_id(), 1);
-                    conex_cal_per.insertCalendarPermitTaskNull(userSigned.getId(), invite.getCalendar_id(), invite.getRol());
-                   
-                    System.out.println("SE HA ACEPTADO");
-                    acceptB = 1;
-                });
+    private void configurationActionPerformed(java.awt.event.ActionEvent evt) {                                              
+        Configuration configuration = new Configuration();
+        configuration.setVisible(true);
+    }                                             
 
-                decline.addActionListener((java.awt.event.ActionEvent e) -> {
-                    invitations.remove(invite);
-                    try {
-                        loadNotifications();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(Notification.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    //eliminar de la base de datos
-                    conex_invite.replyInvitation(invite.getInvitation_id(), 0);
-                    acceptB = 0;
-                });
+    private void singoutActionPerformed(java.awt.event.ActionEvent evt) {                                        
+        conex_us = HerokuUsersSqlConnection.getInstance();
+        
+        try {
+            if(conex_us.signOut2(this.userSignedUpmp)){
+                this.setVisible(false);
+                System.exit(0);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }                                       
+
+    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {                                           
+        if(jCheckBox1.isSelected()){
+            userSignedUpmp.setModo(1);
+            jPanel1.setBackground(Color.decode("#000000"));
+            jPanel2.setBackground(Color.decode("#7D8E9A"));
+            jPanel4.setBackground(Color.decode("#000000"));
+
+            description.setBackground(Color.decode("#7D8E9A"));
+            description.setForeground(Color.decode("#FFFFFF"));
+
+            jTextPane2.setBackground(Color.decode("#7D8E9A"));
+            jTextPane2.setForeground(Color.decode("#FFFFFF"));
+
+            jLabel1.setForeground(Color.decode("#FFFFFF"));
+            jLabel2.setForeground(Color.decode("#FFFFFF"));
+            this.getContentPane().setBackground(Color.decode("#000000"));
+        
+            for(int i = 0; i < botones.size(); i++){
+                botones.get(i).setBackground(Color.decode("#000000"));
+                titulos.get(i).setForeground(Color.decode("#FFFFFF"));
+                eliminars.get(i).setIcon(new ImageIcon(getClass().getResource("/design/imagenes/basura_blanco.png")));
             }
         
+            jButton2.setBackground(Color.decode("#848B81"));
+            jButton2.setForeground(Color.decode("#474040"));
+        }else{
+            userSignedUpmp.setModo(0);
+            jPanel1.setBackground(Color.decode("#FFFFFF"));
+            jPanel2.setBackground(Color.decode("#EBD8BD"));
+            jPanel4.setBackground(Color.decode("#FFFFFF"));
+            
+            description.setBackground(Color.decode("#EBD8BD"));
+            description.setForeground(Color.decode("#000000"));
+
+            jTextPane2.setBackground(Color.decode("#EBD8BD"));
+            jTextPane2.setForeground(Color.decode("#000000"));
+
+            jLabel2.setForeground(Color.decode("#000000"));
+            jLabel2.setForeground(Color.decode("#000000"));
+            this.getContentPane().setBackground(Color.decode("#FFFFFF"));
+        
+            for(int i = 0; i < botones.size(); i++){
+                botones.get(i).setBackground(new Color(203,239,255));
+                titulos.get(i).setForeground(Color.decode("#000000"));
+                eliminars.get(i).setIcon(new ImageIcon(getClass().getResource("/design/imagenes/basura.png"))); 
+            }
+        
+            jButton2.setBackground(new Color(203,239,255));
+            jButton2.setForeground(Color.decode("#000000"));
+        }
+    }                                          
+
+
+    private void initCalendars(){
+        conex_cal_per = HerokuCalendarPermitSqlConnection.getInstance();
+        conex_cal = HerokuCalendarSqlConnection.getInstance();
+        
+        ButtonCalendar bc = new ButtonCalendar();
+        jButton2 = bc.createButtonPrincipal(posicionCalendariox, posicionCalendarioy);
+        // jButton2.setBackground(new Color(203,239,255));
+        jPanel4.add(jButton2);
+        
+        jButton2.addActionListener((java.awt.event.ActionEvent e) -> {
+
+            InputCalendarName inputCalendarName = new InputCalendarName();
+            inputCalendarName.userSignedIn=userSigned;
+            inputCalendarName.setVisible(true);
+
+            String calendarName = inputCalendarName.getCalendarName();
+            if(!calendarName.equals("") && inputCalendarName.getIdCalendarCreated() >0 && inputCalendarName.getCalendarExists()==false && inputCalendarName.gethelp()==true){
+                aux.add(inputCalendarName.getCalendarId());
+                añadirCalendario(calendarName);
+            }
+        });
+        
+        for (int x=0; x<aux.size(); x++){
+            String calendar_name=conex_cal.getCalendarNameById(aux.get(x));
+            if(!(calendar_name == null)){
+                añadirCalendario(calendar_name);
+            }else{
+            }
         }
     }
     
+    private ArrayList<Integer> loadCalendars(){
+        conex_cal_per = HerokuCalendarPermitSqlConnection.getInstance();
+        ArrayList<Integer> calendarsUser=conex_cal_per.selectAllCalendarsIdByIdUser(userSigned.getId());
+        return calendarsUser;
+    }                                                                                                                                                                 
     
-    
-    public void getNotifications() throws SQLException{
-        //conseguir todas las invitaciones sin responder
-        invitations = conex_invite.getAllInvitationIdByUserId(userSigned.getId());
-        loadNotifications();
-    }
-       
     public void close(){
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                reloadMainPage();
+                confirmarSalida();
             }
         });
-    }  
-    
-    public void reloadMainPage(){
-        if(acceptB == 1){
-            m2.reload();
-            System.out.println("HOLA");
-        }
-        m2.setVisible(true);
-    }    
-     
-    boolean acceptNotf() {
-        return acceptB == 1;
     }
     
+    public void confirmarSalida() {
+        HerokuUsersSqlConnection conex = HerokuUsersSqlConnection.getInstance();
+        try {
+            if(conex.signOut2(userSignedUpmp)){
+                this.setVisible(false);
+                System.exit(0);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void añadirCalendario(String calendarName){
+        
+        ButtonCalendar calendar_aux = new ButtonCalendar();
+     
+        JButton boton1 = calendar_aux.createButton(posicionCalendariox, posicionCalendarioy);
+        botones.add(boton1);
+        JLabel titulo = calendar_aux.createTitle(calendarName, posicionCalendariox, posicionCalendarioy);
+        titulos.add(titulo);
+        JButton eliminar = calendar_aux.createDelete(posicionCalendariox, posicionCalendarioy);
+        eliminars.add(eliminar);
+        jPanel4.add(boton1);
+        jPanel4.add(titulo);
+        jPanel4.add(eliminar);
+        if(jCheckBox1.isSelected()){
+            boton1.setBackground(Color.decode("#000000"));
+            titulo.setForeground(Color.decode("#FFFFFF"));
+            eliminar.setIcon(new ImageIcon(getClass().getResource("/design/imagenes/basura_blanco.png")));
+        }else {
+            boton1.setBackground(new Color(203,239,255));
+            titulo.setForeground(Color.decode("#000000"));
+            eliminar.setIcon(new ImageIcon(getClass().getResource("/design/imagenes/basura.png")));
+        }
+        
+         if(posicion == aux.size()){
+            posicion--;
+        }
+        
+        ButtonCalendar calendar = new ButtonCalendar(posicion, aux.get(posicion), boton1, titulo, eliminar, posicionCalendariox, posicionCalendarioy);        
+        
+        posicion++;
+        calendars.addCalendar(calendar);
+        
+        if(posicionCalendariox > 1235){
+            posicionCalendariox=6;
+            posicionCalendarioy+=210;
+        }else{
+            posicionCalendariox+=247;
+        }
+        
+        boton1.setLocation(posicionCalendariox,posicionCalendarioy);
+        titulo.setLocation(posicionCalendariox,posicionCalendarioy-39);
+        eliminar.setLocation(posicionCalendariox+160,posicionCalendarioy-39);
+        
+        boton1.addActionListener((java.awt.event.ActionEvent e) -> {
+            System.out.println("Se ha abierto el calendario " + calendarName);
+            calendarView cv = new calendarView(new CalendarTask(calendarName, calendar.getId()));
+            System.out.println("ID DEL CALEDIOOOOOO: "+ calendar.getId());
+            cv.setVisible(true);
+        });
+        
+        eliminar.addActionListener((java.awt.event.ActionEvent e) -> {
+            int input = JOptionPane.showConfirmDialog(null, "¿Quieres eliminar este calendario?");
+        // 0=yes, 1=no, 2=cancel
+            if (input == 0) {
+            boton1.setVisible(false);
+            titulo.setVisible(false);
+            eliminar.setVisible(false);
+        
+            ArrayList<ButtonCalendar> a = calendars.getCalendars();
+            //System.out.println("Lista a: " + a.toString());
+            int x = 0;
+            System.out.println("La longitude aux: " + aux.size());
+            System.out.println("La longitude calendars: " + a.size());
+           // System.out.println("La longitude a: " + a.size());
+            for(int i = 0; i < aux.size(); i++){
+                
+                if(a.get(i).getTitulo().getText().equals(titulo.getText())){
+                    
+                   x = a.get(i).getId();
+                   a.remove(calendar);
+                   calendars.remove(calendar);
+                   aux.remove(aux.indexOf(x));
+                   
+                   botones.remove(i);
+                   titulos.remove(i);
+                   eliminars.remove(i);
+                   
+                   if(conex_cal_per.selectRolfromUser(userSigned.getId(),x).equals("Admin")){
+                   conex_cal.deleteCalendarById(x);
+                       conex_cal_per.deleteCalendarPermitById(x);
+
+                   }else{
+                       /*se borra solo la conexión con el usuario*/
+                       conex_cal_per.deleteOnlyCalendarPermitfromOneUser(x,userSigned.getId());
+                   }
+                   break;
+                } 
+            }
+            
+            if(posicion!=0){
+                posicion--;
+            }
+            
+            jPanel4.removeAll();
+            jPanel4.updateUI();
+            jPanel4.repaint();
+            
+            posicionCalendariox = 6;
+            posicionCalendarioy = 39;
+
+            initCalendars();
+            }
+        });
+        
+    }
+        
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -279,34 +590,35 @@ public class Notification extends javax.swing.JDialog implements usuario{
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Notification.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         
         //</editor-fold>
 
-        /* Create and display the dialog */
+        /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
             try {
-                Notification dialog = new Notification(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
+                new MainPage().setVisible(true);
             } catch (SQLException ex) {
-                Logger.getLogger(Notification.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }
 
     // Variables declaration - do not modify                     
+    private javax.swing.JButton alert;
+    private javax.swing.JButton configuration;
+    private javax.swing.JTextField description;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jTextPane2;
+    private javax.swing.JButton singout;
+    private javax.swing.JButton users1;
     // End of variables declaration                   
-
 }
