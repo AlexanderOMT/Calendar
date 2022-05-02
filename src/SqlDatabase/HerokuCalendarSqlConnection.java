@@ -73,19 +73,18 @@ public class HerokuCalendarSqlConnection extends SqlConnection {
             ps.setString(1, special_id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-            System.out.println(
-                    "Id Calendario: " +
-                    rs.getString("calendar_id")
-            );
-            conn.close();
-            return true;
+                System.out.println(
+                        "Id Calendario: " +
+                        rs.getString("calendar_id")
+                );
+                conn.close();
+                return true;
             }
             conn.close();
-               return false;
+            return false;
             
         } catch (SQLException e) {
-            System.out.println("Error al seleccionar id de calendario por nombre"
-                    + " de calendario y nombre de propietario"
+            System.out.println("Error al seleccionar id de calendario por id especial"
                     + " en la tabla CALENDAR: " + e.getMessage());
         }
         return false;
@@ -225,7 +224,7 @@ public class HerokuCalendarSqlConnection extends SqlConnection {
             }
             conn.close();
         } catch (SQLException e) {
-            System.out.println("Error al seleccionar por id  en la tabla CALENDAR: " + e.getMessage());
+            System.out.println("Error al seleccionar nombre de calendario por id  en la tabla CALENDAR: " + e.getMessage());
         }
         return calendar_name;
     }    
@@ -261,11 +260,11 @@ public class HerokuCalendarSqlConnection extends SqlConnection {
 
         try{
             PreparedStatement ps = conn.prepareStatement("SELECT calendar_id FROM calendar WHERE special_id=?;");
-            //ps.setString(1, special_id);
+            ps.setString(1, special_id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 System.out.println(
-                        "ID DEL EL CALENDARIOOO " +
+                        "ID DEL CALENDARIO: " +
                         rs.getString("calendar_id")
                 );
                 int aux=rs.getInt("calendar_id");

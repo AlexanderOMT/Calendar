@@ -5,8 +5,12 @@
  */
 package design;
 
+import SqlDatabase.HerokuCalendarPermitSqlConnection;
+import SqlDatabase.HerokuCalendarSqlConnection;
 import static design.usuario.userSigned;
 import java.awt.Color;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import model.User;
 
 /**
@@ -152,8 +156,37 @@ public class Configuration extends javax.swing.JDialog {
     }// </editor-fold>                        
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
-    }                                        
+        
+        int result = JOptionPane.showConfirmDialog(null, "Are you sure do you want to remove your account?\n"
+                + "All calendars will be removed(even those are shared)", "WARNING",
+            JOptionPane.YES_NO_OPTION, JOptionPane.YES_OPTION);
+        
+        if (true ? result == 0 : false) removeAllUserCalendars();
+        
+        
+    }                
+    
+    private void removeAllUserCalendars(){
+    
+        HerokuCalendarPermitSqlConnection calPermitConn = HerokuCalendarPermitSqlConnection.getInstance();
+        HerokuCalendarSqlConnection calConn = HerokuCalendarSqlConnection.getInstance();
+        
+        String specialId, calendarName;
+        String userEmail = userSignedUpmp.getEmail();
+        
+        ArrayList<Integer> calendarsUser = calPermitConn.selectAllCalendarsIdByIdUser(userSignedUpmp.getId());
+
+        for (int calendarId : calendarsUser) {
+            
+            calendarName = calConn.getCalendarNameById(calendarId);
+            specialId = calendarName + userEmail;
+            int calendarIdToRemove = calConn.getCalendarIdBySpecialId(specialId);
+            calConn.deleteCalendarById(calendarIdToRemove);
+            
+        }
+        
+        
+    }
 
     /**
      * @param args the command line arguments
