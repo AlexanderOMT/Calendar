@@ -7,7 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import model.Admin;
 import model.Invitation;
+import model.User;
 
 
 public class HerokuInvitationSqlConnection extends SqlConnection { 
@@ -281,4 +283,35 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
         return invitations;
     }
     
+    
+     public Admin getAdminfromCalendar(int cal_id) throws SQLException {
+        
+        Admin u= new Admin();
+        Connection conn = getSqlConnection();     
+        ArrayList<Invitation> invitations= new ArrayList<Invitation>();
+        try{
+            PreparedStatement ps = conn.prepareStatement("SELECT DISTINCT * FROM calendar_permit WHERE calendar_id =? AND rol='Admin'");
+            ps.setInt(1, cal_id);
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+            System.out.println(
+                    "Id usuario: " +
+                    rs.getInt("user_id") + "\t" +
+                    "Id calendario: " +
+                    rs.getString("calendar_id") + "\t" +
+                    "Rol: " +
+                    rs.getString("rol")       
+            );
+                 u= new Admin( rs.getInt("user_id"),rs.getInt("calendar_id"), rs.getString("rol") );
+                 conn.close();
+                return u;
+            
+            }
+        }catch (SQLException e) {
+            System.out.println("Error al seleccionar el admin del grupo: " + e.getMessage());
+        }
+        return u;
+        
+            }
 }

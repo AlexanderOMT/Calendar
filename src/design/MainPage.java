@@ -55,8 +55,8 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
                 
         Color color = new Color(255,255,255);
         this.getContentPane().setBackground(color);
-        // userSigned.setEmail("selene@gmail.com");
-        // userSigned.setId(1);
+        userSigned.setEmail("minerva@gmail.com");
+        userSigned.setId(20);
         this.setLocationRelativeTo(null);
         this.setExtendedState(MAXIMIZED_BOTH);
         userSignedUpmp=userSigned;
@@ -446,6 +446,7 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
     
     private ArrayList<Integer> loadCalendars(){
         conex_cal_per = HerokuCalendarPermitSqlConnection.getInstance();
+        System.out.println("LJKASDFJLKÑASDFJKLÑAJLKDSFÑ:"+userSigned.getId());
         ArrayList<Integer> calendarsUser=conex_cal_per.selectAllCalendarsIdByIdUser(userSigned.getId());
         return calendarsUser;
     }                                                                                                                                                                 
