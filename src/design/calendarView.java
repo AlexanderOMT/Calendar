@@ -6,7 +6,6 @@ package design;
 
 import SqlDatabase.HerokuCalendarPermitSqlConnection;
 import SqlDatabase.HerokuCalendarSqlConnection;
-import SqlDatabase.HerokuInvitationSqlConnection;
 import SqlDatabase.HerokuTaskSqlConnection;
 import SqlDatabase.HerokuUsersSqlConnection;
 import static design.usuario.userSigned;
@@ -52,8 +51,8 @@ public final class calendarView extends javax.swing.JFrame {
         //setIdRandom();
         //setIdCalendar(actualCalendar.getId());
         initComponents();
-        
-        // changeColor();
+        userSignedUpmp=userSigned;
+        changeColor();
         
         initTags();
         loadTask();
@@ -61,29 +60,46 @@ public final class calendarView extends javax.swing.JFrame {
         //test();
         this.setLocationRelativeTo(null);
         this.setExtendedState(MAXIMIZED_BOTH);
-        /* Color color = new Color(255,255,255);
-        this.getContentPane().setBackground(color); */
         actualMonth = cl.get(Calendar.MONTH);
         actualYear = cl.get(Calendar.YEAR);
         updateTasks();
         doubleClickDay();
-        userSignedUpmp=userSigned;
+        
         close();
     }
     
     public void changeColor(){
-        this.getContentPane().setBackground(Color.decode("#000000"));
-        jLabel2.setForeground(Color.decode("#FFFFFF"));
-        jLabel1.setForeground(Color.decode("#FFFFFF"));
-        
-        jButton3.setBackground(Color.decode("#768FAC"));
-        jButton4.setBackground(Color.decode("#838383"));
-        
-        jButton2.setBackground(Color.decode("#859EBC"));
-        jButton1.setBackground(Color.decode("#859EBC"));
-        jButton5.setBackground(Color.decode("#859EBC"));
-        jButton6.setBackground(Color.decode("#859EBC"));
-        
+        if(userSignedUpmp.getModo() == 1){
+            this.getContentPane().setBackground(Color.decode("#000000"));
+            jLabel2.setForeground(Color.decode("#FFFFFF"));
+            jLabel1.setForeground(Color.decode("#FFFFFF"));
+
+            jButton3.setBackground(Color.decode("#768FAC"));
+            jButton4.setBackground(Color.decode("#838383"));
+
+            jButton2.setBackground(Color.decode("#859EBC"));
+            jButton1.setBackground(Color.decode("#859EBC"));
+            jButton5.setBackground(Color.decode("#859EBC"));
+            jButton6.setBackground(Color.decode("#859EBC"));
+            jButton7.setBackground(Color.decode("#859EBC"));
+                    
+            jTable1.setBackground(Color.decode("#F0F0F0"));
+        }else{
+            this.getContentPane().setBackground(Color.decode("#FFFFFF"));
+            jLabel2.setForeground(Color.decode("#000000"));
+            jLabel1.setForeground(Color.decode("#000000"));
+
+            jButton3.setBackground(Color.decode("#F0F0F0"));
+            jButton4.setBackground(Color.decode("#F0F0F0"));
+
+            jButton2.setBackground(Color.decode("#F0F0F0"));
+            jButton1.setBackground(Color.decode("#F0F0F0"));
+            jButton5.setBackground(Color.decode("#F0F0F0"));
+            jButton6.setBackground(Color.decode("#F0F0F0"));
+            jButton7.setBackground(Color.decode("#F0F0F0"));
+                    
+            jTable1.setBackground(Color.decode("#F0F0F0"));
+        }       
     }
     
     // Method to access with double click to the day view
@@ -244,6 +260,7 @@ public final class calendarView extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
 
         addTaskInternal.setBackground(new java.awt.Color(255, 255, 255));
         addTaskInternal.setBorder(null);
@@ -407,17 +424,24 @@ public final class calendarView extends javax.swing.JFrame {
             }
         });
 
+        jButton7.setText("Back");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(70, 70, 70)
+                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(57, 57, 57)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton2)
@@ -426,28 +450,18 @@ public final class calendarView extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton1))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 855, Short.MAX_VALUE))
-                .addGap(59, 59, 59)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton5)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton6)
-                        .addGap(10, 10, 10)))
-                .addGap(38, 38, 38))
+                .addGap(75, 75, 75)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(22, 22, 22))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
-                .addGap(18, 18, 18)
-                .addComponent(jButton4)
-                .addContainerGap(649, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addContainerGap(23, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton5)
                     .addComponent(jButton1)
                     .addComponent(jLabel1)
                     .addComponent(jButton2))
@@ -457,9 +471,21 @@ public final class calendarView extends javax.swing.JFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 595, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(74, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(71, 71, 71)
-                        .addComponent(jButton6)
+                        .addGap(9, 9, 9)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton4)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(jButton7)
+                .addGap(18, 18, 18)
+                .addComponent(jButton5)
+                .addGap(18, 18, 18)
+                .addComponent(jButton6)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -628,9 +654,11 @@ public final class calendarView extends javax.swing.JFrame {
             compartir.setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(calendarView.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
+        }        
+    }                                        
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        this.setVisible(false);        
     }                                        
     public void close(){
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -730,6 +758,7 @@ public final class calendarView extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JComboBox<String> jComboBoxTag;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
