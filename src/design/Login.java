@@ -232,7 +232,8 @@ public final class Login extends javax.swing.JFrame implements usuario{
                     MainPage mp = new MainPage();                     
                     mp.setVisible(true);
                     this.setVisible(false);
-                }else {                  
+                }else {    
+                    
                 }
             }catch (SQLException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
