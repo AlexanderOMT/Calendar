@@ -4,6 +4,7 @@
  */
 package design;
 
+import static design.usuario.userSigned;
 import java.awt.Color;
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -16,6 +17,7 @@ import javax.swing.JList;
 import model.CalendarTask;
 import model.Tags;
 import model.Task;
+import model.User;
 
 public class weekView extends javax.swing.JFrame {
 
@@ -29,7 +31,7 @@ public class weekView extends javax.swing.JFrame {
     private int nextLast;
     private int nextChangeDay;
     private boolean nextChange = false;
-    
+    private User userSignedUpmp;
     private CalendarTask actualCalendar;
     private Tags tag;
     
@@ -39,7 +41,8 @@ public class weekView extends javax.swing.JFrame {
         this.actualYear = year;
         initComponents();
         
-        // changeColor();
+        userSignedUpmp=userSigned;
+        changeColor();
         
         //test();
         calculateDate();
@@ -50,19 +53,51 @@ public class weekView extends javax.swing.JFrame {
     }
     
     public void changeColor(){
-        this.getContentPane().setBackground(Color.decode("#000000"));
-        jLabelDay1.setForeground(Color.decode("#FFFFFF"));
-        jLabelDay2.setForeground(Color.decode("#FFFFFF"));
-        jLabelDay3.setForeground(Color.decode("#FFFFFF"));
-        jLabelDay4.setForeground(Color.decode("#FFFFFF"));
-        jLabelDay5.setForeground(Color.decode("#FFFFFF"));
-        jLabelDay6.setForeground(Color.decode("#FFFFFF"));
-        jLabelDay7.setForeground(Color.decode("#FFFFFF"));
-        jLabelMY.setForeground(Color.decode("#FFFFFF"));
-        
-        jButton1.setBackground(Color.decode("#859EBC"));
-        jButton2.setBackground(Color.decode("#859EBC"));
-        jButton3.setBackground(Color.decode("#859EBC"));
+        if(userSignedUpmp.getModo() == 1){
+            this.getContentPane().setBackground(Color.decode("#000000"));
+            jLabelDay1.setForeground(Color.decode("#FFFFFF"));
+            jLabelDay2.setForeground(Color.decode("#FFFFFF"));
+            jLabelDay3.setForeground(Color.decode("#FFFFFF"));
+            jLabelDay4.setForeground(Color.decode("#FFFFFF"));
+            jLabelDay5.setForeground(Color.decode("#FFFFFF"));
+            jLabelDay6.setForeground(Color.decode("#FFFFFF"));
+            jLabelDay7.setForeground(Color.decode("#FFFFFF"));
+            jLabelMY.setForeground(Color.decode("#FFFFFF"));
+
+            jButton1.setBackground(Color.decode("#859EBC"));
+            jButton2.setBackground(Color.decode("#859EBC"));
+            jButton3.setBackground(Color.decode("#859EBC"));
+            
+            jList1.setBackground(Color.decode("#F0F0F0"));
+            jList2.setBackground(Color.decode("#F0F0F0"));
+            jList3.setBackground(Color.decode("#F0F0F0"));
+            jList4.setBackground(Color.decode("#F0F0F0"));
+            jList5.setBackground(Color.decode("#F0F0F0"));
+            jList6.setBackground(Color.decode("#F0F0F0"));
+            jList7.setBackground(Color.decode("#F0F0F0"));
+        }else{
+            this.getContentPane().setBackground(Color.decode("#FFFFFF"));
+            jLabelDay1.setForeground(Color.decode("#000000"));
+            jLabelDay2.setForeground(Color.decode("#000000"));
+            jLabelDay3.setForeground(Color.decode("#000000"));
+            jLabelDay4.setForeground(Color.decode("#000000"));
+            jLabelDay5.setForeground(Color.decode("#000000"));
+            jLabelDay6.setForeground(Color.decode("#000000"));
+            jLabelDay7.setForeground(Color.decode("#000000"));
+            jLabelMY.setForeground(Color.decode("#000000"));
+
+            jButton1.setBackground(Color.decode("#F0F0F0"));
+            jButton2.setBackground(Color.decode("#F0F0F0"));
+            jButton3.setBackground(Color.decode("#F0F0F0"));
+            
+            jList1.setBackground(Color.decode("#F0F0F0"));
+            jList2.setBackground(Color.decode("#F0F0F0"));
+            jList3.setBackground(Color.decode("#F0F0F0"));
+            jList4.setBackground(Color.decode("#F0F0F0"));
+            jList5.setBackground(Color.decode("#F0F0F0"));
+            jList6.setBackground(Color.decode("#F0F0F0"));
+            jList7.setBackground(Color.decode("#F0F0F0"));
+        }
     }
     
     public void test() {
