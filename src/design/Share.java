@@ -43,7 +43,7 @@ public class Share extends javax.swing.JDialog implements usuario{
     HerokuCalendarPermitSqlConnection conex_cal_perm= new HerokuCalendarPermitSqlConnection();
     private User userSignedUpmp;
     private Admin administrador= new Admin(); 
-    
+    private boolean hasTransfered=false;
     private int posxb1=570;
     private int posxb2=635;
     private int posy=10;
@@ -53,13 +53,12 @@ public class Share extends javax.swing.JDialog implements usuario{
     public Share(java.awt.Frame parent, boolean modal) throws SQLException {
         super(parent, modal);
         initComponents();
-        
         getNotifications();
     }
     
     public Share(CalendarTask actualCalendar) throws SQLException{
         this.actualCalendar=actualCalendar;
-        this.administrador.setCorreo("minerva@gmail.com");
+        
         System.out.println("ID DEL ACTUAL CALENDAR ESSS: "+ this.actualCalendar.getId());
         initComponents();
         userSignedUpmp=userSigned;
@@ -318,17 +317,88 @@ public class Share extends javax.swing.JDialog implements usuario{
         
     }                                        
 
+    
+    public void transferirOwnership() throws SQLException{
+        
+        if(invitations.size() >0){ 
+            jPanel2.removeAll();
+            jPanel2.updateUI();
+            jPanel2.revalidate();
+            
+            JButton back= new JButton("Back"); back.setSize(65,35); back.setLocation(500, 30); jPanel2.add(back);
+            back.addActionListener((java.awt.event.ActionEvent e) -> {
+                if(hasTransfered){
+                    try {
+                        getNotifications();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Share.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }else{
+                    try {
+                        loadNotifications();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Share.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
+            
+            int posyb1relative=45;
+            int posyb2relative=45;
+            int posytextorelative=40;
+            ButtonCalendar aux= new ButtonCalendar();
+            for (int x=0; x<invitations.size(); x++){
+                Invitation invite=invitations.get(x);
+                String email=conex_user.getEmailByUserId(invite.getTarget_user());
+                JLabel title= aux.createCorreoInvitationTitle(email, 20, posyb1relative);
+                JButton transfer= aux.createButtonInvitation(185, posyb1relative);
+                transfer.setText("Transfer");
+                jPanel2.add(title); jPanel2.add(transfer); 
+                        posyb1relative+=40;
+                        posyb2relative+=40;
+                        posytextorelative+=40;
+                transfer.addActionListener((java.awt.event.ActionEvent e) -> {
+                    try {
+                        this.conex_invite.deleteInvitationByTargetUserIdAndCalendarId(invite.getTarget_user(),actualCalendar.getId());
+                        this.conex_cal_perm.changeRol(invite.getTarget_user(), actualCalendar.getId(), "Admin");
+                        this.conex_cal_perm.changeRol(userSigned.getId(), actualCalendar.getId(), "Editor");
+                        this.conex_invite.insertInvitationAccepted(userSigned.getId(), userSigned.getId(), actualCalendar.getId(), "Editor");
+                        jTextField1.setText("You've changed the ownership of this calendar");
+                        getNotifications();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Share.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                });
+            }
+        }else{
+            jTextField1.setText("It's only you in this calendar!");
+        }
+    }
+    
+    public void showAdminOption(){
+         //HACER QUE SOLO SE MUESTRE SI EL USUARIO INICIADO ES EL ADMINISTRADOR - CAMBIAR NUMERO DE LAS POSICIONES RELATIVAS SEGUN USUARIO
+       
+         JButton trans_owner = new JButton("Transfer ownership");
+         trans_owner.setSize(145, 35);trans_owner.setLocation(450, 5);jPanel2.add(trans_owner);
+        
+         trans_owner.addActionListener((java.awt.event.ActionEvent e) -> {
+            try {
+                transferirOwnership();
+            } catch (SQLException ex) {
+                Logger.getLogger(Share.class.getName()).log(Level.SEVERE, null, ex);
+            }
+         });
+    }
+    
     //ZONA DE CARGA DE DATOS
      public void loadNotifications() throws SQLException{
         jPanel2.removeAll();
         jPanel2.updateUI();
         jPanel2.revalidate();
         
-        JSeparator jSeparator2 = new JSeparator(); jSeparator2.setSize(700, 5);jSeparator2.setLocation(0, 45);jPanel2.add(jSeparator2);
+         JSeparator jSeparator2 = new JSeparator(); jSeparator2.setSize(700, 5);jSeparator2.setLocation(0, 45);jPanel2.add(jSeparator2);
         JLabel admin_title= new JLabel(administrador.getCorreo()+ " es el administrador de este calendario");
          admin_title.setSize(400, 40);admin_title.setLocation(20, 0);jPanel2.add(admin_title);
-         JButton trans_owner = new JButton("Transfer ownership");
-         trans_owner.setSize(145, 35);trans_owner.setLocation(450, 5);jPanel2.add(trans_owner);
+       
         if(invitations.size() >0){ 
             int posyb1relative=55;
             int posyb2relative=55;
@@ -337,39 +407,18 @@ public class Share extends javax.swing.JDialog implements usuario{
             for (int x=0; x<invitations.size(); x++){
                 Invitation invite=invitations.get(x);
                 String email=conex_user.getEmailByUserId(invite.getTarget_user());
-                JLabel title= aux.createCorreoInvitationTitle(email, 20, posyb1relative);
-                JLabel rol_user= aux.createCorreoInvitationRol(invite.getRol(), 185, posyb1relative);
-                JButton delete= aux.createButtonInvitation(460, posyb1relative);
-                JButton change= aux.createButtonInvitation(355, posyb1relative);
-                JComboBox roles= aux.createJComboBox(270, posyb1relative);
+                JLabel title= aux.createCorreoInvitationTitle(email, 20, posyb1relative);jPanel2.add(title);
+                JLabel rol_user= aux.createCorreoInvitationRol(invite.getRol(), 185, posyb1relative);jPanel2.add(rol_user); 
+                if(administrador.getUser_id() == userSigned.getId()){
+                    showAdminOption();
+                    JButton delete= aux.createButtonInvitation(460, posyb1relative);
+                    JButton change= aux.createButtonInvitation(355, posyb1relative);
+                    JComboBox roles= aux.createJComboBox(270, posyb1relative); jPanel2.add(change);
                     delete.setText("eliminate");change.setText("change");
-                    jPanel2.add(change); jPanel2.add(delete); jPanel2.add(title); jPanel2.add(roles);jPanel2.add(rol_user); 
-                        posyb1relative+=40;
-                        posyb2relative+=40;
-                        posytextorelative+=40;
-                    
+                    jPanel2.add(delete);  jPanel2.add(roles);
                         
-                    if(userSignedUpmp.getModo() == 1){
-                        delete.setBackground(Color.decode("#000000"));
-                        delete.setForeground(Color.decode("#FFFFFF"));
-
-                        change.setBackground(Color.decode("#000000"));
-                        change.setForeground(Color.decode("#FFFFFF"));
-
-                        roles.setBackground(Color.decode("#000000"));
-                        roles.setForeground(Color.decode("#FFFFFF"));
-                    }else{
-                        delete.setBackground(Color.decode("#FFFFFF"));
-                        delete.setForeground(Color.decode("#000000"));
-
-                        change.setBackground(Color.decode("#FFFFFF"));
-                        change.setForeground(Color.decode("#000000"));
-
-                        roles.setBackground(Color.decode("#FFFFFF"));
-                        roles.setForeground(Color.decode("#000000"));
-                    }
                         
-            //ACCIONES PARA LOS BOTONES DE ACEPTAR Y RECHAZAR
+                        //ACCIONES PARA LOS BOTONES DE ACEPTAR Y RECHAZAR
                     change.addActionListener((java.awt.event.ActionEvent e) -> {
                         try {       
                             if (actualCalendar == null){
@@ -401,6 +450,31 @@ public class Share extends javax.swing.JDialog implements usuario{
                              jTextField1.setText("That didn't work! Try again");
                         }
                     });
+                    
+                     if(userSignedUpmp.getModo() == 1){
+                        delete.setBackground(Color.decode("#000000"));
+                        delete.setForeground(Color.decode("#FFFFFF"));
+
+                        change.setBackground(Color.decode("#000000"));
+                        change.setForeground(Color.decode("#FFFFFF"));
+
+                        roles.setBackground(Color.decode("#000000"));
+                        roles.setForeground(Color.decode("#FFFFFF"));
+                    }else{
+                        delete.setBackground(Color.decode("#FFFFFF"));
+                        delete.setForeground(Color.decode("#000000"));
+
+                        change.setBackground(Color.decode("#FFFFFF"));
+                        change.setForeground(Color.decode("#000000"));
+
+                        roles.setBackground(Color.decode("#FFFFFF"));
+                        roles.setForeground(Color.decode("#000000"));
+                    }
+                    
+                }                       
+            posyb1relative+=40;
+                        posyb2relative+=40;
+                        posytextorelative+=40;
             }
         
         }
@@ -413,7 +487,9 @@ public class Share extends javax.swing.JDialog implements usuario{
         //conseguir todas las invitaciones sin responder
         invitations = conex_invite.getInvitationsAccepted(actualCalendar.getId());
         //invitations= this.conex_cal_perm.
-        //Admin administrador=conex_invite.getAdminfromCalendar(actualCalendar.getId());
+        administrador=conex_invite.getAdminfromCalendar(actualCalendar.getId());
+        administrador.setCorreo(this.conex_user.getEmailByUserId(administrador.getUser_id()));
+        System.out.println(administrador.getUser_id());
         loadNotifications();
     }
     

@@ -55,6 +55,15 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
                 
         Color color = new Color(255,255,255);
         this.getContentPane().setBackground(color);
+        
+        
+        
+        
+        userSigned.setEmail("selene2");
+        userSigned.setId(3);
+        userSigned.setEmail("d");
+        userSigned.setId(9);
+        
         userSigned.setEmail("minerva@gmail.com");
         userSigned.setId(20);
         this.setLocationRelativeTo(null);
