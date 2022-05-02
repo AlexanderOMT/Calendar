@@ -1,5 +1,6 @@
 package design;
 
+import static design.usuario.userSigned;
 import java.awt.Color;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -12,39 +13,56 @@ import javax.swing.JOptionPane;
 import model.CalendarTask;
 import model.Tags;
 import model.Task;
+import model.User;
 
 public class dayView extends javax.swing.JFrame {
     
     private CalendarTask actualCalendar;
     private Timestamp date;
     Tags tag;
-            
+    private User userSignedUpmp;
+    
     public dayView(CalendarTask actualCalendar, Timestamp date) {
         this.actualCalendar = actualCalendar;
         this.date = date;
         initComponents();
-        
-        // changeColor();
+        userSignedUpmp=userSigned;
+        changeColor();
         
         initTags();
         this.setLocationRelativeTo(null);
         this.setExtendedState(MAXIMIZED_BOTH);
         updateDate();
-        /* Color color = new Color(255,255,255);
-        this.getContentPane().setBackground(color); */
     }
     
     public void changeColor(){
-        this.getContentPane().setBackground(Color.decode("#000000"));
-        dayLabel.setForeground(Color.decode("#FFFFFF"));
-        
-        jButton4.setBackground(Color.decode("#859EBC"));
-        jButton5.setBackground(Color.decode("#859EBC"));
-        
-        jButton1.setBackground(Color.decode("#859EBC"));
-        jButton2.setBackground(Color.decode("#859EBC"));
-        jButton3.setBackground(Color.decode("#859EBC"));
-        jButton6.setBackground(Color.decode("#859EBC"));
+        if(userSignedUpmp.getModo() == 1){
+            this.getContentPane().setBackground(Color.decode("#000000"));
+            dayLabel.setForeground(Color.decode("#000000"));
+
+            jButton4.setBackground(Color.decode("#859EBC"));
+            jButton5.setBackground(Color.decode("#859EBC"));
+
+            jButton1.setBackground(Color.decode("#859EBC"));
+            jButton2.setBackground(Color.decode("#859EBC"));
+            jButton3.setBackground(Color.decode("#859EBC"));
+            jButton6.setBackground(Color.decode("#859EBC"));
+            
+            jList1.setBackground(Color.decode("#F0F0F0"));
+        }else{
+            this.getContentPane().setBackground(Color.decode("#FFFFFF"));
+            dayLabel.setForeground(Color.decode("#FFFFFF"));
+
+            jButton4.setBackground(Color.decode("#F0F0F0"));
+            jButton5.setBackground(Color.decode("#F0F0F0"));
+
+            jButton1.setBackground(Color.decode("#F0F0F0"));
+            jButton2.setBackground(Color.decode("#F0F0F0"));
+            jButton3.setBackground(Color.decode("#F0F0F0"));
+            jButton6.setBackground(Color.decode("#F0F0F0"));
+            
+            jList1.setBackground(Color.decode("#F0F0F0"));
+        }
     }
     
     public void updateDate() {
