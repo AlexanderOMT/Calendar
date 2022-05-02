@@ -25,6 +25,13 @@ public class Invitation {
         this.reply = reply;
         this.rol=rol;
     }
+    public Invitation(int origin_user, int target_user, int calendar_id, String reply, String rol) {
+        this.origin_user = origin_user;
+        this.target_user = target_user;
+        this.calendar_id = calendar_id;
+        this.reply = reply;
+        this.rol=rol;
+    }
 
     public int getInvitation_id() {
         return invitation_id;

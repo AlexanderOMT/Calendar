@@ -7,7 +7,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.Admin;
 import model.Invitation;
+import model.User;
 
 
 public class HerokuInvitationSqlConnection extends SqlConnection { 
@@ -193,6 +197,24 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
             
         
     }
+    public void insertInvitationAccepted(int origin_user_id, int target_user_id, int calendar_id, String rol) {
+        try {
+            Connection conn = getSqlConnection();
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO invitation(origin_user_id, target_user_id, target_calendar_id, reply ,rol) VALUES(?,?,?,?,?)");
+            ps.setInt(1, origin_user_id);
+            ps.setInt(2, target_user_id);
+            ps.setInt(3, calendar_id);
+            ps.setInt(4, 1);
+            ps.setString(5, rol);
+            int res = ps.executeUpdate();
+            
+            conn.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(HerokuInvitationSqlConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+        
+    }
     
     
     public void selectInvitationIdByOriginAndTarget(int origin_user_id, int target_user_id) {
@@ -257,6 +279,24 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
         }
 
     }    
+    
+    public void deleteInvitationByTargetUserIdAndCalendarId(int target_us_id, int cal_id) {
+        Connection conn = getSqlConnection();
+        
+        try{
+            PreparedStatement ps = conn.prepareStatement("DELETE FROM invitation WHERE target_user_id=? AND target_calendar_id=?");
+            ps.setInt(1, target_us_id);
+            ps.setInt(2, cal_id);
+            int res = ps.executeUpdate();
+                        
+            
+            conn.close();
+            
+        } catch (SQLException e) {
+        }
+
+    }  
+    
     public ArrayList<Invitation> getInvitationsAccepted(Integer target_calendar_id) {
         Connection conn = getSqlConnection();     
         ArrayList<Invitation> invitations= new ArrayList<Invitation>();
@@ -281,4 +321,35 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
         return invitations;
     }
     
+    
+     public Admin getAdminfromCalendar(int cal_id) throws SQLException {
+        
+        Admin u= new Admin();
+        Connection conn = getSqlConnection();     
+        ArrayList<Invitation> invitations= new ArrayList<Invitation>();
+        try{
+            PreparedStatement ps = conn.prepareStatement("SELECT DISTINCT * FROM calendar_permit WHERE calendar_id =? AND rol='Admin'");
+            ps.setInt(1, cal_id);
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+            System.out.println(
+                    "Id usuario: " +
+                    rs.getInt("user_id") + "\t" +
+                    "Id calendario: " +
+                    rs.getString("calendar_id") + "\t" +
+                    "Rol: " +
+                    rs.getString("rol")       
+            );
+                 u= new Admin( rs.getInt("user_id"),rs.getInt("calendar_id"), rs.getString("rol") );
+                 conn.close();
+                return u;
+            
+            }
+        }catch (SQLException e) {
+            System.out.println("Error al seleccionar el admin del grupo: " + e.getMessage());
+        }
+        return u;
+        
+            }
 }
