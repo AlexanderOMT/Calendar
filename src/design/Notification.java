@@ -245,26 +245,18 @@ public class Notification extends javax.swing.JDialog implements usuario{
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                // reloadMainPage();
-                prueba();
+                reloadMainPage();
             }
         });
     }  
     
-    public void prueba(){
+    public void reloadMainPage(){
         if(acceptB == 1){
             m2.reload();
             System.out.println("HOLA");
         }
         m2.setVisible(true);
-    }
-    
-     public void reloadMainPage() throws SQLException{
-        MainPage mn = new MainPage();
-        // mn2.setVisible(true);
-        mn.setVisible(false);
-    }   
-    
+    }    
      
     boolean acceptNotf() {
         return acceptB == 1;
