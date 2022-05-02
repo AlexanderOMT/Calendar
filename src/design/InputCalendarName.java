@@ -19,24 +19,25 @@ public class InputCalendarName extends javax.swing.JDialog implements usuario{
     private boolean calendarExist=false;
     public User userSignedIn;
     private boolean help=false;
+    private User userSignedUpmp;
     
     public InputCalendarName(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
     
-    public InputCalendarName(boolean modo){
+    public InputCalendarName(){
         initComponents();
         Color color = new Color(255,255,255);
         this.getContentPane().setBackground(color);
         setModal(true);
         this.setLocationRelativeTo(null);
-        
-        changeColor(modo);
+        userSignedUpmp=userSigned;
+        changeColor();
     }
     
-    public void changeColor(boolean modo){
-        if(modo){
+    public void changeColor(){
+        if(userSignedUpmp.getModo() == 1){
             jPanel1.setBackground(Color.decode("#000000"));
             calendarName.setForeground(Color.decode("#FFFFFF"));
             calendarName.setBackground(Color.decode("#9EB8C2"));
