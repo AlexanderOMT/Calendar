@@ -24,7 +24,7 @@ public class Configuration extends javax.swing.JDialog {
         initComponents();
     }
     
-    public Configuration(boolean modo){
+    public Configuration(){
         initComponents();
         Color color = new Color(36,47,35);
         this.getContentPane().setBackground(color);
@@ -33,18 +33,18 @@ public class Configuration extends javax.swing.JDialog {
         userSignedUpmp=userSigned;
         jTextPane2.setText(userSignedUpmp.getName());
         description.setText(userSignedUpmp.getDescription());
-        changeColor(modo);
+        changeColor();
     }
     
-    public void changeColor(boolean modo){
-        if(modo){
+    public void changeColor(){
+        if(userSignedUpmp.getModo() == 1){
             jPanel1.setBackground(Color.decode("#000000"));
             jLabel1.setForeground(Color.decode("#FFFFFF"));
             jTextPane2.setBackground(Color.decode("#000000"));
             jTextPane2.setForeground(Color.decode("#FFFFFF"));
             description.setBackground(Color.decode("#000000"));
             description.setForeground(Color.decode("#FFFFFF"));
-            jButton1.setBackground(Color.decode("#AE7171")); 
+            jButton1.setBackground(Color.decode("#AE7171"));
             jButton1.setForeground(Color.decode("#FFFFFF"));
         }else {
             jPanel1.setBackground(Color.decode("#FFFFFF"));
@@ -53,7 +53,7 @@ public class Configuration extends javax.swing.JDialog {
             jTextPane2.setForeground(Color.decode("#000000"));
             description.setBackground(Color.decode("#FFFFFF"));
             description.setForeground(Color.decode("#000000"));
-            jButton1.setBackground(Color.decode("#FB9696")); 
+            jButton1.setBackground(Color.decode("#FB9696"));
             jButton1.setForeground(Color.decode("#000000"));
         }
         
