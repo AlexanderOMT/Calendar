@@ -57,11 +57,9 @@ public class Share extends javax.swing.JDialog implements usuario{
     
     public Share(CalendarTask actualCalendar) throws SQLException{
         this.actualCalendar=actualCalendar;
-        
         System.out.println("ID DEL ACTUAL CALENDAR ES: "+ this.actualCalendar.getId());
         initComponents();
         changeColor();
-        
         Color color = new Color(36,47,35);
         this.getContentPane().setBackground(color);
         setModal(true);
@@ -295,8 +293,7 @@ public class Share extends javax.swing.JDialog implements usuario{
                         System.out.println(e.getMessage());
                         jTextField1.setText("That didn't work! Try again");
                     }
-                }
-                 
+                }                 
             }
         } catch (SQLException ex) {
             Logger.getLogger(Share.class.getName()).log(Level.SEVERE, null, ex);
