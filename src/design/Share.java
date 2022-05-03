@@ -487,10 +487,8 @@ public class Share extends javax.swing.JDialog implements usuario{
     public void getNotifications() throws SQLException{
         //conseguir todas las invitaciones sin responder
         invitations = conex_invite.getInvitationsAccepted(actualCalendar.getId());
-        //invitations= this.conex_cal_perm.
         administrador=conex_invite.getAdminfromCalendar(actualCalendar.getId());
         administrador.setCorreo(this.conex_user.getEmailByUserId(administrador.getUser_id()));
-        System.out.println(administrador.getUser_id());
         loadNotifications();
     }
     
