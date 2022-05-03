@@ -341,7 +341,7 @@ public class HerokuCalendarPermitSqlConnection extends SqlConnection {
                 System.out.println("Error al eliminar por id en la tabla CALENDAR_PERMIT: " + e.getMessage());
             }
     }
-    public void deleteOnlyCalendarPermitfromOneUser(int id_cal, int id_user) {
+    public void deleteOnlyCalendarPermitfromOneUser( int id_user, int id_cal) {
         
         Connection conn = getSqlConnection();
         

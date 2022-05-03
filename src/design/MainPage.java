@@ -6,6 +6,7 @@ package design;
 
 import SqlDatabase.HerokuCalendarPermitSqlConnection;
 import SqlDatabase.HerokuCalendarSqlConnection;
+import SqlDatabase.HerokuInvitationSqlConnection;
 import SqlDatabase.HerokuUsersSqlConnection;
 import java.awt.Color;
 import java.awt.event.WindowAdapter;
@@ -66,6 +67,9 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
         
         userSigned.setEmail("minerva@gmail.com");
         userSigned.setId(20);
+//        
+//         userSigned.setEmail("selene3");
+//        userSigned.setId(7);
         this.setLocationRelativeTo(null);
         this.setExtendedState(MAXIMIZED_BOTH);
         userSignedUpmp=userSigned;
@@ -565,7 +569,9 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
 
                    }else{
                        /*se borra solo la conexión con el usuario*/
-                       conex_cal_per.deleteOnlyCalendarPermitfromOneUser(x,userSigned.getId());
+                       conex_cal_per.deleteOnlyCalendarPermitfromOneUser(userSigned.getId(),x);
+                       HerokuInvitationSqlConnection conex_invite= new HerokuInvitationSqlConnection(); 
+                       conex_invite.deleteInvitationByTargetUserIdAndCalendarId(userSigned.getId(), x);
                    }
                    break;
                 } 

@@ -409,6 +409,7 @@ public class Share extends javax.swing.JDialog implements usuario{
                 String email=conex_user.getEmailByUserId(invite.getTarget_user());
                 JLabel title= aux.createCorreoInvitationTitle(email, 20, posyb1relative);jPanel2.add(title);
                 JLabel rol_user= aux.createCorreoInvitationRol(invite.getRol(), 185, posyb1relative);jPanel2.add(rol_user); 
+                //Solo si el usuario es administrador se muestra la opcion de editar roles, y eliminar usuarios
                 if(administrador.getUser_id() == userSigned.getId()){
                     showAdminOption();
                     JButton delete= aux.createButtonInvitation(460, posyb1relative);
@@ -443,7 +444,7 @@ public class Share extends javax.swing.JDialog implements usuario{
                             conex_invite.deleteInvitationById(invite.getInvitation_id());
                             conex_cal_perm.deleteOnlyCalendarPermitfromOneUser(invite.getTarget_user(), invite.getCalendar_id());
                             invitations.remove(invite);
-                            jTextField1.setText(email+"has been eliminated from"+this.actualCalendar.getName()+"correctly!");
+                            jTextField1.setText(email+" has been eliminated from "+this.actualCalendar.getName()+" correctly!");
                             loadNotifications();
                         } catch (SQLException ex) {
                             Logger.getLogger(Notification.class.getName()).log(Level.SEVERE, null, ex);
@@ -472,7 +473,7 @@ public class Share extends javax.swing.JDialog implements usuario{
                     }
                     
                 }                       
-            posyb1relative+=40;
+                        posyb1relative+=40;
                         posyb2relative+=40;
                         posytextorelative+=40;
             }

@@ -712,6 +712,7 @@ public final class calendarView extends javax.swing.JFrame {
             c.addTask(t);
         }
         c.setId(this.actualCalendar.getId());
+        c.setName(actualCalendar.getName());
         this.actualCalendar = c;
     } 
 
