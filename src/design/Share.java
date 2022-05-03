@@ -292,7 +292,6 @@ public class Share extends javax.swing.JDialog implements usuario{
                         conex_invite.changeRol(actual_cal_id,actual_user_id, target_user_id,(String) Rol.getSelectedItem() );
                         jTextField1.setText("Your invitation has been send correctly!");
                     }else{
-                        System.out.println("OHHHHHHH");
                         System.out.println(e.getMessage());
                         jTextField1.setText("That didn't work! Try again");
                     }
