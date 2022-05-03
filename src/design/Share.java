@@ -41,7 +41,6 @@ public class Share extends javax.swing.JDialog implements usuario{
     HerokuCalendarSqlConnection conex_cal= new HerokuCalendarSqlConnection();
     HerokuInvitationSqlConnection conex_invite= new HerokuInvitationSqlConnection();
     HerokuCalendarPermitSqlConnection conex_cal_perm= new HerokuCalendarPermitSqlConnection();
-    private User userSignedUpmp;
     private Admin administrador= new Admin(); 
     private boolean hasTransfered=false;
     private int posxb1=570;
@@ -59,9 +58,8 @@ public class Share extends javax.swing.JDialog implements usuario{
     public Share(CalendarTask actualCalendar) throws SQLException{
         this.actualCalendar=actualCalendar;
         
-        System.out.println("ID DEL ACTUAL CALENDAR ESSS: "+ this.actualCalendar.getId());
+        System.out.println("ID DEL ACTUAL CALENDAR ES: "+ this.actualCalendar.getId());
         initComponents();
-        userSignedUpmp=userSigned;
         changeColor();
         
         Color color = new Color(36,47,35);
@@ -73,7 +71,7 @@ public class Share extends javax.swing.JDialog implements usuario{
     }
     
     public void changeColor(){
-        if(userSignedUpmp.getModo() == 1){
+        if(userSigned.getModo() == 1){
             jPanel1.setBackground(Color.decode("#000000"));
             jLabel1.setForeground(Color.decode("#FFFFFF"));
             jLabel2.setForeground(Color.decode("#FFFFFF"));
@@ -277,23 +275,15 @@ public class Share extends javax.swing.JDialog implements usuario{
         //userSigned.setId(20);
         try {
             int actual_cal_id=0;
-                actual_cal_id=this.actualCalendar.getId();
-            
-            
+            actual_cal_id=this.actualCalendar.getId();
             int actual_user_id=userSigned.getId();
-            //get target user id
             String correo_target=jTextPane1.getText();
-            HerokuUsersSqlConnection conex_us= new HerokuUsersSqlConnection();
-            int target_user_id=conex_us.getUserIdByEmail(correo_target);
+            int target_user_id=conex_user.getUserIdByEmail(correo_target);
             if (target_user_id == -1){
                 jTextField1.setText("That user doesn't exist! Try again");
             }else{
                 conex_invite= new HerokuInvitationSqlConnection();
                 try{
-                    System.out.println(actual_user_id);
-                    System.out.println(target_user_id);
-                    System.out.println(actual_cal_id);
-                    System.out.println(Rol.getSelectedItem());
                     conex_invite.insertInvitation(actual_user_id, target_user_id, actual_cal_id, (String) Rol.getSelectedItem());
                     jTextField1.setText("Your invitation has been send correctly!");
                 }catch (SQLException e){
@@ -310,7 +300,6 @@ public class Share extends javax.swing.JDialog implements usuario{
                  
             }
         } catch (SQLException ex) {
-            System.out.println("asdfadsf");
             Logger.getLogger(Share.class.getName()).log(Level.SEVERE, null, ex);
             jTextField1.setText("That didn't work! Try again");
         }
@@ -452,7 +441,7 @@ public class Share extends javax.swing.JDialog implements usuario{
                         }
                     });
                     
-                     if(userSignedUpmp.getModo() == 1){
+                     if(userSigned.getModo() == 1){
                         delete.setBackground(Color.decode("#000000"));
                         delete.setForeground(Color.decode("#FFFFFF"));
 
