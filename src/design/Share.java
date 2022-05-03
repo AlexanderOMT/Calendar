@@ -29,47 +29,49 @@ import model.User;
  *
  * @author Leyre
  */
-public class Share extends javax.swing.JDialog implements usuario{
+public class Share extends javax.swing.JDialog implements usuario {
 
     /**
      * Creates new form Share
+     *
      * @param parent
      * @param modal
      */
     private ArrayList<Invitation> invitations;
-    HerokuUsersSqlConnection conex_user= new HerokuUsersSqlConnection();
-    HerokuCalendarSqlConnection conex_cal= new HerokuCalendarSqlConnection();
-    HerokuInvitationSqlConnection conex_invite= new HerokuInvitationSqlConnection();
-    HerokuCalendarPermitSqlConnection conex_cal_perm= new HerokuCalendarPermitSqlConnection();
-    private Admin administrador= new Admin(); 
-    private boolean hasTransfered=false;
-    private int posxb1=570;
-    private int posxb2=635;
-    private int posy=10;
-    private int posxtext=10;
-    private int posytext=10;
+    HerokuUsersSqlConnection conex_user = new HerokuUsersSqlConnection();
+    HerokuCalendarSqlConnection conex_cal = new HerokuCalendarSqlConnection();
+    HerokuInvitationSqlConnection conex_invite = new HerokuInvitationSqlConnection();
+    HerokuCalendarPermitSqlConnection conex_cal_perm = new HerokuCalendarPermitSqlConnection();
+    private Admin administrador = new Admin();
+    private boolean hasTransfered = false;
+    private int posxb1 = 570;
+    private int posxb2 = 635;
+    private int posy = 10;
+    private int posxtext = 10;
+    private int posytext = 10;
     private CalendarTask actualCalendar;//= new CalendarTask("c", 27);
+
     public Share(java.awt.Frame parent, boolean modal) throws SQLException {
         super(parent, modal);
         initComponents();
         getNotifications();
     }
-    
-    public Share(CalendarTask actualCalendar) throws SQLException{
-        this.actualCalendar=actualCalendar;
-        System.out.println("ID DEL ACTUAL CALENDAR ES: "+ this.actualCalendar.getId());
+
+    public Share(CalendarTask actualCalendar) throws SQLException {
+        this.actualCalendar = actualCalendar;
+        System.out.println("ID DEL ACTUAL CALENDAR ES: " + this.actualCalendar.getId());
         initComponents();
         changeColor();
-        Color color = new Color(36,47,35);
+        Color color = new Color(36, 47, 35);
         this.getContentPane().setBackground(color);
         setModal(true);
         this.setLocationRelativeTo(null);
         Rol.setEditable(false);
         getNotifications();
     }
-    
-    public void changeColor(){
-        if(userSigned.getModo() == 1){
+
+    public void changeColor() {
+        if (userSigned.getModo() == 1) {
             jPanel1.setBackground(Color.decode("#000000"));
             jLabel1.setForeground(Color.decode("#FFFFFF"));
             jLabel2.setForeground(Color.decode("#FFFFFF"));
@@ -79,7 +81,7 @@ public class Share extends javax.swing.JDialog implements usuario{
             Rol.setForeground(Color.decode("#FFFFFF"));
             // jButton1.setBackground(Color.decode("#859EBC"));
             jPanel2.setBackground(Color.decode("#000000"));
-        }else{
+        } else {
             jPanel1.setBackground(Color.decode("#FFFFFF"));
             jLabel1.setForeground(Color.decode("#000000"));
             jLabel2.setForeground(Color.decode("#000000"));
@@ -259,66 +261,68 @@ public class Share extends javax.swing.JDialog implements usuario{
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-    }                                           
+    }
 
-    private void RolActionPerformed(java.awt.event.ActionEvent evt) {                                    
+    private void RolActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-    }                                   
+    }
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
         jTextField1.setText("");
         //userSigned.setEmail("minerva@gmail.");
         //userSigned.setId(20);
         try {
-            int actual_cal_id=0;
-            actual_cal_id=this.actualCalendar.getId();
-            int actual_user_id=userSigned.getId();
-            String correo_target=jTextPane1.getText();
-            int target_user_id=conex_user.getUserIdByEmail(correo_target);
-            if (target_user_id == -1){
+            int actual_cal_id = 0;
+            actual_cal_id = this.actualCalendar.getId();
+            int actual_user_id = userSigned.getId();
+            String correo_target = jTextPane1.getText();
+            int target_user_id = conex_user.getUserIdByEmail(correo_target);
+            if (target_user_id == -1) {
                 jTextField1.setText("That user doesn't exist! Try again");
-            }else{
-                conex_invite= new HerokuInvitationSqlConnection();
-                try{
+            } else {
+                conex_invite = new HerokuInvitationSqlConnection();
+                try {
                     conex_invite.insertInvitation(actual_user_id, target_user_id, actual_cal_id, (String) Rol.getSelectedItem());
                     jTextField1.setText("Your invitation has been send correctly!");
-                }catch (SQLException e){
-                    if(e.getErrorCode() == 1062){
+                } catch (SQLException e) {
+                    if (e.getErrorCode() == 1062) {
                         System.out.println("se procede a hacer un update con changeRol()");
-                        conex_invite.changeRol(actual_cal_id,actual_user_id, target_user_id,(String) Rol.getSelectedItem() );
+                        conex_invite.changeRol(actual_cal_id, actual_user_id, target_user_id, (String) Rol.getSelectedItem());
                         jTextField1.setText("Your invitation has been send correctly!");
-                    }else{
+                    } else {
                         System.out.println(e.getMessage());
                         jTextField1.setText("That didn't work! Try again");
                     }
-                }                 
+                }
             }
         } catch (SQLException ex) {
             Logger.getLogger(Share.class.getName()).log(Level.SEVERE, null, ex);
             jTextField1.setText("That didn't work! Try again");
         }
-        
-    }                                        
 
-    
-    public void transferirOwnership() throws SQLException{
-        
-        if(invitations.size() >0){ 
+    }
+
+    public void transferirOwnership() throws SQLException {
+
+        if (invitations.size() > 0) {
             jPanel2.removeAll();
             jPanel2.updateUI();
             jPanel2.revalidate();
-            
-            JButton back= new JButton("Back"); back.setSize(65,35); back.setLocation(500, 30); jPanel2.add(back);
+
+            JButton back = new JButton("Back");
+            back.setSize(65, 35);
+            back.setLocation(500, 30);
+            jPanel2.add(back);
             back.addActionListener((java.awt.event.ActionEvent e) -> {
-                if(hasTransfered){
+                if (hasTransfered) {
                     try {
                         getNotifications();
                     } catch (SQLException ex) {
                         Logger.getLogger(Share.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }else{
+                } else {
                     try {
                         loadNotifications();
                     } catch (SQLException ex) {
@@ -326,24 +330,25 @@ public class Share extends javax.swing.JDialog implements usuario{
                     }
                 }
             });
-            
-            int posyb1relative=45;
-            int posyb2relative=45;
-            int posytextorelative=40;
-            ButtonCalendar aux= new ButtonCalendar();
-            for (int x=0; x<invitations.size(); x++){
-                Invitation invite=invitations.get(x);
-                String email=conex_user.getEmailByUserId(invite.getTarget_user());
-                JLabel title= aux.createCorreoInvitationTitle(email, 20, posyb1relative);
-                JButton transfer= aux.createButtonInvitation(185, posyb1relative);
+
+            int posyb1relative = 45;
+            int posyb2relative = 45;
+            int posytextorelative = 40;
+            ButtonCalendar aux = new ButtonCalendar();
+            for (int x = 0; x < invitations.size(); x++) {
+                Invitation invite = invitations.get(x);
+                String email = conex_user.getEmailByUserId(invite.getTarget_user());
+                JLabel title = aux.createCorreoInvitationTitle(email, 20, posyb1relative);
+                JButton transfer = aux.createButtonInvitation(185, posyb1relative);
                 transfer.setText("Transfer");
-                jPanel2.add(title); jPanel2.add(transfer); 
-                        posyb1relative+=40;
-                        posyb2relative+=40;
-                        posytextorelative+=40;
+                jPanel2.add(title);
+                jPanel2.add(transfer);
+                posyb1relative += 40;
+                posyb2relative += 40;
+                posytextorelative += 40;
                 transfer.addActionListener((java.awt.event.ActionEvent e) -> {
                     try {
-                        this.conex_invite.deleteInvitationByTargetUserIdAndCalendarId(invite.getTarget_user(),actualCalendar.getId());
+                        this.conex_invite.deleteInvitationByTargetUserIdAndCalendarId(invite.getTarget_user(), actualCalendar.getId());
                         this.conex_cal_perm.changeRol(invite.getTarget_user(), actualCalendar.getId(), "Admin");
                         this.conex_cal_perm.changeRol(userSigned.getId(), actualCalendar.getId(), "Editor");
                         this.conex_invite.insertInvitationAccepted(userSigned.getId(), userSigned.getId(), actualCalendar.getId(), "Editor");
@@ -354,68 +359,79 @@ public class Share extends javax.swing.JDialog implements usuario{
                     }
                 });
             }
-        }else{
+        } else {
             jTextField1.setText("It's only you in this calendar!");
         }
     }
-    
-    public void showAdminOption(){
-         //HACER QUE SOLO SE MUESTRE SI EL USUARIO INICIADO ES EL ADMINISTRADOR - CAMBIAR NUMERO DE LAS POSICIONES RELATIVAS SEGUN USUARIO
-       
-         JButton trans_owner = new JButton("Transfer ownership");
-         trans_owner.setSize(145, 35);trans_owner.setLocation(450, 5);jPanel2.add(trans_owner);
-        
-         trans_owner.addActionListener((java.awt.event.ActionEvent e) -> {
+
+    public void showAdminOption() {
+        //HACER QUE SOLO SE MUESTRE SI EL USUARIO INICIADO ES EL ADMINISTRADOR - CAMBIAR NUMERO DE LAS POSICIONES RELATIVAS SEGUN USUARIO
+
+        JButton trans_owner = new JButton("Transfer ownership");
+        trans_owner.setSize(145, 35);
+        trans_owner.setLocation(450, 5);
+        jPanel2.add(trans_owner);
+
+        trans_owner.addActionListener((java.awt.event.ActionEvent e) -> {
             try {
                 transferirOwnership();
             } catch (SQLException ex) {
                 Logger.getLogger(Share.class.getName()).log(Level.SEVERE, null, ex);
             }
-         });
+        });
     }
-    
+
     //ZONA DE CARGA DE DATOS
-     public void loadNotifications() throws SQLException{
+    public void loadNotifications() throws SQLException {
         jPanel2.removeAll();
         jPanel2.updateUI();
         jPanel2.revalidate();
-        
-         JSeparator jSeparator2 = new JSeparator(); jSeparator2.setSize(700, 5);jSeparator2.setLocation(0, 45);jPanel2.add(jSeparator2);
-        JLabel admin_title= new JLabel(administrador.getCorreo()+ " es el administrador de este calendario");
-         admin_title.setSize(400, 40);admin_title.setLocation(20, 0);jPanel2.add(admin_title);
-       
-        if(invitations.size() >0){ 
-            int posyb1relative=55;
-            int posyb2relative=55;
-            int posytextorelative=50;
-            ButtonCalendar aux= new ButtonCalendar();
-            for (int x=0; x<invitations.size(); x++){
-                Invitation invite=invitations.get(x);
-                String email=conex_user.getEmailByUserId(invite.getTarget_user());
-                JLabel title= aux.createCorreoInvitationTitle(email, 20, posyb1relative);jPanel2.add(title);
-                JLabel rol_user= aux.createCorreoInvitationRol(invite.getRol(), 185, posyb1relative);jPanel2.add(rol_user); 
+
+        JSeparator jSeparator2 = new JSeparator();
+        jSeparator2.setSize(700, 5);
+        jSeparator2.setLocation(0, 45);
+        jPanel2.add(jSeparator2);
+        JLabel admin_title = new JLabel(administrador.getCorreo() + " es el administrador de este calendario");
+        admin_title.setSize(400, 40);
+        admin_title.setLocation(20, 0);
+        jPanel2.add(admin_title);
+
+        if (invitations.size() > 0) {
+            int posyb1relative = 55;
+            int posyb2relative = 55;
+            int posytextorelative = 50;
+            ButtonCalendar aux = new ButtonCalendar();
+            for (int x = 0; x < invitations.size(); x++) {
+                Invitation invite = invitations.get(x);
+                String email = conex_user.getEmailByUserId(invite.getTarget_user());
+                JLabel title = aux.createCorreoInvitationTitle(email, 20, posyb1relative);
+                jPanel2.add(title);
+                JLabel rol_user = aux.createCorreoInvitationRol(invite.getRol(), 185, posyb1relative);
+                jPanel2.add(rol_user);
                 //Solo si el usuario es administrador se muestra la opcion de editar roles, y eliminar usuarios
-                if(administrador.getUser_id() == userSigned.getId()){
+                if (administrador.getUser_id() == userSigned.getId()) {
                     showAdminOption();
-                    JButton delete= aux.createButtonInvitation(460, posyb1relative);
-                    JButton change= aux.createButtonInvitation(355, posyb1relative);
-                    JComboBox roles= aux.createJComboBox(270, posyb1relative); jPanel2.add(change);
-                    delete.setText("eliminate");change.setText("change");
-                    jPanel2.add(delete);  jPanel2.add(roles);
-                        
-                        
-                        //ACCIONES PARA LOS BOTONES DE ACEPTAR Y RECHAZAR
+                    JButton delete = aux.createButtonInvitation(460, posyb1relative);
+                    JButton change = aux.createButtonInvitation(355, posyb1relative);
+                    JComboBox roles = aux.createJComboBox(270, posyb1relative);
+                    jPanel2.add(change);
+                    delete.setText("eliminate");
+                    change.setText("change");
+                    jPanel2.add(delete);
+                    jPanel2.add(roles);
+
+                    //ACCIONES PARA LOS BOTONES DE ACEPTAR Y RECHAZAR
                     change.addActionListener((java.awt.event.ActionEvent e) -> {
-                        try {       
-                            if (actualCalendar == null){
-                                    System.out.println("No existe un calendario");
-                            }else if (actualCalendar.getId() == 0){
-                                    System.out.println("El CALENDAR ID ES CERO");
-                            }else{
-                            conex_invite.changeRol(actualCalendar.getId(),invite.getOrigin_user(), invite.getTarget_user() , (String) roles.getSelectedItem());
-                            conex_cal_perm.changeRol(invite.getTarget_user(), invite.getCalendar_id(), (String) roles.getSelectedItem());
-                            jTextField1.setText("The rol has been changed correctly!");
-                            getNotifications();
+                        try {
+                            if (actualCalendar == null) {
+                                System.out.println("No existe un calendario");
+                            } else if (actualCalendar.getId() == 0) {
+                                System.out.println("El CALENDAR ID ES CERO");
+                            } else {
+                                conex_invite.changeRol(actualCalendar.getId(), invite.getOrigin_user(), invite.getTarget_user(), (String) roles.getSelectedItem());
+                                conex_cal_perm.changeRol(invite.getTarget_user(), invite.getCalendar_id(), (String) roles.getSelectedItem());
+                                jTextField1.setText("The rol has been changed correctly!");
+                                getNotifications();
                             }
                         } catch (SQLException ex) {
                             Logger.getLogger(Share.class.getName()).log(Level.SEVERE, null, ex);
@@ -425,19 +441,19 @@ public class Share extends javax.swing.JDialog implements usuario{
 
                     delete.addActionListener((java.awt.event.ActionEvent e) -> {
                         try {
-                            
+
                             conex_invite.deleteInvitationById(invite.getInvitation_id());
                             conex_cal_perm.deleteOnlyCalendarPermitfromOneUser(invite.getTarget_user(), invite.getCalendar_id());
                             invitations.remove(invite);
-                            jTextField1.setText(email+" has been eliminated from "+this.actualCalendar.getName()+" correctly!");
+                            jTextField1.setText(email + " has been eliminated from " + this.actualCalendar.getName() + " correctly!");
                             loadNotifications();
                         } catch (SQLException ex) {
                             Logger.getLogger(Notification.class.getName()).log(Level.SEVERE, null, ex);
-                             jTextField1.setText("That didn't work! Try again");
+                            jTextField1.setText("That didn't work! Try again");
                         }
                     });
-                    
-                     if(userSigned.getModo() == 1){
+
+                    if (userSigned.getModo() == 1) {
                         delete.setBackground(Color.decode("#000000"));
                         delete.setForeground(Color.decode("#FFFFFF"));
 
@@ -446,7 +462,7 @@ public class Share extends javax.swing.JDialog implements usuario{
 
                         roles.setBackground(Color.decode("#000000"));
                         roles.setForeground(Color.decode("#FFFFFF"));
-                    }else{
+                    } else {
                         delete.setBackground(Color.decode("#FFFFFF"));
                         delete.setForeground(Color.decode("#000000"));
 
@@ -456,28 +472,25 @@ public class Share extends javax.swing.JDialog implements usuario{
                         roles.setBackground(Color.decode("#FFFFFF"));
                         roles.setForeground(Color.decode("#000000"));
                     }
-                    
-                }                       
-                        posyb1relative+=40;
-                        posyb2relative+=40;
-                        posytextorelative+=40;
+
+                }
+                posyb1relative += 40;
+                posyb2relative += 40;
+                posytextorelative += 40;
             }
-        
+
         }
-        
+
     }
-    
-    
-    
-    public void getNotifications() throws SQLException{
+
+    public void getNotifications() throws SQLException {
         //conseguir todas las invitaciones sin responder
         invitations = conex_invite.getInvitationsAccepted(actualCalendar.getId());
-        administrador=conex_invite.getAdminfromCalendar(actualCalendar.getId());
+        administrador = conex_invite.getAdminfromCalendar(actualCalendar.getId());
         administrador.setCorreo(this.conex_user.getEmailByUserId(administrador.getUser_id()));
         loadNotifications();
     }
-    
-    
+
     /**
      * @param args the command line arguments
      */
@@ -498,7 +511,7 @@ public class Share extends javax.swing.JDialog implements usuario{
             java.util.logging.Logger.getLogger(Share.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
+
         //</editor-fold>
 
         /* Create and display the dialog */
