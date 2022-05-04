@@ -39,6 +39,7 @@ public final class calendarView extends javax.swing.JFrame {
     private HerokuTaskSqlConnection conex_task;
     private HerokuCalendarPermitSqlConnection conex_calendarPermit;
     public int idCalendar;
+    public int idActualTask;
     public float idRandom;
     Calendar cl = new GregorianCalendar();
     Tags tag; 
@@ -46,8 +47,10 @@ public final class calendarView extends javax.swing.JFrame {
 
     
     // Constructor
-    public calendarView(CalendarTask actualCalendar) {
+    public calendarView(CalendarTask actualCalendar, int idCalendar) {
+        System.out.println(idCalendar);
         this.actualCalendar = actualCalendar;
+        this.idCalendar = idCalendar;
         //setIdRandom();
         //setIdCalendar(actualCalendar.getId());
         initComponents();
@@ -115,7 +118,7 @@ public final class calendarView extends javax.swing.JFrame {
                         (jTable1.getSelectedRow(), jTable1.getSelectedColumn());
                     int day = Integer.parseInt(tasks[0]);
                     Timestamp date = new Timestamp (actualYear-1900, actualMonth, day, 0, 0, 0, 0);
-                    dayView dia = new dayView(actualCalendar, date);
+                    dayView dia = new dayView(actualCalendar, date, idCalendar);
                     dia.setVisible(true);
                     setVisible(false);
                 }
@@ -130,7 +133,7 @@ public final class calendarView extends javax.swing.JFrame {
         // ArrayList<Tags> tags = new ArrayList<>();
         tag = Tags.BIRTHDAY;
         // tags.add(tag);
-        Task t = new Task(1, "Esto es una prueba", "This is the description", fecha2, 3, tag.toString());
+        /*Task t = new Task(1, "Esto es una prueba", "This is the description", fecha2, 3, tag.toString());
         c.addTask(t);
         t = new Task(2, "Esto es una prueba1", "This is the description", new Timestamp(2022-1900, 4, 23, 0, 0, 0, 0), 3, tag.toString());
         c.addTask(t);
@@ -143,7 +146,7 @@ public final class calendarView extends javax.swing.JFrame {
         tag = Tags.HOUSE;
         // tags.add(tag);
         t = new Task(5, "Esto es una prueba1", "This is the description", new Timestamp(2022-1900, 4, 24, 0, 0, 0, 0), 3, tag.toString());
-        c.addTask(t);
+        c.addTask(t);*/
         //List l = c.getTasks(date);
         //l = c.getTasks(date);
         
@@ -512,6 +515,7 @@ public final class calendarView extends javax.swing.JFrame {
         updateTasks();
     }                                        
 
+    // Add a task
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {                                         
 // TODO add your handling code here:
         //this.actualCalendar = actualCalendar;
@@ -532,11 +536,18 @@ public final class calendarView extends javax.swing.JFrame {
                 Timestamp fecha = new Timestamp(this.actualYear-1900, this.actualMonth,Integer.parseInt (tasks[0]), Integer.valueOf(minBox.getSelectedItem().toString()), Integer.valueOf(minBox.getSelectedItem().toString()), 0, 0);
                 // ArrayList<Tags> tags = new ArrayList<>();
                 // tags.add(tag);
-                Task t = new Task(1, nameField.getText(), descriptionField.getText(), fecha, 3, jComboBoxTag.getSelectedItem().toString());
-
-                //Task t1 = new Task(nameField.getText(), descriptionField.getText(), fecha, 3, jComboBoxTag.getSelectedItem().toString(),Float.toString(getIdRandom()));
-                //addTask(t1);
+                
+                HerokuTaskSqlConnection con = HerokuTaskSqlConnection.getInstance();
+                HerokuCalendarPermitSqlConnection con1 = HerokuCalendarPermitSqlConnection.getInstance();
+                Task t = new Task(nameField.getText(), descriptionField.getText(), fecha, 3, jComboBoxTag.getSelectedItem().toString());
                 this.actualCalendar.addTask(t);
+                int idTask = con.insertTaskByTask(t);
+                String rol = con1.selectRolfromUser(userSignedUpmp.getId(), this.idCalendar);
+                        
+                con1.insertCalendarPermit(userSignedUpmp.getId(), this.idCalendar, idTask, rol);
+                
+                loadTask();
+                
                 //System.out.println("El valor del ID de actual calendar: " +getIdCalendar());
                 
                 
@@ -581,17 +592,6 @@ public final class calendarView extends javax.swing.JFrame {
         conex_calendarPermit = HerokuCalendarPermitSqlConnection.getInstance();
         conex_task = HerokuTaskSqlConnection.getInstance();
         conex_task.insertTaskByTask(t);
-        ArrayList<String> specialId = conex_task.selectSpecialIdTasks(t.getName());
-        System.out.println(specialId);
-        System.out.println(t.getSpecialId());
-        for(int i = 0; i < specialId.size(); i++){      //sacar el id por el getSpecialId();
-            if(specialId.get(i).equals(t.getSpecialId())){
-                System.out.println("Id del calendario: " + t.getSpecialId());
-                int id = conex_task.selectIdBySpecialIdTasks(t.getSpecialId());
-                System.out.println("Id del calendario: " + getIdCalendar());
-                conex_calendarPermit.insertCalendarPermit(userSignedUpmp.getId(), getIdCalendar(), id, "Admin");     //FIJO ADMIN POR EL MOMENTO
-            }
-        }
         
         loadTask();      
         
@@ -636,13 +636,13 @@ public final class calendarView extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
-        weekView week = new weekView(this.actualMonth,this.actualYear,this.actualCalendar);
+        weekView week = new weekView(this.actualMonth,this.actualYear,this.actualCalendar,this.idCalendar);
         week.setVisible(true);
         setVisible(false);
     }                                        
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        dayView week = new dayView(this.actualCalendar, new Timestamp(this.actualYear-1900,this.actualMonth,1,0,0,0,0));
+        dayView week = new dayView(this.actualCalendar, new Timestamp(this.actualYear-1900,this.actualMonth,1,0,0,0,0), this.idCalendar);
         week.setVisible(true);
         setVisible(false);
     }                                        
@@ -744,8 +744,9 @@ public final class calendarView extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
+        
         java.awt.EventQueue.invokeLater(() -> {
-            new calendarView(new CalendarTask()).setVisible(true);
+            new calendarView(new CalendarTask(),540).setVisible(true);
         });
     }
 

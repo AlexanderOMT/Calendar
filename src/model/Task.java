@@ -10,35 +10,21 @@ public class Task {
     private Timestamp date;
     private int prior;
     private String tag;
-    private String specialId;
     
     public Task () {
     }
     
-    public Task (int id, String name, String desc, Timestamp date, int prior, String tag) {
-        this.id = id;
+    public Task (String name, String desc, Timestamp date, int prior, String tag) {
         this.name = name;
         this.desc = desc;
         this.date = date;
         this.prior = prior;
         this.tag = tag;
-    }
-    
-    public Task (String name, String desc, Timestamp date, int prior, String tag, String specialId) {
-        this.name = name;
-        this.desc = desc;
-        this.date = date;
-        this.prior = prior;
-        this.tag = tag;
-        this.specialId = specialId;
     }
     
 
     public void setId(int id) {
         this.id = id;
-    }
-    public void setId(String specialId) {
-        this.specialId = specialId;
     }
 
     public void setName(String name) {
@@ -63,10 +49,6 @@ public class Task {
 
     public int getId() {
         return id;
-    }
-    
-    public String getSpecialId() {
-        return specialId;
     }
     
     public String getName() {

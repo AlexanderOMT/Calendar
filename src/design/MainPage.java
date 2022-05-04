@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.event.ActionEvent;
+//import javafx.event.ActionEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -55,6 +55,8 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
                 
         Color color = new Color(255,255,255);
         this.getContentPane().setBackground(color);
+        userSigned.setEmail("tareas@gmail.com");
+        userSigned.setId(52);
 //        userSigned.setEmail("selene2");
 //        userSigned.setId(3);
 //        userSigned.setEmail("d");
@@ -525,7 +527,7 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
         
         boton1.addActionListener((java.awt.event.ActionEvent e) -> {
             System.out.println("Se ha abierto el calendario " + calendarName);
-            calendarView cv = new calendarView(new CalendarTask(calendarName, calendar.getId()));
+            calendarView cv = new calendarView(new CalendarTask(calendarName, calendar.getId()), calendar.getId());
             System.out.println("ID DEL CALEDIOOOOOO: "+ calendar.getId());
             cv.setVisible(true);
         });

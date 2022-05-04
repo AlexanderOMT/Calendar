@@ -105,26 +105,35 @@ public class HerokuTaskSqlConnection  extends SqlConnection {
     }
     
     
-    public void insertTaskByTask(Task task) {
+    public int insertTaskByTask(Task task) {
         Connection conn = getSqlConnection();  
-        System.out.println("Entra en insertar BD");
+        int result=-1;
         try{
-            PreparedStatement ps = conn.prepareStatement("INSERT INTO task(name, date, tag, priority, description, special_id) VALUES(?, ?, ?, ?, ?, ?)");
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO task(name, date, tag, priority, description) VALUES(?, ?, ?, ?, ?)");
             ps.setString(1, task.getName());
             ps.setTimestamp(2, (Timestamp) task.getDate()); 
             ps.setString(3, task.getTag()); 
             ps.setInt(4, task.getPrior());
             ps.setString(5, task.getDesc());
-            ps.setString(6, task.getSpecialId());
             
-            int res = ps.executeUpdate();
+            // ps.execute();  
+            ps.executeUpdate();
             
+            ps = conn.prepareStatement("SELECT DISTINCT last_insert_id() AS last_id FROM task;");
+            
+            ResultSet res = ps.executeQuery();
+            
+            
+            if(res.next()) result = res.getInt("last_id");
             
             conn.close();
+            return result;
             
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            //JOptionPane.showMessageDialog(null, "Error al insertar en la tabla TASK: " + e.getMessage());
+            System.out.println("Error al insertar en la tabla TASK: " + e.getMessage());
         }
+        return result;
     }
     
     public void selectTaskById(int id) {

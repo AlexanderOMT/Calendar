@@ -18,12 +18,14 @@ import model.User;
 public class dayView extends javax.swing.JFrame {
     
     private CalendarTask actualCalendar;
+    private int calendarId;
     private Timestamp date;
     Tags tag;
     private User userSignedUpmp;
     
-    public dayView(CalendarTask actualCalendar, Timestamp date) {
+    public dayView(CalendarTask actualCalendar, Timestamp date, int calendarId) {
         this.actualCalendar = actualCalendar;
+        this.calendarId = calendarId;
         this.date = date;
         initComponents();
         userSignedUpmp=userSigned;
@@ -419,7 +421,7 @@ public class dayView extends javax.swing.JFrame {
     //Back
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
-        calendarView cal = new calendarView(this.actualCalendar);
+        calendarView cal = new calendarView(this.actualCalendar, this.calendarId);
         cal.setVisible(true);
         setVisible(false);
     }                                        
@@ -441,7 +443,7 @@ public class dayView extends javax.swing.JFrame {
                         this.date.getMonth(), this.date.getDate(), 
                         Integer.valueOf(hourBox1.getSelectedItem().toString()), 
                         Integer.valueOf(minBox1.getSelectedItem().toString()), 0, 0);
-                t = new Task(t.getId(), nameField1.getText(), descriptionField1.getText(), 
+                t = new Task(nameField1.getText(), descriptionField1.getText(), 
                         fecha, 3, jComboBoxTag1.getSelectedItem().toString());
                 this.actualCalendar.setTask(jList1.getSelectedIndex(), t);
                 
@@ -505,7 +507,7 @@ public class dayView extends javax.swing.JFrame {
         switch (option) {
             case JOptionPane.OK_OPTION:
                 Timestamp fecha = new Timestamp(this.date.getYear(), this.date.getMonth(), this.date.getDate(), Integer.valueOf(hourBox.getSelectedItem().toString()), Integer.valueOf(minBox.getSelectedItem().toString()), 0, 0);
-                Task t = new Task(1, nameField.getText(), descriptionField.getText(), fecha, 3, jComboBoxTag.getSelectedItem().toString());
+                Task t = new Task(nameField.getText(), descriptionField.getText(), fecha, 3, jComboBoxTag.getSelectedItem().toString());
                 this.actualCalendar.addTask(t);
                 
                 updateDate();
@@ -611,7 +613,7 @@ public class dayView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new dayView(new CalendarTask(), new Timestamp(2022-1900,3,1,0,0,0,0)).setVisible(true);
+                new dayView(new CalendarTask(), new Timestamp(2022-1900,3,1,0,0,0,0), 1).setVisible(true);
             }
         });
     }

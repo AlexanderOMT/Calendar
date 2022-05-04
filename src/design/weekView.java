@@ -34,8 +34,10 @@ public class weekView extends javax.swing.JFrame {
     private User userSignedUpmp;
     private CalendarTask actualCalendar;
     private Tags tag;
+    private int idCalendar;
     
-    public weekView(int month, int year, CalendarTask actualCalendar) {
+    public weekView(int month, int year, CalendarTask actualCalendar, int idCalendar) {
+        this.idCalendar = idCalendar;
         this.actualCalendar = actualCalendar;
         this.actualMonth = month;
         this.actualYear = year;
@@ -98,17 +100,8 @@ public class weekView extends javax.swing.JFrame {
             jList6.setBackground(Color.decode("#F0F0F0"));
             jList7.setBackground(Color.decode("#F0F0F0"));
         }
-    }
-    
-    public void test() {
-        CalendarTask c = new CalendarTask("prueba");
-        tag = Tags.BIRTHDAY;
-        Task t = new Task(2, "Esto es una prueba1", "This is the description", new Timestamp(2022-1900, 2, 28, 0, 0, 0, 0), 3, tag.toString());
-        c.addTask(t);
-        t = new Task(4, "Esto es una pruweba3", "This is the description", new Timestamp(2022-1900, 3, 1, 0, 0, 0, 0), 3, tag.toString());
-        c.addTask(t);
-        this.actualCalendar = c;
-    }
+    }    
+
     
     // Method to calculate dates of week and show
     public void calculateDate() {
@@ -418,7 +411,7 @@ public class weekView extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
-        calendarView cal = new calendarView(this.actualCalendar);
+        calendarView cal = new calendarView(this.actualCalendar, this.idCalendar);
         cal.setVisible(true);
         setVisible(false);
     }                                        
@@ -453,7 +446,7 @@ public class weekView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new weekView(3,2022,new CalendarTask()).setVisible(true);
+                new weekView(3,2022,new CalendarTask(),1).setVisible(true);
             }
         });
     }
