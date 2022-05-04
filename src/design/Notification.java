@@ -225,7 +225,6 @@ public class Notification extends javax.swing.JDialog implements usuario{
                     }
                     //eliminar de la base de datos
                     conex_invite.replyInvitation(invite.getInvitation_id(), 0);
-                    acceptB = 0;
                 });
             }
         
