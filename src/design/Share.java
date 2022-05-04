@@ -403,6 +403,7 @@ public class Share extends javax.swing.JDialog implements usuario {
         admin_title.setSize(400, 40);
         admin_title.setLocation(20, 0);
         jPanel2.add(admin_title);
+        changeColorLoadAdmin(admin_title);
 
         if (invitations.size() > 0) {
             int posyb1relative = 55;
@@ -478,9 +479,22 @@ public class Share extends javax.swing.JDialog implements usuario {
 
     }
 
+    public void changeColorLoadAdmin(JLabel admin_title) {
+
+        if (userSigned.getModo() == 1) {
+            System.out.println("ESTA EN MODO OSCURO");
+            admin_title.setForeground(Color.white);
+            admin_title.setBackground(Color.black);
+        } else {
+            admin_title.setForeground(Color.black);
+            admin_title.setBackground(Color.white);
+        }
+    }
+    
     public void changeColorLoadNotif(JLabel title, JLabel rol_user) {
 
         if (userSigned.getModo() == 1) {
+            System.out.println("ESTA EN MODO OSCURO");
             title.setForeground(Color.white);
             rol_user.setForeground(Color.white);
             title.setBackground(Color.black);
