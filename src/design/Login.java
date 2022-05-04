@@ -22,21 +22,19 @@ import model.User;
  *
  * @author Selene
  */
-public final class Login extends javax.swing.JFrame implements usuario{
+public final class Login extends javax.swing.JFrame implements usuario {
 
     /**
      * Creates new form Login
      */
-    private User userSingedUp;
     public Login() {
         initComponents();
         email.setToolTipText("Enter email");
         contraseña.setToolTipText("Enter password");
         this.setLocationRelativeTo(null);
-        Color color = new Color(255,255,255);
+        Color color = new Color(255, 255, 255);
         this.getContentPane().setBackground(color);
         this.setExtendedState(MAXIMIZED_BOTH);
-        userSingedUp=userSigned;
         close();
     }
 
@@ -78,6 +76,7 @@ public final class Login extends javax.swing.JFrame implements usuario{
             public void focusGained(java.awt.event.FocusEvent evt) {
                 emailFocusGained(evt);
             }
+
             public void focusLost(java.awt.event.FocusEvent evt) {
                 emailFocusLost(evt);
             }
@@ -95,6 +94,7 @@ public final class Login extends javax.swing.JFrame implements usuario{
             public void focusGained(java.awt.event.FocusEvent evt) {
                 contraseñaFocusGained(evt);
             }
+
             public void focusLost(java.awt.event.FocusEvent evt) {
                 contraseñaFocusLost(evt);
             }
@@ -299,16 +299,16 @@ public final class Login extends javax.swing.JFrame implements usuario{
             }
         });
     }
-    
+
     public void confirmarSalida() throws SQLException {
         HerokuUsersSqlConnection conex = HerokuUsersSqlConnection.getInstance();
-        if(conex.signOut2(userSingedUp)){
-            
+        if (conex.signOut2(userSigned)) {
+
             this.setVisible(false);
             System.exit(0);
         }
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -329,7 +329,7 @@ public final class Login extends javax.swing.JFrame implements usuario{
             java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
+
         //</editor-fold>
 
         /* Create and display the form */

@@ -417,6 +417,7 @@ public class Share extends javax.swing.JDialog implements usuario {
                 JLabel rol_user = aux.createCorreoInvitationRol(invite.getRol(), 185, posyb1relative);
                 jPanel2.add(rol_user);
                 //Solo si el usuario es administrador se muestra la opcion de editar roles, y eliminar usuarios
+                changeColorLoadNotif(title, rol_user);
                 if (administrador.getUser_id() == userSigned.getId()) {
                     showAdminOption();
                     JButton delete = aux.createButtonInvitation(460, posyb1relative);
@@ -465,25 +466,7 @@ public class Share extends javax.swing.JDialog implements usuario {
                         }
                     });
 
-                    if (userSigned.getModo() == 1) {
-                        delete.setBackground(Color.decode("#000000"));
-                        delete.setForeground(Color.decode("#FFFFFF"));
-
-                        change.setBackground(Color.decode("#000000"));
-                        change.setForeground(Color.decode("#FFFFFF"));
-
-                        roles.setBackground(Color.decode("#000000"));
-                        roles.setForeground(Color.decode("#FFFFFF"));
-                    } else {
-                        delete.setBackground(Color.decode("#FFFFFF"));
-                        delete.setForeground(Color.decode("#000000"));
-
-                        change.setBackground(Color.decode("#FFFFFF"));
-                        change.setForeground(Color.decode("#000000"));
-
-                        roles.setBackground(Color.decode("#FFFFFF"));
-                        roles.setForeground(Color.decode("#000000"));
-                    }
+                    changeColorAdminChangeandDelete(change, delete, roles);
 
                 }
                 posyb1relative += 40;
@@ -493,6 +476,43 @@ public class Share extends javax.swing.JDialog implements usuario {
 
         }
 
+    }
+
+    public void changeColorLoadNotif(JLabel title, JLabel rol_user) {
+
+        if (userSigned.getModo() == 1) {
+            title.setForeground(Color.white);
+            rol_user.setForeground(Color.white);
+            title.setBackground(Color.black);
+            rol_user.setBackground(Color.black);
+        } else {
+            title.setForeground(Color.black);
+            rol_user.setForeground(Color.black);
+            title.setBackground(Color.white);
+            rol_user.setBackground(Color.white);
+        }
+    }
+
+    public void changeColorAdminChangeandDelete(JButton change, JButton delete, JComboBox roles) {
+        if (userSigned.getModo() == 1) {
+            delete.setBackground(Color.decode("#000000"));
+            delete.setForeground(Color.decode("#FFFFFF"));
+
+            change.setBackground(Color.decode("#000000"));
+            change.setForeground(Color.decode("#FFFFFF"));
+
+            roles.setBackground(Color.decode("#000000"));
+            roles.setForeground(Color.decode("#FFFFFF"));
+        } else {
+            delete.setBackground(Color.decode("#FFFFFF"));
+            delete.setForeground(Color.decode("#000000"));
+
+            change.setBackground(Color.decode("#FFFFFF"));
+            change.setForeground(Color.decode("#000000"));
+
+            roles.setBackground(Color.decode("#FFFFFF"));
+            roles.setForeground(Color.decode("#000000"));
+        }
     }
 
     public void changeTextField() {

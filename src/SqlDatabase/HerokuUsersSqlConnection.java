@@ -112,6 +112,33 @@ public class HerokuUsersSqlConnection extends SqlConnection {
         }
     } 
     
+    public String getNameByUserId(int id) throws SQLException {
+        Connection conn = getSqlConnection();
+        try{
+            ps = conn.prepareStatement("SELECT * FROM user WHERE user_id=?");
+            ps.setInt(1, id);
+            
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                String aux= rs.getString("name");
+                return aux;
+            } else {
+                return null;
+            }
+            
+        } catch (SQLException e) {
+            System.err.println(e);
+            return null;
+        } finally{
+            try{
+                conn.close();
+            } catch (SQLException e) {
+                System.err.println(e);
+            }
+        }
+    } 
+    
     /*este metodo en realidad no es un select, es una comprobación*/
     public boolean selectUserByEmail(String email) throws SQLException {
         Connection conn = getSqlConnection();
@@ -237,7 +264,6 @@ public class HerokuUsersSqlConnection extends SqlConnection {
                         emailUser = user.getEmail();
                         conn.close();
                         return true;
-                    }else{
                     }
                 }
             }

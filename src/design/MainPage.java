@@ -50,34 +50,28 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
      * Creates new form MainPage
      */
     
-    private User userSignedUpmp;
     public MainPage() throws SQLException {
         initComponents();
                 
         Color color = new Color(255,255,255);
         this.getContentPane().setBackground(color);
-        
-        
-        
-        
-        userSigned.setEmail("selene2");
-        userSigned.setId(3);
-        userSigned.setEmail("d");
-        userSigned.setId(9);
-        
-        userSigned.setEmail("minerva@gmail.com");
-        userSigned.setId(20);
+//        userSigned.setEmail("selene2");
+//        userSigned.setId(3);
+//        userSigned.setEmail("d");
+//        userSigned.setId(9);
+//        
+//        userSigned.setEmail("minerva@gmail.com");
+//        userSigned.setId(20);
 //        
 //         userSigned.setEmail("selene3");
 //        userSigned.setId(7);
         this.setLocationRelativeTo(null);
         this.setExtendedState(MAXIMIZED_BOTH);
-        userSignedUpmp=userSigned;
         
-        if(userSignedUpmp.getModo() == 1){
+        if(userSigned.getModo() == 1){
             jCheckBox1.setSelected(true);
             
-            userSignedUpmp.setModo(1);
+//            userSigned.setModo(1);
             jPanel1.setBackground(Color.decode("#000000"));
             jPanel2.setBackground(Color.decode("#7D8E9A"));
             jPanel4.setBackground(Color.decode("#000000"));
@@ -102,8 +96,8 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
             jButton2.setForeground(Color.decode("#474040"));
         }
         
-        jTextPane2.setText(userSignedUpmp.getName());
-        description.setText(userSignedUpmp.getDescription());
+        jTextPane2.setText(userSigned.getName());
+        description.setText(userSigned.getDescription());
         
         conex_us = HerokuUsersSqlConnection.getInstance();
         conex_cal = HerokuCalendarSqlConnection.getInstance();
@@ -332,8 +326,8 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
     private void users1ActionPerformed(java.awt.event.ActionEvent evt) {                                       
         ChangeUser cu = new ChangeUser();
         cu.setVisible(true);
-        jTextPane2.setText(userSignedUpmp.getName());
-        description.setText(userSignedUpmp.getDescription());
+        jTextPane2.setText(userSigned.getName());
+        description.setText(userSigned.getDescription());
     }                                      
 
     private void alertActionPerformed(java.awt.event.ActionEvent evt) {                                      
@@ -364,7 +358,7 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
         conex_us = HerokuUsersSqlConnection.getInstance();
         
         try {
-            if(conex_us.signOut2(this.userSignedUpmp)){
+            if(conex_us.signOut2(this.userSigned)){
                 this.setVisible(false);
                 System.exit(0);
             }
@@ -375,7 +369,7 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {                                           
         if(jCheckBox1.isSelected()){
-            userSignedUpmp.setModo(1);
+            userSigned.setModo(1);
             jPanel1.setBackground(Color.decode("#000000"));
             jPanel2.setBackground(Color.decode("#7D8E9A"));
             jPanel4.setBackground(Color.decode("#000000"));
@@ -399,7 +393,7 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
             jButton2.setBackground(Color.decode("#848B81"));
             jButton2.setForeground(Color.decode("#474040"));
         }else{
-            userSignedUpmp.setModo(0);
+            userSigned.setModo(0);
             jPanel1.setBackground(Color.decode("#FFFFFF"));
             jPanel2.setBackground(Color.decode("#EBD8BD"));
             jPanel4.setBackground(Color.decode("#FFFFFF"));
@@ -477,7 +471,7 @@ public final class MainPage extends javax.swing.JFrame implements usuario{
     public void confirmarSalida() {
         HerokuUsersSqlConnection conex = HerokuUsersSqlConnection.getInstance();
         try {
-            if(conex.signOut2(userSignedUpmp)){
+            if(conex.signOut2(userSigned)){
                 this.setVisible(false);
                 System.exit(0);
             }

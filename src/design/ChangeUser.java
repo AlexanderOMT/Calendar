@@ -163,9 +163,9 @@ public class ChangeUser extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         HerokuUsersSqlConnection conex_user = new HerokuUsersSqlConnection();
-        userSignedUpmp.setName(jTextField2.getText());
-        userSignedUpmp.setDescription(jTextArea1.getText());
-        if(conex_user.updateUser(userSignedUpmp)){
+       userSigned.setName(jTextField2.getText());
+        userSigned.setDescription(jTextArea1.getText());
+        if(conex_user.updateUser(userSigned)){
             System.out.println("Se ha modificado el valor del usuario");
         } else {
             System.out.println("No se ha modificado el valor del usuario");
