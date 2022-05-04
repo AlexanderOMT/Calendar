@@ -49,6 +49,7 @@ public class Share extends javax.swing.JDialog implements usuario {
     private int posy = 10;
     private int posxtext = 10;
     private int posytext = 10;
+    private String mensaje;
     private CalendarTask actualCalendar;//= new CalendarTask("c", 27);
 
     public Share(java.awt.Frame parent, boolean modal) throws SQLException {
@@ -280,26 +281,31 @@ public class Share extends javax.swing.JDialog implements usuario {
             String correo_target = jTextPane1.getText();
             int target_user_id = conex_user.getUserIdByEmail(correo_target);
             if (target_user_id == -1) {
-                jTextField1.setText("That user doesn't exist! Try again");
+                mensaje = "That user doesn't exist! Try again";
+                changeTextField();
             } else {
                 conex_invite = new HerokuInvitationSqlConnection();
                 try {
                     conex_invite.insertInvitation(actual_user_id, target_user_id, actual_cal_id, (String) Rol.getSelectedItem());
-                    jTextField1.setText("Your invitation has been send correctly!");
+                    mensaje = "Your invitation has been send correctly!";
+                    changeTextField();
                 } catch (SQLException e) {
                     if (e.getErrorCode() == 1062) {
                         System.out.println("se procede a hacer un update con changeRol()");
                         conex_invite.changeRol(actual_cal_id, actual_user_id, target_user_id, (String) Rol.getSelectedItem());
-                        jTextField1.setText("Your invitation has been send correctly!");
+                        mensaje = "Your invitation has been send correctly!";
+                        changeTextField();
                     } else {
                         System.out.println(e.getMessage());
-                        jTextField1.setText("That didn't work! Try again");
+                        mensaje = "That didn't work! Try again";
+                        changeTextField();
                     }
                 }
             }
         } catch (SQLException ex) {
             Logger.getLogger(Share.class.getName()).log(Level.SEVERE, null, ex);
-            jTextField1.setText("That didn't work! Try again");
+            mensaje = "That didn't work! Try again";
+            changeTextField();
         }
 
     }
@@ -352,7 +358,8 @@ public class Share extends javax.swing.JDialog implements usuario {
                         this.conex_cal_perm.changeRol(invite.getTarget_user(), actualCalendar.getId(), "Admin");
                         this.conex_cal_perm.changeRol(userSigned.getId(), actualCalendar.getId(), "Editor");
                         this.conex_invite.insertInvitationAccepted(userSigned.getId(), userSigned.getId(), actualCalendar.getId(), "Editor");
-                        jTextField1.setText("You've changed the ownership of this calendar");
+                        mensaje = "You've changed the ownership of this calendar";
+                        changeTextField();
                         getNotifications();
                     } catch (SQLException ex) {
                         Logger.getLogger(Share.class.getName()).log(Level.SEVERE, null, ex);
@@ -360,7 +367,8 @@ public class Share extends javax.swing.JDialog implements usuario {
                 });
             }
         } else {
-            jTextField1.setText("It's only you in this calendar!");
+            mensaje = "It's only you in this calendar!";
+            changeTextField();
         }
     }
 
@@ -430,12 +438,14 @@ public class Share extends javax.swing.JDialog implements usuario {
                             } else {
                                 conex_invite.changeRol(actualCalendar.getId(), invite.getOrigin_user(), invite.getTarget_user(), (String) roles.getSelectedItem());
                                 conex_cal_perm.changeRol(invite.getTarget_user(), invite.getCalendar_id(), (String) roles.getSelectedItem());
-                                jTextField1.setText("The rol has been changed correctly!");
+                                mensaje = "The rol has been changed correctly!";
+                                changeTextField();
                                 getNotifications();
                             }
                         } catch (SQLException ex) {
                             Logger.getLogger(Share.class.getName()).log(Level.SEVERE, null, ex);
-                            jTextField1.setText("That didn't work! Try again");
+                            mensaje = "That didn't work! Try again";
+                            changeTextField();
                         }
                     });
 
@@ -445,11 +455,13 @@ public class Share extends javax.swing.JDialog implements usuario {
                             conex_invite.deleteInvitationById(invite.getInvitation_id());
                             conex_cal_perm.deleteOnlyCalendarPermitfromOneUser(invite.getTarget_user(), invite.getCalendar_id());
                             invitations.remove(invite);
-                            jTextField1.setText(email + " has been eliminated from " + this.actualCalendar.getName() + " correctly!");
+                            mensaje = email + " has been eliminated from " + this.actualCalendar.getName() + " correctly!";
+                            changeTextField();
                             loadNotifications();
                         } catch (SQLException ex) {
                             Logger.getLogger(Notification.class.getName()).log(Level.SEVERE, null, ex);
-                            jTextField1.setText("That didn't work! Try again");
+                            mensaje = "That didn't work! Try again";
+                            changeTextField();
                         }
                     });
 
@@ -481,6 +493,12 @@ public class Share extends javax.swing.JDialog implements usuario {
 
         }
 
+    }
+
+    public void changeTextField() {
+        jTextField1.setText(mensaje);
+        jTextField1.setSize(mensaje.length() * 260 / 40, 30);
+        jTextField1.setLocation(40 * 165 / mensaje.length(), 188);
     }
 
     public void getNotifications() throws SQLException {
