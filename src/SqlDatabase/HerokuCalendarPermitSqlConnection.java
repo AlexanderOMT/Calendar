@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /*
 Nombre de los roles de los usuarios en la bd:
@@ -265,9 +267,10 @@ public class HerokuCalendarPermitSqlConnection extends SqlConnection {
 
     } 
         
-    public void selectUsersPermitsByCalendarId(int id) {
+    // return: lista de ids de usuarios que pertenece al calendario
+    public Map<Integer, String> selectUsersPermitsByCalendarId(int id) {
         Connection conn = getSqlConnection();
-        
+        Map<Integer, String> user_id_rol = new HashMap<>();
         try{
             PreparedStatement ps = conn.prepareStatement("SELECT DISTINCT calendar_permit.user_id, calendar_permit.task_id, calendar_permit.rol FROM calendar_permit inner JOIN calendar\n" +
                 "ON calendar_permit.calendar_id = calendar.calendar_id \n" +
@@ -286,13 +289,15 @@ public class HerokuCalendarPermitSqlConnection extends SqlConnection {
                         rs.getInt("task_id") + "\t" +
                         "Rol: " +
                         rs.getString("rol") + "\t"
-            );
+                );
+                user_id_rol.put(rs.getInt("user_id"), rs.getString("rol"));
             }
             conn.close();
+            
         } catch (SQLException e) {
             System.out.println("Error al seleccionar permisos de usuario por id del calendario en la tabla CALENDAR_PERMIT: " + e.getMessage());
         }
-
+        return user_id_rol;
     }    
 
 

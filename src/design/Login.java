@@ -24,6 +24,8 @@ import model.User;
  */
 public final class Login extends javax.swing.JFrame implements usuario {
 
+    private User userSingedUp;
+    
     /**
      * Creates new form Login
      */

@@ -19,7 +19,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -545,6 +547,15 @@ public final class calendarView extends javax.swing.JFrame {
                 String rol = con1.selectRolfromUser(userSignedUpmp.getId(), this.idCalendar);
                         
                 con1.insertCalendarPermit(userSignedUpmp.getId(), this.idCalendar, idTask, rol);
+                
+                // Obtener users by calendarid
+                
+                Map<Integer, String> user_id_rol = con1.selectUsersPermitsByCalendarId(this.idCalendar);
+
+                user_id_rol.keySet().forEach((id) -> {
+                    con1.insertCalendarPermit(id, idCalendar, idTask, user_id_rol.get(id));
+                });
+
                 
                 loadTask();
                 
