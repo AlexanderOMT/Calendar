@@ -70,8 +70,9 @@ public class CalendarTask{
         List<Task> dayTasks = new ArrayList<>();
         while (i.hasNext()) {
             Task t = (Task)i.next();
-            System.out.println("a: " + t.getDate().getDate());
-            System.out.println("b: " +date.getDate());
+            if (t.getDate() == null) {
+                continue;
+            }
             if (t.getDate().getYear() == date.getYear() 
                     && t.getDate().getMonth() == date.getMonth() 
                     && t.getDate().getDate() == date.getDate()) {

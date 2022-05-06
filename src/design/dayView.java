@@ -40,7 +40,7 @@ public class dayView extends javax.swing.JFrame {
     public void changeColor(){
         if(userSignedUpmp.getModo() == 1){
             this.getContentPane().setBackground(Color.decode("#000000"));
-            dayLabel.setForeground(Color.decode("#000000"));
+            dayLabel.setForeground(Color.decode("#FFFFFF"));
 
             jButton4.setBackground(Color.decode("#859EBC"));
             jButton5.setBackground(Color.decode("#859EBC"));
@@ -53,7 +53,7 @@ public class dayView extends javax.swing.JFrame {
             jList1.setBackground(Color.decode("#F0F0F0"));
         }else{
             this.getContentPane().setBackground(Color.decode("#FFFFFF"));
-            dayLabel.setForeground(Color.decode("#FFFFFF"));
+            dayLabel.setForeground(Color.decode("#000000"));
 
             jButton4.setBackground(Color.decode("#F0F0F0"));
             jButton5.setBackground(Color.decode("#F0F0F0"));
