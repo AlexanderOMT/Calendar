@@ -3,27 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/leyre/Documents/NetBeansProjects/Calendar/src/design/InputCalendarName.java</file>
-            <file>file:/C:/Users/leyre/Documents/NetBeansProjects/Calendar/src/design/dayView.java</file>
-            <file>file:/C:/Users/leyre/Documents/NetBeansProjects/Calendar/src/design/weekView.java</file>
-            <file>file:/C:/Users/leyre/Documents/NetBeansProjects/Calendar/src/design/Sign_up.java</file>
-            <file>file:/C:/Users/leyre/Documents/NetBeansProjects/Calendar/src/SqlDatabase/HerokuUsersSqlConnection.java</file>
-            <file>file:/C:/Users/leyre/Documents/NetBeansProjects/Calendar/src/design/Login.java</file>
-            <file>file:/C:/Users/leyre/Documents/NetBeansProjects/Calendar/src/SqlDatabase/HerokuCalendarSqlConnection.java</file>
-            <file>file:/C:/Users/leyre/Documents/NetBeansProjects/Calendar/src/SqlDatabase/HerokuCalendarPermitSqlConnection.java</file>
-            <file>file:/C:/Users/leyre/Documents/NetBeansProjects/Calendar/src/design/Notification.java</file>
-            <file>file:/C:/Users/leyre/Documents/NetBeansProjects/Calendar/src/design/Share.java</file>
-            <file>file:/C:/Users/leyre/Documents/NetBeansProjects/Calendar/src/SqlDatabase/HerokuTaskSqlConnection.java</file>
-            <file>file:/C:/Users/leyre/Documents/NetBeansProjects/Calendar/src/design/ChangeUser.java</file>
-            <file>file:/C:/Users/leyre/Documents/NetBeansProjects/Calendar/src/design/calendarView.java</file>
-            <file>file:/C:/Users/leyre/Documents/NetBeansProjects/Calendar/src/model/Task.java</file>
-            <file>file:/C:/Users/leyre/Documents/NetBeansProjects/Calendar/src/design/MainPage.java</file>
-            <file>file:/C:/Users/leyre/Documents/NetBeansProjects/Calendar/src/model/ButtonCalendar.java</file>
-            <file>file:/C:/Users/leyre/Documents/NetBeansProjects/Calendar/src/design/Configuration.java</file>
-            <file>file:/C:/Users/leyre/Documents/NetBeansProjects/Calendar/src/design/MultiLineTableCellRenderer.java</file>
-            <file>file:/C:/Users/leyre/Documents/NetBeansProjects/Calendar/src/model/Calendars.java</file>
-            <file>file:/C:/Users/leyre/Documents/NetBeansProjects/Calendar/src/design/usuario.java</file>
-            <file>file:/C:/Users/leyre/Documents/NetBeansProjects/Calendar/src/SqlDatabase/HerokuInvitationSqlConnection.java</file>
+            <file>file:/C:/Users/leyre/Calendar/src/design/selectDate.java</file>
+            <file>file:/C:/Users/leyre/Calendar/src/design/addTaskInternal.java</file>
+            <file>file:/C:/Users/leyre/Calendar/src/design/modifyTaskInternal.java</file>
+            <file>file:/C:/Users/leyre/Calendar/src/design/calendarView.java</file>
+            <file>file:/C:/Users/leyre/Calendar/src/design/Share.java</file>
         </group>
     </open-files>
 </project-private>

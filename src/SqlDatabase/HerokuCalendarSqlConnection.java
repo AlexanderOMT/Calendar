@@ -1,4 +1,3 @@
-
 package SqlDatabase;
 
 import java.sql.Connection;
@@ -6,8 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class HerokuCalendarSqlConnection extends SqlConnection {
  
@@ -23,6 +20,25 @@ public class HerokuCalendarSqlConnection extends SqlConnection {
         return instance;
     }   
     
+    
+    public void selectCalendarIdByOwnerNameAndCalendarName(String owner_name, String calendar_name){
+        String sql = "SELECT calendar_id FROM calendar where name='test_calendar' and email_owner='test_owner'";
+        try (Connection conn = this.getSqlConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql)){
+            while (rs.next()) {
+            System.out.println(
+                    "Id Calendario: " +
+                    rs.getString("calendar_id")
+            );
+            }
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println("Error al seleccionar id de calendario por nombre"
+                    + " de calendario y nombre de propietario"
+                    + " en la tabla CALENDAR: " + e.getMessage());
+        }
+    }
     
     public void selectCalendarIdByNameAndSpecialId(String name, String special_id){
         Connection conn = getSqlConnection();
@@ -57,16 +73,18 @@ public class HerokuCalendarSqlConnection extends SqlConnection {
             ps.setString(1, special_id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-            System.out.println(
-                    "Id Calendario: " +
-                    rs.getString("calendar_id")
-            );
-            return true;
+                System.out.println(
+                        "Id Calendario: " +
+                        rs.getString("calendar_id")
+                );
+                conn.close();
+                return true;
             }
+            conn.close();
+            return false;
             
         } catch (SQLException e) {
-            System.out.println("Error al seleccionar id de calendario por nombre"
-                    + " de calendario y nombre de propietario"
+            System.out.println("Error al seleccionar id de calendario por id especial"
                     + " en la tabla CALENDAR: " + e.getMessage());
         }
         return false;
@@ -83,6 +101,7 @@ public class HerokuCalendarSqlConnection extends SqlConnection {
                             rs.getString("special_id")
                 );
             }
+            conn.close();
         } catch (SQLException e) {
             System.out.println("Error al seleccionar todo en la tabla CALENDAR: " + e.getMessage());
         }
@@ -98,12 +117,19 @@ public class HerokuCalendarSqlConnection extends SqlConnection {
             // ps.execute();  
             int res = ps.executeUpdate();
             
-            
+            if(res > 0){
+                //JOptionPane.showMessageDialog(null, "Calendario insertado correctamente");
+                System.out.println("Calendario insertado correctamente");
+            }else{
+                //JOptionPane.showMessageDialog(null, "Calendario insertado incorrectamente");
+                System.out.println("Calendario insertado incorrectamente");
+            }
             
             conn.close();
             
         } catch (SQLException e) {
-            
+            //JOptionPane.showMessageDialog(null, "Error al insertar en la tabla CALENDAR: " + e.getMessage());
+            System.out.println("Error al insertar en la tabla CALENDAR: " + e.getMessage());
         }
     }
     
@@ -115,11 +141,18 @@ public class HerokuCalendarSqlConnection extends SqlConnection {
             
             ResultSet rs = ps.executeQuery();
             
-            
-            
-            
+            if (rs.next()) {
+                
+                System.out.println(rs.getInt("calendar_id") + "\t" +
+                rs.getString("name") + "\t"
+            );
+            } else {
+                //JOptionPane.showMessageDialog(null, "No existe ningún usuario con ese id");
+                System.out.println("No existe ningún usuario con ese id");
+            }
+            conn.close();
         } catch (SQLException e) {
-            
+            System.out.println("Error al seleccionar por id  en la tabla CALENDAR: " + e.getMessage());
         }
 
     }            
@@ -134,14 +167,19 @@ public class HerokuCalendarSqlConnection extends SqlConnection {
             
             int res = ps.executeUpdate();
             
-            
+            if(res > 0){
+                //JOptionPane.showMessageDialog(null, "Usuario eliminado correctamente");
+                System.out.println("Calendario eliminado correctamente");
+            }else{
+                //JOptionPane.showMessageDialog(null, "Usuario eliminado incorrectamente");
+                System.out.println("Calendario eliminado incorrectamente");
+            }
             
             conn.close();
             
         }catch (SQLException e) {
                 System.out.println("Error al eliminar por id en la tabla CALENDAR: " + e.getMessage());
             }
- 
     }
     
     /*este metodo sirve para una prueba, no debe ser necesario para el desarrollo correcto del programa*/
@@ -158,27 +196,36 @@ public class HerokuCalendarSqlConnection extends SqlConnection {
             calendario=rs.getInt("calendar_id");
             
             }
+            conn.close();
         } catch (SQLException e) {
             System.out.println("Error al seleccionar todo en la tabla CALENDAR: " + e.getMessage());
         }
         return calendario;
     }
     /*metodo que devuelve el nombre del calendario pasado por parametro en forma de id*/
-     public String getCalendarNameById(int id) {
+    public String getCalendarNameById(int id) {
         Connection conn = getSqlConnection();
         String calendar_name="";
         try{
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM calendar WHERE calendar_id=" + Integer.toString(id));
+            PreparedStatement ps = conn.prepareStatement("SELECT DISTINCT * FROM calendar WHERE calendar_id=" + Integer.toString(id));
             
             ResultSet rs = ps.executeQuery();
             
-           
+            if (rs.next()) {
+                
+                System.out.println(rs.getInt("calendar_id") + "\t" +
+                                            rs.getString("name") + "\t"
+                                            );
+                calendar_name=rs.getString("name");
+                conn.close();
+            } else {
+                //JOptionPane.showMessageDialog(null, "No existe ningún usuario con ese id");
+                System.out.println("No existe ningún usuario con ese id");
+            }
             conn.close();
         } catch (SQLException e) {
-           
-            
+            System.out.println("Error al seleccionar nombre de calendario por id  en la tabla CALENDAR: " + e.getMessage());
         }
-        
         return calendar_name;
     }    
      
@@ -190,12 +237,47 @@ public class HerokuCalendarSqlConnection extends SqlConnection {
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM calendar WHERE special_id=?");
             ps.setString(1, email_id);
             ResultSet rs = ps.executeQuery();
-
             
+            if (rs.next()) {
+                
+                System.out.println(rs.getInt("calendar_id") + "\t" +
+                                            rs.getString("name") + "\t"
+                                            );
+                calendar_id=rs.getInt("calendar_id");
+            } else {
+                //JOptionPane.showMessageDialog(null, "No existe ningún usuario con ese id");
+                System.out.println("No existe ningún calendario con ese id");
+            }
+            conn.close();
         } catch (SQLException e) {
-            
+            System.out.println("Error al seleccionar por id  en la tabla CALENDAR: " + e.getMessage());
         }
         return calendar_id;
     }    
+     
+     public int getCalendarIdBySpecialId(String special_id){
+        Connection conn = getSqlConnection();
+
+        try{
+            PreparedStatement ps = conn.prepareStatement("SELECT calendar_id FROM calendar WHERE special_id=?;");
+            ps.setString(1, special_id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                System.out.println(
+                        "ID DEL CALENDARIO: " +
+                        rs.getString("calendar_id")
+                );
+                int aux=rs.getInt("calendar_id");
+                conn.close();
+            return aux ;
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al seleccionar id de calendario por nombre"
+                    + " de calendario y nombre de propietario"
+                    + " en la tabla CALENDAR: " + e.getMessage());
+        }
+        return -1;
+    }
 
 }

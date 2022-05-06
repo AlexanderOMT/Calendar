@@ -5,9 +5,10 @@
  */
 package model;
 
-import java.util.ArrayList;
+import java.awt.Color;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -82,6 +83,7 @@ public class ButtonCalendar {
         botonAux.setLocation(posicionCalendarioxAux,posicionCalendarioyAux);
         return botonAux;
     }
+    
     public JScrollPane createTextFieldNotification(int posicionCalendarioxAux, int posicionCalendarioyAux, String texto){
         JTextField textoaux = new JTextField(texto);
         textoaux.setFont(new java.awt.Font("asd", 0, 15)); // NOI18N
@@ -119,6 +121,38 @@ public class ButtonCalendar {
         eliminarAux.setContentAreaFilled(false);
         eliminarAux.setLocation(posicionCalendarioxAux+160,posicionCalendarioyAux-39);
         return eliminarAux;
+    }
+    //ZONA INVITATION SHARE
+    public JLabel createCorreoInvitationTitle(String correo, int posicionCalendarioxAux, int posicionCalendarioyAux){
+        JLabel tituloAux = new JLabel();
+        tituloAux.setSize(225, 25);
+        tituloAux.setText(correo);
+        tituloAux.setBorder(null);
+        tituloAux.setLocation(posicionCalendarioxAux,posicionCalendarioyAux);
+        return tituloAux;
+    }
+    
+     public JLabel createCorreoInvitationRol(String rol, int posicionCalendarioxAux, int posicionCalendarioyAux){
+        JLabel tituloAux = new JLabel();
+        tituloAux.setSize(85, 25);
+        tituloAux.setText(rol);
+        tituloAux.setBorder(null);
+        tituloAux.setLocation(posicionCalendarioxAux,posicionCalendarioyAux);
+        return tituloAux;
+    }
+    public JButton createButtonInvitation(int posicionCalendarioxAux, int posicionCalendarioyAux){
+        JButton botonAux = new JButton();
+        botonAux.setSize(85, 25);
+        
+        botonAux.setLocation(posicionCalendarioxAux,posicionCalendarioyAux);
+        return botonAux;
+    }
+    public JComboBox createJComboBox(int posicionCalendarioxAux, int posicionCalendarioyAux){
+        javax.swing.JComboBox<String> botonAux=new javax.swing.JComboBox<>();
+        botonAux.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Editor", "Lector"}));
+        botonAux.setSize(85, 25);
+        botonAux.setLocation(posicionCalendarioxAux,posicionCalendarioyAux);
+        return botonAux;
     }
 
 }

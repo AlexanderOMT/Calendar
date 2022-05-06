@@ -7,7 +7,7 @@ package model;
 
 /**
  *
- * @author TESTER
+ * @author Selene
  */
 public enum Tags
 {

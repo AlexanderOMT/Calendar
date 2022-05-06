@@ -26,6 +26,10 @@ public class Calendars {
         calendars.remove(posicion);
     }
     
+    public void clearCalendar(){
+        calendars.clear();
+    }
+    
     @Override
     public String toString(){
         String result = "";

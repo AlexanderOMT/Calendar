@@ -4,6 +4,7 @@
  */
 package design;
 
+import static design.usuario.userSigned;
 import java.awt.Color;
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -16,48 +17,91 @@ import javax.swing.JList;
 import model.CalendarTask;
 import model.Tags;
 import model.Task;
+import model.User;
 
-/**
- *
- * @author nauze
- */
 public class weekView extends javax.swing.JFrame {
 
     private int actualMonth;
     private int actualYear;
-    private int prev;
-    private int next;
     private int prevFirst;
     private int prevLast;
+    private int prevChangeDay;
+    private boolean prevChange = false;
     private int nextFirst;
     private int nextLast;
-    private int changeDay;
-    
+    private int nextChangeDay;
+    private boolean nextChange = false;
+    private User userSignedUpmp;
     private CalendarTask actualCalendar;
     private Tags tag;
+    private int idCalendar;
     
-    public weekView(int month, int year, CalendarTask actualCalendar) {
+    public weekView(int month, int year, CalendarTask actualCalendar, int idCalendar) {
+        this.idCalendar = idCalendar;
         this.actualCalendar = actualCalendar;
         this.actualMonth = month;
         this.actualYear = year;
         initComponents();
-        test();
+        
+        userSignedUpmp=userSigned;
+        changeColor();
+        
+        //test();
         calculateDate();
         this.setLocationRelativeTo(null);
         this.setExtendedState(MAXIMIZED_BOTH);
-        Color color = new Color(255,255,255);
-        this.getContentPane().setBackground(color);
+        /* Color color = new Color(255,255,255);
+        this.getContentPane().setBackground(color); */
     }
     
-    public void test() {
-        CalendarTask c = new CalendarTask("prueba");
-        tag = Tags.BIRTHDAY;
-        Task t = new Task(2, "Esto es una prueba1", "This is the description", new Timestamp(2022-1900, 3, 27, 0, 0, 0, 0), 3, tag.toString());
-        c.addTask(t);
-        t = new Task(4, "Esto es una prueba3", "This is the description", new Timestamp(2022-1900, 4, 1, 0, 0, 0, 0), 3, tag.toString());
-        c.addTask(t);
-        this.actualCalendar = c;
-    }
+    public void changeColor(){
+        if(userSignedUpmp.getModo() == 1){
+            this.getContentPane().setBackground(Color.decode("#000000"));
+            jLabelDay1.setForeground(Color.decode("#FFFFFF"));
+            jLabelDay2.setForeground(Color.decode("#FFFFFF"));
+            jLabelDay3.setForeground(Color.decode("#FFFFFF"));
+            jLabelDay4.setForeground(Color.decode("#FFFFFF"));
+            jLabelDay5.setForeground(Color.decode("#FFFFFF"));
+            jLabelDay6.setForeground(Color.decode("#FFFFFF"));
+            jLabelDay7.setForeground(Color.decode("#FFFFFF"));
+            jLabelMY.setForeground(Color.decode("#FFFFFF"));
+
+            jButton1.setBackground(Color.decode("#859EBC"));
+            jButton2.setBackground(Color.decode("#859EBC"));
+            jButton3.setBackground(Color.decode("#859EBC"));
+            
+            jList1.setBackground(Color.decode("#F0F0F0"));
+            jList2.setBackground(Color.decode("#F0F0F0"));
+            jList3.setBackground(Color.decode("#F0F0F0"));
+            jList4.setBackground(Color.decode("#F0F0F0"));
+            jList5.setBackground(Color.decode("#F0F0F0"));
+            jList6.setBackground(Color.decode("#F0F0F0"));
+            jList7.setBackground(Color.decode("#F0F0F0"));
+        }else{
+            this.getContentPane().setBackground(Color.decode("#FFFFFF"));
+            jLabelDay1.setForeground(Color.decode("#000000"));
+            jLabelDay2.setForeground(Color.decode("#000000"));
+            jLabelDay3.setForeground(Color.decode("#000000"));
+            jLabelDay4.setForeground(Color.decode("#000000"));
+            jLabelDay5.setForeground(Color.decode("#000000"));
+            jLabelDay6.setForeground(Color.decode("#000000"));
+            jLabelDay7.setForeground(Color.decode("#000000"));
+            jLabelMY.setForeground(Color.decode("#000000"));
+
+            jButton1.setBackground(Color.decode("#F0F0F0"));
+            jButton2.setBackground(Color.decode("#F0F0F0"));
+            jButton3.setBackground(Color.decode("#F0F0F0"));
+            
+            jList1.setBackground(Color.decode("#F0F0F0"));
+            jList2.setBackground(Color.decode("#F0F0F0"));
+            jList3.setBackground(Color.decode("#F0F0F0"));
+            jList4.setBackground(Color.decode("#F0F0F0"));
+            jList5.setBackground(Color.decode("#F0F0F0"));
+            jList6.setBackground(Color.decode("#F0F0F0"));
+            jList7.setBackground(Color.decode("#F0F0F0"));
+        }
+    }    
+
     
     // Method to calculate dates of week and show
     public void calculateDate() {
@@ -84,16 +128,35 @@ public class weekView extends javax.swing.JFrame {
                             jLabelDay4,jLabelDay5,jLabelDay6,jLabelDay7};
         JList[] lists = new JList[]{jList1,jList2,jList3,jList4,jList5,
                             jList6,jList7};
+        this.nextFirst = lastDayOfWeek + 1;
+        this.nextLast = this.nextFirst + 6;
+        this.nextChangeDay = -1;
+        Calendar c1 = new GregorianCalendar(actualYear, actualMonth, 1);
+        if (this.nextLast > c1.getActualMaximum(Calendar.DAY_OF_MONTH)) {
+            this.nextLast = this.nextLast - c1.getActualMaximum(Calendar.DAY_OF_MONTH);
+            this.nextChangeDay = c1.getActualMaximum(Calendar.DAY_OF_MONTH);
+            this.nextChange = true;
+        }
+        
         this.prevLast = firstDayOfWeek - 1;
-        this.next = lastDayOfWeek + 1;
+        this.prevFirst = this.prevLast - 6;
+        this.prevChangeDay = -1;
+        if (dayChangeMonth != -1) {
+            this.prevChange = true;
+        }
+        if (prevFirst <= 0) {
+            Calendar c2 = new GregorianCalendar(actualYear, actualMonth-1, 1);
+            this.prevFirst = c2.getActualMaximum(Calendar.DAY_OF_MONTH) + this.prevFirst;
+            this.prevChangeDay = c2.getActualMaximum(Calendar.DAY_OF_MONTH);
+        }
         if (dayChangeMonth != -1) {
             dayChangeMonth = dayChangeMonth-firstDayOfWeek+1;
             for (int i = 0; i < dayChangeMonth; i++) {
                 labels[i].setText(days[i] + " " + firstDayOfWeek);
-                Timestamp t = new Timestamp(this.actualYear-1900, this.actualMonth-1, 
+                Timestamp t = new Timestamp(this.actualYear-1900, this.actualMonth, 
                         firstDayOfWeek, 0, 0, 0, 0);
                 if (firstDayOfWeek == 31) {
-                    t = new Timestamp(this.actualYear-1900, this.actualMonth-1, 
+                    t = new Timestamp(this.actualYear-1900, this.actualMonth, 
                         0, 0, 0, 0, 0);
                 }
                 updateList(t,lists[i]);
@@ -141,7 +204,7 @@ public class weekView extends javax.swing.JFrame {
      * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -304,56 +367,54 @@ public class weekView extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>                        
 
     // Button go to the previous week
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
-        Calendar c1 = new GregorianCalendar(this.actualYear, this.actualMonth-1, this.prev);
-        if (c1.getActualMaximum(Calendar.DAY_OF_MONTH)-this.prev <= 7) {
+        if (this.prevChange == true) {
             this.actualMonth--;
+            if (this.actualMonth == -1) {
+                this.actualMonth = 11;
+                this.actualYear--;
+            }
+            this.prevChange = false;
         }
-        if (this.actualMonth == -1) {
-            this.actualMonth = 11;
-            this.actualYear--;
+        if (this.nextChange == true) {
+            this.nextChange = false;
         }
+        calculateWeek(this.prevFirst, this.prevLast, this.prevChangeDay);
         String months[] = {"January", "February", "March", "April", "May", "June", 
             "July", "August", "September", "October", "November", "December"};
         jLabelMY.setText(months[this.actualMonth] + " " + this.actualYear);
-        if (this.prev < 7) {
-            calculateWeek(c1.getActualMaximum(Calendar.DAY_OF_MONTH)+this.prev-6,this.prev,c1.getActualMaximum(Calendar.DAY_OF_MONTH));
-        } else {
-            calculateWeek(this.prev-6,this.prev,-1);
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }                                        
 
     // Button go to the next week
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
-        Calendar c1 = new GregorianCalendar(this.actualYear, this.actualMonth, this.prev);
-        if (c1.getActualMaximum(Calendar.DAY_OF_MONTH)+this.next <= 7) {
+        if (this.nextChange == true) {
             this.actualMonth++;
+            if (this.actualMonth == 12) {
+                this.actualMonth = 0;
+                this.actualYear++;
+            }
+            this.nextChange = false;
         }
-        if (this.actualMonth == 12) {
-            this.actualMonth = 0;
-            this.actualYear++;
+        if (this.prevChange == true) {
+            this.prevChange = false;
         }
+        calculateWeek(this.nextFirst, this.nextLast, this.nextChangeDay);
         String months[] = {"January", "February", "March", "April", "May", "June", 
             "July", "August", "September", "October", "November", "December"};
         jLabelMY.setText(months[this.actualMonth] + " " + this.actualYear);
-        if (this.next < 7) {
-            calculateWeek(this.next,-c1.getActualMaximum(Calendar.DAY_OF_MONTH)-this.next+6,c1.getActualMaximum(Calendar.DAY_OF_MONTH));
-        } else {
-            calculateWeek(this.next,this.next+6,-1);
-        }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }                                        
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
-        calendarView cal = new calendarView(this.actualCalendar);
+        calendarView cal = new calendarView(this.actualCalendar, this.idCalendar);
         cal.setVisible(true);
         setVisible(false);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }                                        
 
     /**
      * @param args the command line arguments
@@ -385,12 +446,12 @@ public class weekView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new weekView(4,2022,new CalendarTask()).setVisible(true);
+                new weekView(3,2022,new CalendarTask(),1).setVisible(true);
             }
         });
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify                     
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -416,5 +477,5 @@ public class weekView extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
-    // End of variables declaration//GEN-END:variables
+    // End of variables declaration                   
 }

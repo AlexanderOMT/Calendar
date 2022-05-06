@@ -21,10 +21,7 @@ public abstract class SqlConnection {
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(url, user, pswd);
         } catch (SQLException | ClassNotFoundException e) {
-            System.out.println("Error al conectarse: " + e.getMessage());
         }
         return con;
     }
-    
-     
 }

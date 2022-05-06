@@ -1,6 +1,5 @@
 package model;
 
-import SqlDatabase.HerokuTaskSqlConnection;
 import java.util.ArrayList;
 import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,7 +14,15 @@ public class CalendarTask{
     
     private final ArrayList<Task> dateTasks = new ArrayList<>();
     private String name;
-    private Integer id;
+    private int id;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public CalendarTask (){}
     
@@ -23,6 +30,10 @@ public class CalendarTask{
         this.name = name;
     }
 
+    public CalendarTask (String name, int id){
+        this.name=name;
+        this.id=id;
+    }
     // Method to add a task
     public void addTask(Task t) {
         dateTasks.add(t);
@@ -59,6 +70,9 @@ public class CalendarTask{
         List<Task> dayTasks = new ArrayList<>();
         while (i.hasNext()) {
             Task t = (Task)i.next();
+            if (t.getDate() == null) {
+                continue;
+            }
             if (t.getDate().getYear() == date.getYear() 
                     && t.getDate().getMonth() == date.getMonth() 
                     && t.getDate().getDate() == date.getDate()) {
