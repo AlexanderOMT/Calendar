@@ -27,6 +27,7 @@ public class selectDate extends javax.swing.JDialog {
     public selectDate() {
         initComponents();
         userSignedUpmp=userSigned;
+        this.setLocationRelativeTo(null);
         changeColor();
     }
     
