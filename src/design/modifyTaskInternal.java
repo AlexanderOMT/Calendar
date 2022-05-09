@@ -29,6 +29,7 @@ public class modifyTaskInternal extends javax.swing.JDialog {
     public modifyTaskInternal() {
         initComponents();
         userSignedUpmp=userSigned;
+        this.setLocationRelativeTo(null);
         changeColor();
     }
 
