@@ -27,6 +27,7 @@ public class selectTask extends javax.swing.JDialog {
     public selectTask() {
         initComponents();
         userSignedUpmp=userSigned;
+        this.setLocationRelativeTo(null);
         changeColor();
     }
     
