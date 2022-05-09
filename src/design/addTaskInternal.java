@@ -31,6 +31,7 @@ public class addTaskInternal extends javax.swing.JDialog {
     private Timestamp fecha;
     private CalendarTask actualCalendar;
     private int idCalendar;
+    private calendarView calendar;
     public addTaskInternal(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -42,13 +43,14 @@ public class addTaskInternal extends javax.swing.JDialog {
         changeColor();
     }
     
-    public addTaskInternal(JTable jTable1, Timestamp fecha, CalendarTask actualCalendar, int idCalendar) {
+    public addTaskInternal(JTable jTable1, Timestamp fecha, CalendarTask actualCalendar, int idCalendar, calendarView calendar) {
         initComponents();
         userSignedUpmp=userSigned;
         this.jTable1 = jTable1;
         this.fecha = fecha;
         this.actualCalendar = actualCalendar;
         this.idCalendar = idCalendar;
+        this.calendar=calendar;
         initTags();
         changeColor();
     }
@@ -284,7 +286,6 @@ public class addTaskInternal extends javax.swing.JDialog {
         String[] tasks = (String[]) jTable1.getValueAt
                         (jTable1.getSelectedRow(), jTable1.getSelectedColumn());
         
-        calendarView calendar = new calendarView(this.actualCalendar, this.idCalendar);
         
                 
                 HerokuTaskSqlConnection con = HerokuTaskSqlConnection.getInstance();
@@ -309,7 +310,7 @@ public class addTaskInternal extends javax.swing.JDialog {
                 });
 
                
-                
+               
                 calendar.loadTask();
                 
                 //System.out.println("El valor del ID de actual calendar: " +getIdCalendar());
@@ -317,6 +318,7 @@ public class addTaskInternal extends javax.swing.JDialog {
                 
                 
                 calendar.updateTasks();
+                
                 nameField.setText("Add a title");
                 descriptionField.setText("Add a description");
                 hourBox.setSelectedIndex(0);

@@ -545,7 +545,8 @@ public final class calendarView extends javax.swing.JFrame {
                 Timestamp fecha = new Timestamp(this.actualYear-1900, this.actualMonth,Integer.parseInt (tasks[0]), Integer.valueOf(minBox.getSelectedItem().toString()), Integer.valueOf(minBox.getSelectedItem().toString()), 0, 0);
                 // ArrayList<Tags> tags = new ArrayList<>();
                 // tags.add(tag);
-                addTaskInternal addTaskInternal = new addTaskInternal( jTable1, fecha, this.actualCalendar, this.idCalendar);
+                calendarView a= this;
+                addTaskInternal addTaskInternal = new addTaskInternal( jTable1, fecha, this.actualCalendar, this.idCalendar, a);
                 addTaskInternal.setVisible(true);
             
         }
@@ -591,6 +592,7 @@ public final class calendarView extends javax.swing.JFrame {
                 
                 
                 updateTasks();
+                
                 
                 //Timestamp fecha2 = new Timestamp(this.actualYear-1900, Integer.parseInt(month),Integer.parseInt (day), Integer.parseInt((String) hourBox.getSelectedItem()), Integer.parseInt((String) minBox.getSelectedItem()), 0, 0);
                 //List l = actualCalendar.getTasks(fecha2);

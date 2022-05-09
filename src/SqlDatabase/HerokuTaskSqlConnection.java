@@ -61,10 +61,10 @@ public class HerokuTaskSqlConnection  extends SqlConnection {
     
     public int selectIdBySpecialIdTasks(String special_Id) {
         
-        Connection conn = getSqlConnection();
+        
          int task_id = 0;
         try{
-            
+            Connection conn = getSqlConnection();
             System.out.println("Entra en el try de permit");
             ps = conn.prepareStatement("SELECT DISTINCT task_id FROM task WHERE special_id=?");
             ps.setString(1, special_Id);
@@ -75,6 +75,7 @@ public class HerokuTaskSqlConnection  extends SqlConnection {
 
                 //conn.close();
                 task_id = rs.getInt("task_id");
+                conn.close();
             } 
             
         } catch (SQLException e) {
@@ -143,7 +144,7 @@ public class HerokuTaskSqlConnection  extends SqlConnection {
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM task WHERE task_id=" + Integer.toString(id));
             
             ResultSet rs = ps.executeQuery();
-            
+            conn.close();
             
         } catch (SQLException e) {
         }
@@ -165,6 +166,7 @@ public class HerokuTaskSqlConnection  extends SqlConnection {
                 task.setPrior(rs.getInt("priority"));
                 task.setDesc(rs.getString("description"));
             }
+            conn.close();
             
         } catch (SQLException e) {
         }
