@@ -5,6 +5,8 @@ import SqlDatabase.HerokuCalendarSqlConnection;
 import SqlDatabase.HerokuTaskSqlConnection;
 import static design.usuario.userSigned;
 import java.awt.Color;
+import java.awt.Point;
+import java.awt.event.MouseEvent;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -13,7 +15,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultListModel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.ListModel;
 import model.CalendarTask;
 import model.Tags;
@@ -40,6 +44,24 @@ public class dayView extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setExtendedState(MAXIMIZED_BOTH);
         updateDate();
+        doubleClickTask();
+    }
+    
+    // Method to access with double click to the day view
+    public void doubleClickTask () {
+        jList1.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent me) {
+                JList list =(JList) me.getSource();
+                Point p = me.getPoint();
+                if (me.getClickCount() == 2) {
+                    List<Task> dayTasks = actualCalendar.getTasks(date);
+                    Task t = dayTasks.get(jList1.getSelectedIndex());
+                    taskView taskView = new taskView(t);
+                    taskView.setVisible(true);
+                }
+            }
+        });
     }
     
     public void changeColor(){
@@ -461,20 +483,6 @@ public class dayView extends javax.swing.JFrame {
             modifyTaskInternal modifyTaskInternal = new modifyTaskInternal(t, this.date, this.actualCalendar, this);
             modifyTaskInternal.setVisible(true);
         }
-            /*
-            HerokuTaskSqlConnection taskConn = HerokuTaskSqlConnection.getInstance();
-            HerokuCalendarPermitSqlConnection con1 = HerokuCalendarPermitSqlConnection.getInstance();
-            taskConn.deleteTaskById(t.getId());
-            taskConn.insertTaskIntoSpecificId(t, t.getId());
-            String rol = con1.selectRolfromUser(userSignedUpmp.getId(), this.actualCalendar.getId());
-            con1.insertCalendarPermit(userSignedUpmp.getId(), this.actualCalendar.getId(), t.getId(), rol);
-            final int idTask = t.getId();
-            Map<Integer, String> user_id_rol = con1.selectUsersPermitsByCalendarId(this.actualCalendar.getId());
-            user_id_rol.keySet().forEach((id) -> {
-                con1.insertCalendarPermit(id, this.actualCalendar.getId(), idTask, user_id_rol.get(id));
-            });
-            loadTask();
-            updateDate();*/
     }                                        
 
     //Delete
