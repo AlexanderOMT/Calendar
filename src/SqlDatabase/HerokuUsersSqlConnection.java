@@ -59,8 +59,9 @@ public class HerokuUsersSqlConnection extends SqlConnection {
     
     public int getUserIdByEmail(String email) throws SQLException {
         Connection conn = getSqlConnection();
-        System.out.println("Usuario:" );
+       
         try{
+            System.out.println("Usuario:" + email );
             ps = conn.prepareStatement("SELECT * FROM user WHERE email=?");
             ps.setString(1, email);
             
