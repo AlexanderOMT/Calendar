@@ -2,6 +2,13 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/Minerva/Calendar/src/SqlDatabase/HerokuUsersSqlConnection.java</file>
+            <file>file:/C:/Users/Minerva/Calendar/src/design/MainPage.java</file>
+            <file>file:/C:/Users/Minerva/Calendar/src/SqlDatabase/HerokuTaskSqlConnection.java</file>
+            <file>file:/C:/Users/Minerva/Calendar/src/design/addTaskInternal.java</file>
+            <file>file:/C:/Users/Minerva/Calendar/src/design/Login.java</file>
+            <file>file:/C:/Users/Minerva/Calendar/src/SqlDatabase/HerokuCalendarPermitSqlConnection.java</file>
+        </group>
     </open-files>
 </project-private>

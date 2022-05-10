@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.JOptionPane;
 import model.User;
 
 public class HerokuUsersSqlConnection extends SqlConnection {
@@ -248,6 +249,7 @@ public class HerokuUsersSqlConnection extends SqlConnection {
             ps.setString(1, user.getEmail());
             rs = ps.executeQuery();
             if (rs.next()) {
+                
                 if(user.getPwd().equals(rs.getString(4))){                     
                     if (!rs.getBoolean(5)) {
                         ps = conn.prepareStatement("UPDATE user SET login=? WHERE email=?");
@@ -266,6 +268,9 @@ public class HerokuUsersSqlConnection extends SqlConnection {
                         conn.close();
                         return true;
                     }
+                }else{
+                     System.out.println("La contrasña introducida o el usuario no es correcto");
+                     JOptionPane.showMessageDialog(null, "La contrasña introducida o el usuario no es correcto");
                 }
             }
             
@@ -278,6 +283,7 @@ public class HerokuUsersSqlConnection extends SqlConnection {
                 System.err.println(e);
             }
         }
+        conn.close();
         return false;
     }
 

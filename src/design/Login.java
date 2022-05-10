@@ -215,22 +215,16 @@ public final class Login extends javax.swing.JFrame implements usuario {
             System.out.println("Se esperaba una contraseña con mínimo una minúscula, una masyúscula, un dígito numérico y sin espacios");
         }else{
             HerokuUsersSqlConnection conex_us = HerokuUsersSqlConnection.getInstance();
-            this.userSigned.setEmail(email_text);
-            this.userSigned.setPwd(contraseña_text);
             
-            try {
-                this.userSigned.setId(conex_us.getUserIdByEmail(email_text));
-                System.out.println("se ha seteado el id del usuario!!");
-            } catch (SQLException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            }
             try {
                 userSigned.setEmail(email_text);
                 userSigned.setPwd(contraseña_text);
                 userSigned.setId(conex_us.getUserIdByEmail(email_text));
+                 System.out.println("Se ha seteado el user");
                 userSigned.setModo(0);
                 userSingedUp=userSigned;
                 if(conex_us.login(this.userSingedUp)){
+                    System.out.println("asdfa");
                     MainPage mp = new MainPage();                     
                     mp.setVisible(true);
                     this.setVisible(false);

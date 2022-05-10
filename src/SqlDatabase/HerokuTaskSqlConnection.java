@@ -133,6 +133,8 @@ public class HerokuTaskSqlConnection  extends SqlConnection {
         } catch (SQLException e) {
             //JOptionPane.showMessageDialog(null, "Error al insertar en la tabla TASK: " + e.getMessage());
             System.out.println("Error al insertar en la tabla TASK: " + e.getMessage());
+            
+            result= selectUltimateTask();
         }
         return result;
     }
@@ -214,4 +216,34 @@ public class HerokuTaskSqlConnection  extends SqlConnection {
         }catch (SQLException e) {
         }
     }
+//    METODO PARA BASE DE DATOS LOCAL QUE NO RECONOCE LAST_INSERT_ID()
+    public int selectUltimateTask() {
+       
+        int calendario=-1;
+        
+
+        try{
+            Connection conn = getSqlConnection();
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM TASK");
+
+            // ps.execute(); 
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                System.out.println(rs.getInt("task_id") + "\t" +
+                            rs.getString("name") + "\t"
+                );
+                calendario=rs.getInt("task_id");
+            
+            }
+            conn.close();
+        } catch (SQLException e) {
+            //JOptionPane.showMessageDialog(null, "Error al insertar en la tabla TASK: " + e.getMessage());
+            System.out.println("Error al insertar en la tabla TASK: " + e.getMessage());
+        }
+        return calendario;
+    }
+    
+    
+    
+    
 }
