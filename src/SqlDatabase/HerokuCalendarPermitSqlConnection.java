@@ -199,7 +199,7 @@ public class HerokuCalendarPermitSqlConnection extends SqlConnection {
             PreparedStatement ps = conn.prepareStatement("INSERT INTO calendar_permit(user_id, calendar_id, task_id, rol) VALUES(?,?,?,?)");
             ps.setInt(1, user_id);
             ps.setInt(2, calendar_id);
-            ps.setInt(3, 1);
+            ps.setInt(3, 2);
             ps.setString(4, rol);
             // ps.execute();  
             int res = ps.executeUpdate();
@@ -209,7 +209,7 @@ public class HerokuCalendarPermitSqlConnection extends SqlConnection {
             conn.close();
             
         } catch (SQLException e) {
-            
+            System.out.println( "NO SE HA CREADO LA CONEXION ENTRE USER Y EL NEW CALENDAR POR: "+e.getMessage());
         }
     }
 

@@ -146,8 +146,10 @@ public class InputCalendarName extends javax.swing.JDialog implements usuario{
             this.calendarExist=true;
             JOptionPane.showMessageDialog(null, "El calendario no se ha podido crear porque ya existe uno con el mismo nombre");
         }else{
+            System.out.println("Se procede a crear el nuevo calendario");
             conex_cal.insertCalendar(CalendarName,new_email_id);
             id_cal_recien_creado=conex_cal.getCalendar(new_email_id);
+            System.out.println("id cal recien creado"+id_cal_recien_creado);
             if(id_cal_recien_creado >0)
                 conex_cal_per.insertCalendarPermitTaskNull(userSignedIn.getId(), id_cal_recien_creado, "Admin");
         }
