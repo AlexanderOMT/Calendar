@@ -60,8 +60,14 @@ public final class calendarView extends javax.swing.JFrame {
         actualYear = cl.get(Calendar.YEAR);
         updateTasks();
         doubleClickDay();
-        
+        ifRol();
         close();
+    }
+    
+    public void ifRol(){
+        if(userSigned.getRol().equals("Lector")){
+            jButton5.setVisible(false);
+        }
     }
 
     

@@ -527,6 +527,7 @@ public final class MainPage extends javax.swing.JFrame implements usuario {
 
         boton1.addActionListener((java.awt.event.ActionEvent e) -> {
             System.out.println("Se ha abierto el calendario " + calendarName);
+            userSigned.setRol(this.conex_cal_per.selectRolfromUser(userSigned.getId(), calendar.getId()));
             calendarView cv = new calendarView(new CalendarTask(calendarName, calendar.getId()));
             System.out.println("ID DEL CALEDIOOOOOO: " + calendar.getId());
             cv.setVisible(true);
