@@ -110,8 +110,8 @@ public class HerokuCalendarPermitSqlConnection extends SqlConnection {
         /*metodo que se utiliza para la obtencion de una lista que contiene los id de calendarios de un usuario concreto*/
     public ArrayList<Integer> selectAllCalendarsIdByIdUser(int user_id) {
         ArrayList<Integer> calendario = new ArrayList<>();
-         Connection conn = getSqlConnection();
         try{
+            Connection conn = getSqlConnection();
             PreparedStatement ps = conn.prepareStatement("SELECT DISTINCT calendar_id FROM calendar_permit inner JOIN user \n" +
                         "ON calendar_permit.user_id = user.user_id \n" +
                         "where user.user_id =" + Integer.toString(user_id) + ";");

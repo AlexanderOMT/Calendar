@@ -534,24 +534,10 @@ public class dayView extends javax.swing.JFrame {
         updateDate();
     }                                        
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        int option = JOptionPane.showConfirmDialog(null,addTaskInternal,"", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION, null);
-        switch (option) {
-            case JOptionPane.OK_OPTION:
-                Timestamp fecha = new Timestamp(this.date.getYear(), this.date.getMonth(), this.date.getDate(), Integer.valueOf(hourBox.getSelectedItem().toString()), Integer.valueOf(minBox.getSelectedItem().toString()), 0, 0);
-                Task t = new Task(nameField.getText(), descriptionField.getText(), fecha, 3, jComboBoxTag.getSelectedItem().toString());
-                this.actualCalendar.addTask(t);
-                
-                updateDate();
-                
-                nameField.setText("Add a title");
-                descriptionField.setText("Add a description");
-                hourBox.setSelectedIndex(0);
-                minBox.setSelectedIndex(0);
-                break;
-            case JOptionPane.CANCEL_OPTION:
-                break;
-        }
+    // Add task
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {
+        addTaskInternal addTaskInternal = new addTaskInternal(this.date, this.actualCalendar, this);
+        addTaskInternal.setVisible(true);
     }                                        
 
     private void nameFieldFocusGained(java.awt.event.FocusEvent evt) {                                      
