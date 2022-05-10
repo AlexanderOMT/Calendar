@@ -33,12 +33,16 @@ public class addTaskInternal extends javax.swing.JDialog {
     private calendarView calendar;
     public addTaskInternal(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        setModal(true);
+        this.setLocationRelativeTo(null);
         initComponents();
     }
     
     public addTaskInternal() {
         initComponents();
         userSignedUpmp=userSigned;
+        setModal(true);
+        this.setLocationRelativeTo(null);
         changeColor();
     }
     
@@ -49,6 +53,8 @@ public class addTaskInternal extends javax.swing.JDialog {
         this.fecha = fecha;
         this.actualCalendar = actualCalendar;
         this.calendar=calendar;
+        setModal(true);
+        this.setLocationRelativeTo(null);
         initTags();
         changeColor();
     }

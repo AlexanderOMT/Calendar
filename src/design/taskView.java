@@ -22,6 +22,8 @@ public class taskView extends javax.swing.JDialog {
     private User userSignedUpmp;
     public taskView(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        setModal(true);
+        this.setLocationRelativeTo(null);
         initComponents();
     }
     
@@ -34,6 +36,8 @@ public class taskView extends javax.swing.JDialog {
                         t.getDate().getMinutes());
         jLabel4.setText(t.getTag());
         userSignedUpmp=userSigned;
+        setModal(true);
+        this.setLocationRelativeTo(null);
         changeColor();
     }
     

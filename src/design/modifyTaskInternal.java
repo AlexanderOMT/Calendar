@@ -34,6 +34,8 @@ public class modifyTaskInternal extends javax.swing.JDialog {
     private dayView listTasks;
     public modifyTaskInternal(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        setModal(true);
+        this.setLocationRelativeTo(null);
         initComponents();
     }
     
@@ -45,6 +47,8 @@ public class modifyTaskInternal extends javax.swing.JDialog {
         initComponents();
         initTags();
         userSignedUpmp=userSigned;
+        setModal(true);
+        this.setLocationRelativeTo(null);
         changeColor();
     }
 
