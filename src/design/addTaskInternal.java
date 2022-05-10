@@ -283,45 +283,24 @@ public class addTaskInternal extends javax.swing.JDialog {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String[] tasks = (String[]) jTable1.getValueAt
                         (jTable1.getSelectedRow(), jTable1.getSelectedColumn());
-        
-        
-                
                 HerokuTaskSqlConnection con = HerokuTaskSqlConnection.getInstance();
                 HerokuCalendarPermitSqlConnection con1 = HerokuCalendarPermitSqlConnection.getInstance();
-                System.out.println(nameField.getText());
-                System.out.println(descriptionField.getText());
-                System.out.println(this.fecha);
-                System.out.println(jComboBoxTag.getSelectedItem().toString());
-                Task t = new Task(nameField.getText(), descriptionField.getText(), this.fecha, 3, jComboBoxTag.getSelectedItem().toString());
+                Task t = new Task(nameField.getText(), descriptionField.getText(), 
+                        this.fecha, 3, jComboBoxTag.getSelectedItem().toString());
                 this.actualCalendar.addTask(t);
                 int idTask = con.insertTaskByTask(t);
                 String rol = con1.selectRolfromUser(userSignedUpmp.getId(), this.actualCalendar.getId());
-                        
                 con1.insertCalendarPermit(userSignedUpmp.getId(), this.actualCalendar.getId(), idTask, rol);
-                
-                // Obtener users by calendarid
-                
                 Map<Integer, String> user_id_rol = con1.selectUsersPermitsByCalendarId(this.actualCalendar.getId());
-
                 user_id_rol.keySet().forEach((id) -> {
                     con1.insertCalendarPermit(id, this.actualCalendar.getId(), idTask, user_id_rol.get(id));
                 });
-
-               
-               
                 calendar.loadTask();
-                
-                //System.out.println("El valor del ID de actual calendar: " +getIdCalendar());
-                
-                
-                
                 calendar.updateTasks();
-                
                 nameField.setText("Add a title");
                 descriptionField.setText("Add a description");
                 hourBox.setSelectedIndex(0);
                 minBox.setSelectedIndex(0);
-                
                 setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 

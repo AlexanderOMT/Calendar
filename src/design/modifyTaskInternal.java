@@ -5,9 +5,13 @@
  */
 package design;
 
+import SqlDatabase.HerokuCalendarPermitSqlConnection;
+import SqlDatabase.HerokuTaskSqlConnection;
 import static design.usuario.userSigned;
 import java.awt.Color;
 import java.sql.Timestamp;
+import java.util.Map;
+import model.CalendarTask;
 import model.Task;
 import model.User;
 
@@ -21,12 +25,22 @@ public class modifyTaskInternal extends javax.swing.JDialog {
      * Creates new form modifyTaskInternal
      */
     private User userSignedUpmp;
+    private Task taskModify;
+    private HerokuTaskSqlConnection conex_task;
+    private HerokuCalendarPermitSqlConnection conex_calendarPermit;
+    private Timestamp date;
+    private CalendarTask actualCalendar;
+    private dayView listTasks;
     public modifyTaskInternal(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
     
-    public modifyTaskInternal() {
+    public modifyTaskInternal(Task t, Timestamp date, CalendarTask actualCalendar, dayView listTasks) {
+        this.listTasks = listTasks;
+        this.actualCalendar = actualCalendar;
+        this.taskModify = t;
+        this.date = date;
         initComponents();
         userSignedUpmp=userSigned;
         changeColor();
@@ -238,23 +252,32 @@ public class modifyTaskInternal extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_minBox1ActionPerformed
 
+    // Ok Modify task
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        System.out.println("Botón para aceptar modificación");
+        System.out.println(this.taskModify.getId() + this.taskModify.getName());
+        this.taskModify.setName(nameField1.getText());
+        this.taskModify.setDesc(descriptionField1.getText());
+        this.date.setHours(Integer.valueOf(hourBox1.getSelectedItem().toString()));
+        this.date.setMinutes(Integer.valueOf(minBox1.getSelectedItem().toString()));
+        this.taskModify.setDate(this.date);
+        //this.taskModify.setTag(jComboBoxTag1.getSelectedItem().toString());
         
-        /*Timestamp fecha = new Timestamp(this.date.getYear(), 
-                this.date.getMonth(), this.date.getDate(), 
-                Integer.valueOf(hourBox1.getSelectedItem().toString()), 
-                Integer.valueOf(minBox1.getSelectedItem().toString()), 0, 0);
-        t = new Task(t.getId(), nameField1.getText(), descriptionField1.getText(), 
-                fecha, 3, jComboBoxTag1.getSelectedItem().toString());
-        this.actualCalendar.setTask(jList1.getSelectedIndex(), t);
-
-        updateDate();
-
-        nameField1.setText("Add a title");
-        descriptionField1.setText("Add a description");
-        hourBox1.setSelectedIndex(0);
-        minBox1.setSelectedIndex(0);
-        */
+        HerokuTaskSqlConnection taskConn = HerokuTaskSqlConnection.getInstance();
+        HerokuCalendarPermitSqlConnection con1 = HerokuCalendarPermitSqlConnection.getInstance();
+        
+        taskConn.deleteTaskById(taskModify.getId());
+        taskConn.insertTaskIntoSpecificId(taskModify, taskModify.getId());
+        String rol = con1.selectRolfromUser(userSignedUpmp.getId(), this.actualCalendar.getId());
+            con1.insertCalendarPermit(userSignedUpmp.getId(), this.actualCalendar.getId(), taskModify.getId(), rol);
+            final int idTask = taskModify.getId();
+            Map<Integer, String> user_id_rol = con1.selectUsersPermitsByCalendarId(this.actualCalendar.getId());
+            user_id_rol.keySet().forEach((id) -> {
+                con1.insertCalendarPermit(id, this.actualCalendar.getId(), idTask, user_id_rol.get(id));
+            });
+        this.listTasks.loadTask();
+        this.listTasks.updateDate();
+        setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

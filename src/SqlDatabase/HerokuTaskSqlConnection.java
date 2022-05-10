@@ -174,6 +174,29 @@ public class HerokuTaskSqlConnection  extends SqlConnection {
 
     }
     
+    public void insertTaskIntoSpecificId(Task task, int id){
+        Connection conn = getSqlConnection(); 
+
+        try{
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO task(task_id, name, date, tag, priority, description) VALUES(?, ?, ?, ?, ?, ?)");
+
+            ps.setInt(1, id);
+            ps.setString(2, task.getName());
+            ps.setTimestamp(3, (Timestamp) task.getDate()); 
+            ps.setString(4, task.getTag()); 
+            ps.setInt(5, task.getPrior());
+            ps.setString(6, task.getDesc());
+
+            // ps.execute(); 
+            ps.executeUpdate();
+
+            conn.close();
+        } catch (SQLException e) {
+            //JOptionPane.showMessageDialog(null, "Error al insertar en la tabla TASK: " + e.getMessage());
+            System.out.println("Error al insertar en la tabla TASK: " + e.getMessage());
+        }
+    }
+    
  
     public void deleteTaskById(int id) {
         

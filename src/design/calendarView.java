@@ -41,7 +41,6 @@ public final class calendarView extends javax.swing.JFrame {
     private HerokuTaskSqlConnection conex_task;
     private HerokuCalendarPermitSqlConnection conex_calendarPermit;
     public int idActualTask;
-    public float idRandom;
     Calendar cl = new GregorianCalendar();
     Tags tag; 
     ArrayList<Integer> aux;
@@ -50,16 +49,11 @@ public final class calendarView extends javax.swing.JFrame {
     // Constructor
     public calendarView(CalendarTask actualCalendar) {
         this.actualCalendar = actualCalendar;
-        //setIdRandom();
-        //setIdCalendar(actualCalendar.getId());
         initComponents();
         userSignedUpmp=userSigned;
         changeColor();
-        
         initTags();
         loadTask();
-       //initTaks();
-        //test();
         this.setLocationRelativeTo(null);
         this.setExtendedState(MAXIMIZED_BOTH);
         actualMonth = cl.get(Calendar.MONTH);
@@ -489,106 +483,20 @@ public final class calendarView extends javax.swing.JFrame {
     }                                        
 
     // Add a task
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-// TODO add your handling code here:
-        //this.actualCalendar = actualCalendar;
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {
         if (jTable1.getSelectedRow() == -1 || jTable1.getSelectedColumn() == -1) {
-            /*
-            JOptionPane.showConfirmDialog(null,"Select a date.","", JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION);
-            return;
-            
-            
-            */
             selectDate selectDate = new selectDate();
             selectDate.setVisible(true);
-            
         }else{
-            
             String[] tasks = (String[]) jTable1.getValueAt
                         (jTable1.getSelectedRow(), jTable1.getSelectedColumn());
-                
-                
-                /*
-                Radio button o checkbox para las tags, y las que esten seleccionadas, 
-                insertarlas en el array (último atributo de la clase Task
-                */
-                Timestamp fecha = new Timestamp(this.actualYear-1900, this.actualMonth,Integer.parseInt (tasks[0]), Integer.valueOf(minBox.getSelectedItem().toString()), Integer.valueOf(minBox.getSelectedItem().toString()), 0, 0);
-                // ArrayList<Tags> tags = new ArrayList<>();
-                // tags.add(tag);
-                calendarView a= this;
-                addTaskInternal addTaskInternal = new addTaskInternal( jTable1, fecha, this.actualCalendar, a);
+                Timestamp fecha = new Timestamp(this.actualYear-1900, 
+                        this.actualMonth,Integer.parseInt (tasks[0]), 
+                        Integer.valueOf(minBox.getSelectedItem().toString()), 
+                        Integer.valueOf(minBox.getSelectedItem().toString()), 0, 0);
+                addTaskInternal addTaskInternal = new addTaskInternal( jTable1, fecha, this.actualCalendar, this);
                 addTaskInternal.setVisible(true);
-            
         }
-        /*
-        int option = JOptionPane.showConfirmDialog(null,addTaskInternal,"", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION, null);
-         
-        switch (option) {
-            case JOptionPane.OK_OPTION:
-                String[] tasks = (String[]) jTable1.getValueAt
-                        (jTable1.getSelectedRow(), jTable1.getSelectedColumn());
-                
-                
-            
-                Radio button o checkbox para las tags, y las que esten seleccionadas, 
-                insertarlas en el array (último atributo de la clase Task
-             
-                Timestamp fecha = new Timestamp(this.actualYear-1900, this.actualMonth,Integer.parseInt (tasks[0]), Integer.valueOf(minBox.getSelectedItem().toString()), Integer.valueOf(minBox.getSelectedItem().toString()), 0, 0);
-                // ArrayList<Tags> tags = new ArrayList<>();
-                // tags.add(tag);
-                addTaskInternal addTaskInternal = new addTaskInternal( jTable1, fecha, this.actualCalendar, this.idCalendar);
-                HerokuTaskSqlConnection con = HerokuTaskSqlConnection.getInstance();
-                HerokuCalendarPermitSqlConnection con1 = HerokuCalendarPermitSqlConnection.getInstance();
-                Task t = new Task(nameField.getText(), descriptionField.getText(), fecha, 3, jComboBoxTag.getSelectedItem().toString());
-                this.actualCalendar.addTask(t);
-                int idTask = con.insertTaskByTask(t);
-                String rol = con1.selectRolfromUser(userSignedUpmp.getId(), this.idCalendar);
-                        
-                con1.insertCalendarPermit(userSignedUpmp.getId(), this.idCalendar, idTask, rol);
-                
-                // Obtener users by calendarid
-                
-                Map<Integer, String> user_id_rol = con1.selectUsersPermitsByCalendarId(this.idCalendar);
-
-                user_id_rol.keySet().forEach((id) -> {
-                    con1.insertCalendarPermit(id, idCalendar, idTask, user_id_rol.get(id));
-                });
-
-                
-                loadTask();
-                
-                //System.out.println("El valor del ID de actual calendar: " +getIdCalendar());
-                
-                
-                
-                updateTasks();
-                
-                
-                //Timestamp fecha2 = new Timestamp(this.actualYear-1900, Integer.parseInt(month),Integer.parseInt (day), Integer.parseInt((String) hourBox.getSelectedItem()), Integer.parseInt((String) minBox.getSelectedItem()), 0, 0);
-                //List l = actualCalendar.getTasks(fecha2);
-                //t = (Task)l.get(l.size()-1);
-                nameField.setText("Add a title");
-                descriptionField.setText("Add a description");
-                hourBox.setSelectedIndex(0);
-                minBox.setSelectedIndex(0);
-                break;
-            case JOptionPane.CANCEL_OPTION:
-                break;
-                
-                
-        }
-    
-    */
-    }                                        
-    
-    private void setIdRandom(){
-        idRandom = (float) Math.random();
-        
-    }
-    
-    private float getIdRandom(){
-        return idRandom;
-        
     }
     
     private void addTask(Task t){
@@ -596,15 +504,8 @@ public final class calendarView extends javax.swing.JFrame {
         conex_calendarPermit = HerokuCalendarPermitSqlConnection.getInstance();
         conex_task = HerokuTaskSqlConnection.getInstance();
         conex_task.insertTaskByTask(t);
-        
-        loadTask();      
-        
-    } 
-    
-    
-    
-    
-    
+        loadTask();   
+    }
     
     private void nameFieldFocusGained(java.awt.event.FocusEvent evt) {                                      
         // TODO add your handling code here:

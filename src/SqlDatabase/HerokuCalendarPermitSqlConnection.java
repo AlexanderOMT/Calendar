@@ -143,10 +143,10 @@ public class HerokuCalendarPermitSqlConnection extends SqlConnection {
             ps.setInt(1, calendar_id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                System.out.println(
+                /*System.out.println(
                         "ID DEL EL TAREAAA " +
                         rs.getString("task_id")
-                );
+                );*/
                 tareas.add(rs.getInt("task_id"));
             }
             conn.close();

@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.ListModel;
@@ -94,7 +95,7 @@ public class dayView extends javax.swing.JFrame {
         }   
     }
     
-    private void loadTask(){
+    public void loadTask(){
         conex_calendarPermit = HerokuCalendarPermitSqlConnection.getInstance();
         HerokuCalendarSqlConnection conex_cal = HerokuCalendarSqlConnection.getInstance();
         conex_task = HerokuTaskSqlConnection.getInstance();
@@ -450,36 +451,30 @@ public class dayView extends javax.swing.JFrame {
     }                                        
 
     //Modify
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {  
         if (jList1.getSelectedIndex() == -1) {
-            JOptionPane.showConfirmDialog(null,"Select a task.","", JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION); 
+            selectTask selectTask = new selectTask();
+            selectTask.setVisible(true);
+        }else{
+            List<Task> dayTasks = actualCalendar.getTasks(this.date);
+            Task t = dayTasks.get(jList1.getSelectedIndex());
+            modifyTaskInternal modifyTaskInternal = new modifyTaskInternal(t, this.date, this.actualCalendar, this);
+            modifyTaskInternal.setVisible(true);
         }
-        Task t = this.actualCalendar.getTask(jList1.getSelectedIndex());
-        nameField1.setText(t.getName());
-        descriptionField1.setText(t.getDesc());
-        hourBox1.setSelectedIndex(t.getDate().getHours());
-        minBox1.setSelectedIndex(t.getDate().getMinutes());
-        int option = JOptionPane.showConfirmDialog(null,modifyTaskInternal,"", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION, null);
-        switch (option) {
-            case JOptionPane.OK_OPTION:
-                Timestamp fecha = new Timestamp(this.date.getYear(), 
-                        this.date.getMonth(), this.date.getDate(), 
-                        Integer.valueOf(hourBox1.getSelectedItem().toString()), 
-                        Integer.valueOf(minBox1.getSelectedItem().toString()), 0, 0);
-                t = new Task(nameField1.getText(), descriptionField1.getText(), 
-                        fecha, 3, jComboBoxTag1.getSelectedItem().toString());
-                this.actualCalendar.setTask(jList1.getSelectedIndex(), t);
-                
-                updateDate();
-                
-                nameField1.setText("Add a title");
-                descriptionField1.setText("Add a description");
-                hourBox1.setSelectedIndex(0);
-                minBox1.setSelectedIndex(0);
-                break;
-            case JOptionPane.CANCEL_OPTION:
-                break;
-        }
+            /*
+            HerokuTaskSqlConnection taskConn = HerokuTaskSqlConnection.getInstance();
+            HerokuCalendarPermitSqlConnection con1 = HerokuCalendarPermitSqlConnection.getInstance();
+            taskConn.deleteTaskById(t.getId());
+            taskConn.insertTaskIntoSpecificId(t, t.getId());
+            String rol = con1.selectRolfromUser(userSignedUpmp.getId(), this.actualCalendar.getId());
+            con1.insertCalendarPermit(userSignedUpmp.getId(), this.actualCalendar.getId(), t.getId(), rol);
+            final int idTask = t.getId();
+            Map<Integer, String> user_id_rol = con1.selectUsersPermitsByCalendarId(this.actualCalendar.getId());
+            user_id_rol.keySet().forEach((id) -> {
+                con1.insertCalendarPermit(id, this.actualCalendar.getId(), idTask, user_id_rol.get(id));
+            });
+            loadTask();
+            updateDate();*/
     }                                        
 
     //Delete
