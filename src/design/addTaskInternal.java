@@ -30,7 +30,6 @@ public class addTaskInternal extends javax.swing.JDialog {
     private JTable jTable1;
     private Timestamp fecha;
     private CalendarTask actualCalendar;
-    private int idCalendar;
     private calendarView calendar;
     public addTaskInternal(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -43,13 +42,12 @@ public class addTaskInternal extends javax.swing.JDialog {
         changeColor();
     }
     
-    public addTaskInternal(JTable jTable1, Timestamp fecha, CalendarTask actualCalendar, int idCalendar, calendarView calendar) {
+    public addTaskInternal(JTable jTable1, Timestamp fecha, CalendarTask actualCalendar, calendarView calendar) {
         initComponents();
         userSignedUpmp=userSigned;
         this.jTable1 = jTable1;
         this.fecha = fecha;
         this.actualCalendar = actualCalendar;
-        this.idCalendar = idCalendar;
         this.calendar=calendar;
         initTags();
         changeColor();
@@ -297,16 +295,16 @@ public class addTaskInternal extends javax.swing.JDialog {
                 Task t = new Task(nameField.getText(), descriptionField.getText(), this.fecha, 3, jComboBoxTag.getSelectedItem().toString());
                 this.actualCalendar.addTask(t);
                 int idTask = con.insertTaskByTask(t);
-                String rol = con1.selectRolfromUser(userSignedUpmp.getId(), this.idCalendar);
+                String rol = con1.selectRolfromUser(userSignedUpmp.getId(), this.actualCalendar.getId());
                         
-                con1.insertCalendarPermit(userSignedUpmp.getId(), this.idCalendar, idTask, rol);
+                con1.insertCalendarPermit(userSignedUpmp.getId(), this.actualCalendar.getId(), idTask, rol);
                 
                 // Obtener users by calendarid
                 
-                Map<Integer, String> user_id_rol = con1.selectUsersPermitsByCalendarId(this.idCalendar);
+                Map<Integer, String> user_id_rol = con1.selectUsersPermitsByCalendarId(this.actualCalendar.getId());
 
                 user_id_rol.keySet().forEach((id) -> {
-                    con1.insertCalendarPermit(id, idCalendar, idTask, user_id_rol.get(id));
+                    con1.insertCalendarPermit(id, this.actualCalendar.getId(), idTask, user_id_rol.get(id));
                 });
 
                

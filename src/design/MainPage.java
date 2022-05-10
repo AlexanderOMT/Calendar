@@ -57,12 +57,13 @@ public final class MainPage extends javax.swing.JFrame implements usuario {
 
         Color color = new Color(255, 255, 255);
         this.getContentPane().setBackground(color);
-//        userSigned.setEmail("tareas@gmail.com");
-//        userSigned.setId(3);
+        userSigned.setEmail("tareas@gmail.com");
+        userSigned.setId(3);
+        userSigned.setName("Nauzet");
 
-        userSigned.setEmail("minerva@gmail.com");
-        userSigned.setId(4);
-        userSigned.setName("Minerva");
+        //userSigned.setEmail("minerva@gmail.com");
+        //userSigned.setId(4);
+        //userSigned.setName("Minerva");
         this.setLocationRelativeTo(null);
         this.setExtendedState(MAXIMIZED_BOTH);
         if (userSigned.getModo() == 1) {
@@ -526,7 +527,7 @@ public final class MainPage extends javax.swing.JFrame implements usuario {
 
         boton1.addActionListener((java.awt.event.ActionEvent e) -> {
             System.out.println("Se ha abierto el calendario " + calendarName);
-            calendarView cv = new calendarView(new CalendarTask(calendarName, calendar.getId()), calendar.getId());
+            calendarView cv = new calendarView(new CalendarTask(calendarName, calendar.getId()));
             System.out.println("ID DEL CALEDIOOOOOO: " + calendar.getId());
             cv.setVisible(true);
         });

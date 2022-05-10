@@ -1,5 +1,8 @@
 package design;
 
+import SqlDatabase.HerokuCalendarPermitSqlConnection;
+import SqlDatabase.HerokuCalendarSqlConnection;
+import SqlDatabase.HerokuTaskSqlConnection;
 import static design.usuario.userSigned;
 import java.awt.Color;
 import java.sql.Timestamp;
@@ -10,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.ListModel;
 import model.CalendarTask;
 import model.Tags;
 import model.Task;
@@ -18,14 +22,14 @@ import model.User;
 public class dayView extends javax.swing.JFrame {
     
     private CalendarTask actualCalendar;
-    private int calendarId;
     private Timestamp date;
+    private HerokuTaskSqlConnection conex_task;
+    private HerokuCalendarPermitSqlConnection conex_calendarPermit;
     Tags tag;
     private User userSignedUpmp;
     
-    public dayView(CalendarTask actualCalendar, Timestamp date, int calendarId) {
+    public dayView(CalendarTask actualCalendar, Timestamp date) {
         this.actualCalendar = actualCalendar;
-        this.calendarId = calendarId;
         this.date = date;
         initComponents();
         userSignedUpmp=userSigned;
@@ -88,6 +92,25 @@ public class dayView extends javax.swing.JFrame {
             jComboBoxTag.addItem(myVar.toString());
             jComboBoxTag1.addItem(myVar.toString());
         }   
+    }
+    
+    private void loadTask(){
+        conex_calendarPermit = HerokuCalendarPermitSqlConnection.getInstance();
+        HerokuCalendarSqlConnection conex_cal = HerokuCalendarSqlConnection.getInstance();
+        conex_task = HerokuTaskSqlConnection.getInstance();
+        actualCalendar.getId();
+        System.out.println(actualCalendar.getId());
+        
+        ArrayList<Integer> calendarsTask=conex_calendarPermit.selectAllTaskIdByIdCalendar(actualCalendar.getId());
+        CalendarTask c = new CalendarTask();
+        
+        for(int i = 0; i < calendarsTask.size(); i++){
+            Task t = conex_task.getTaskById(calendarsTask.get(i));
+            c.addTask(t);
+        }
+        c.setId(this.actualCalendar.getId());
+        c.setName(actualCalendar.getName());
+        this.actualCalendar = c;
     }
 
     /**
@@ -421,7 +444,7 @@ public class dayView extends javax.swing.JFrame {
     //Back
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
-        calendarView cal = new calendarView(this.actualCalendar, this.calendarId);
+        calendarView cal = new calendarView(this.actualCalendar);
         cal.setVisible(true);
         setVisible(false);
     }                                        
@@ -463,10 +486,16 @@ public class dayView extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         if (jList1.getSelectedIndex() == -1) {
             JOptionPane.showConfirmDialog(null,"Select a task.","", JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION); 
+        } else {
+            ListModel model = jList1.getModel();
+            List<Task> dayTasks = actualCalendar.getTasks(this.date);
+            Task t = dayTasks.get(jList1.getSelectedIndex());
+            HerokuTaskSqlConnection taskConn = HerokuTaskSqlConnection.getInstance();
+            taskConn.deleteTaskById(t.getId());
+            loadTask();
+            updateDate();
+            JOptionPane.showConfirmDialog(null,"Eliminado!","", JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION);
         }
-        Task t = actualCalendar.getTask(jList1.getSelectedIndex());
-        actualCalendar.deleteTask(t.getId());
-        updateDate();
     }                                        
 
     // Next day
@@ -613,7 +642,7 @@ public class dayView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new dayView(new CalendarTask(), new Timestamp(2022-1900,3,1,0,0,0,0), 1).setVisible(true);
+                new dayView(new CalendarTask(), new Timestamp(2022-1900,3,1,0,0,0,0)).setVisible(true);
             }
         });
     }
