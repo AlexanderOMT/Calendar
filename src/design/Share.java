@@ -404,7 +404,8 @@ public class Share extends javax.swing.JDialog implements usuario {
         admin_title.setLocation(20, 0);
         jPanel2.add(admin_title);
         changeColorLoadAdmin(admin_title);
-
+         if (administrador.getUser_id() == userSigned.getId())
+            showAdminOption();
         if (invitations.size() > 0) {
             int posyb1relative = 55;
             int posyb2relative = 55;
@@ -420,7 +421,6 @@ public class Share extends javax.swing.JDialog implements usuario {
                 //Solo si el usuario es administrador se muestra la opcion de editar roles, y eliminar usuarios
                 changeColorLoadNotif(title, rol_user);
                 if (administrador.getUser_id() == userSigned.getId()) {
-                    showAdminOption();
                     JButton delete = aux.createButtonInvitation(460, posyb1relative);
                     JButton change = aux.createButtonInvitation(355, posyb1relative);
                     JComboBox roles = aux.createJComboBox(270, posyb1relative);
