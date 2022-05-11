@@ -285,20 +285,18 @@ public class Share extends javax.swing.JDialog implements usuario {
                 changeTextField();
             } else {
                 conex_invite = new HerokuInvitationSqlConnection();
-                try {
-                    conex_invite.insertInvitation(actual_user_id, target_user_id, actual_cal_id, (String) Rol.getSelectedItem());
-                    mensaje = "Your invitation has been send correctly!";
-                    changeTextField();
-                } catch (SQLException e) {
-                    if (e.getErrorCode() == 1062) {
-                        System.out.println("se procede a hacer un update con changeRol()");
-                        conex_invite.changeRol(actual_cal_id, actual_user_id, target_user_id, (String) Rol.getSelectedItem());
+                boolean alredy_invited=this.conex_cal_perm.selectAllCalendarsIdByUserEmail(correo_target, actualCalendar.getId());
+                if (!alredy_invited){
+                    try {
+                        conex_invite.insertInvitation(actual_user_id, target_user_id, actual_cal_id, (String) Rol.getSelectedItem());
                         mensaje = "Your invitation has been send correctly!";
                         changeTextField();
-                    } else {
-                        System.out.println(e.getMessage());
-                        mensaje = "That didn't work! Try again";
-                        changeTextField();
+                    } catch (SQLException e) {
+                        if (e.getErrorCode() == 1062) {
+                            System.out.println("ya has invitado a esta persona");
+                            mensaje="You've alredy invited this person!";
+                            changeTextField();
+                        }
                     }
                 }
             }
@@ -532,7 +530,7 @@ public class Share extends javax.swing.JDialog implements usuario {
     public void changeTextField() {
         jTextField1.setText(mensaje);
         jTextField1.setSize(mensaje.length() * 260 / 40, 30);
-        jTextField1.setLocation(40 * 165 / mensaje.length(), 188);
+        jTextField1.setLocation(50 * 165 / mensaje.length(), 210);
     }
 
     public void getNotifications() throws SQLException {

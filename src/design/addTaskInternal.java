@@ -74,7 +74,7 @@ public class addTaskInternal extends javax.swing.JDialog {
 
     public void changeColor(){
         if(userSignedUpmp.getModo() == 1){
-            this.setBackground(Color.decode("#000000"));
+            this.getContentPane().setBackground(Color.decode("#000000"));
             
             nameField.setForeground(Color.decode("#FFFFFF"));
             nameField.setBackground(Color.decode("#000000"));
@@ -93,7 +93,7 @@ public class addTaskInternal extends javax.swing.JDialog {
             jButton1.setBackground(Color.decode("#859EBC"));
             jButton2.setBackground(Color.decode("#859EBC"));
         }else{
-            this.setBackground( Color.decode("#FFFFFF"));
+            this.getContentPane().setBackground(Color.decode("#FFFFFF"));
             
             nameField.setForeground(Color.decode("#000000"));
             nameField.setBackground(Color.decode("#FFFFFF"));

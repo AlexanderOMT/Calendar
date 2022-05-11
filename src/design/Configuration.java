@@ -7,10 +7,18 @@ package design;
 
 import SqlDatabase.HerokuCalendarPermitSqlConnection;
 import SqlDatabase.HerokuCalendarSqlConnection;
+import SqlDatabase.HerokuInvitationSqlConnection;
+import SqlDatabase.HerokuUsersSqlConnection;
 import static design.usuario.userSigned;
 import java.awt.Color;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import model.User;
 
 /**
@@ -23,12 +31,13 @@ public class Configuration extends javax.swing.JDialog {
      * Creates new form Configuration
      */
     private User userSignedUpmp;
+    private MainPage mn2;
     public Configuration(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
     
-    public Configuration(){
+    public Configuration(MainPage mn2){
         initComponents();
         Color color = new Color(36,47,35);
         this.getContentPane().setBackground(color);
@@ -37,6 +46,7 @@ public class Configuration extends javax.swing.JDialog {
         userSignedUpmp=userSigned;
         jTextPane2.setText(userSignedUpmp.getName());
         description.setText(userSignedUpmp.getDescription());
+        this.mn2=mn2;
         changeColor();
     }
     
@@ -170,7 +180,8 @@ public class Configuration extends javax.swing.JDialog {
     
         HerokuCalendarPermitSqlConnection calPermitConn = HerokuCalendarPermitSqlConnection.getInstance();
         HerokuCalendarSqlConnection calConn = HerokuCalendarSqlConnection.getInstance();
-        
+        HerokuInvitationSqlConnection con_invite =new HerokuInvitationSqlConnection();
+        HerokuUsersSqlConnection con_us =new HerokuUsersSqlConnection();
         String specialId, calendarName;
         String userEmail = userSignedUpmp.getEmail();
         
@@ -181,11 +192,37 @@ public class Configuration extends javax.swing.JDialog {
             calendarName = calConn.getCalendarNameById(calendarId);
             specialId = calendarName + userEmail;
             int calendarIdToRemove = calConn.getCalendarIdBySpecialId(specialId);
-            calConn.deleteCalendarById(calendarIdToRemove);
+            
             
         }
+        con_us.deleteUserById(userSigned.getId());
+         mn2.setVisible(false);
+         this.setVisible(false);
         
-        
+        Sign_up a= new Sign_up();
+        a.setVisible(true);
+    }
+    
+    public void close() {
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                confirmarSalida();
+            }
+        });
+    }
+
+    public void confirmarSalida() {
+        HerokuUsersSqlConnection conex = HerokuUsersSqlConnection.getInstance();
+        try {
+            if (conex.signOut2(userSigned)) {
+                this.setVisible(false);
+                System.exit(0);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

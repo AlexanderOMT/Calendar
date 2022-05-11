@@ -132,6 +132,36 @@ public class HerokuCalendarPermitSqlConnection extends SqlConnection {
         return calendario;
     }
     
+    public boolean selectAllCalendarsIdByUserEmail(String user_email, int cal_id) {
+        ArrayList<Integer> calendario = new ArrayList<>();
+        try{
+            Connection conn = getSqlConnection();
+            PreparedStatement ps = conn.prepareStatement("SELECT DISTINCT calendar_id FROM calendar_permit inner JOIN user \n" +
+                        "ON calendar_permit.user_id = user.user_id \n" +
+                        "where user.email =" + user_email + ";");
+            
+            ResultSet rs = ps.executeQuery();
+            
+             while (rs.next()) {
+                System.out.println(
+                        "Id calendario: " +
+                        rs.getString("calendar_id")    
+                );
+                calendario.add(rs.getInt("calendar_id"));
+            }
+             conn.close();
+        } catch (SQLException e) {
+            System.out.println("Error al seleccionar por id  en la tabla CALENDAR: " + e.getMessage());
+        }
+        
+        for (int x=0; x<calendario.size(); x++){
+            if (calendario.get(x) == cal_id){
+                return true;
+            }
+        }
+        return false;
+    }
+    
         
     public ArrayList<Integer> selectAllTaskIdByIdCalendar(int calendar_id) {
         Connection conn = getSqlConnection();

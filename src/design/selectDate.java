@@ -22,11 +22,15 @@ public class selectDate extends javax.swing.JDialog {
     public selectDate(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setModal(true);
+        this.setLocationRelativeTo(null);
     }
     
     public selectDate() {
         initComponents();
         userSignedUpmp=userSigned;
+        setModal(true);
+        this.setLocationRelativeTo(null);
         changeColor();
     }
     

@@ -21,11 +21,15 @@ public class selectTask extends javax.swing.JDialog {
     private User userSignedUpmp;
     public selectTask(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        setModal(true);
+        this.setLocationRelativeTo(null);
         initComponents();
     }
     
     public selectTask() {
         initComponents();
+        setModal(true);
+        this.setLocationRelativeTo(null);
         userSignedUpmp=userSigned;
         changeColor();
     }

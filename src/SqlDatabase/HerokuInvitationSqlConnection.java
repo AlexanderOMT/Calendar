@@ -352,4 +352,32 @@ public class HerokuInvitationSqlConnection extends SqlConnection {
         return u;
         
             }
+     
+     
+     
+      public int getAllInvitationsFromSameCalendar(Integer user_id, Integer cal_id) {
+        Connection conn = getSqlConnection();
+         int cont=0;
+        try{
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM invitation WHERE ("
+                    + "target_user_id=?" + "target_calendar_id=?"
+                    + ")");
+            ps.setInt(1, user_id);
+            ps.setInt(2, cal_id);
+           
+            ResultSet rs = ps.executeQuery();
+             
+            while (rs.next()) {
+                cont++;
+            }
+            
+            conn.close();
+            return cont;
+            
+        } catch (SQLException e) {
+             System.out.println("Error al seleccionar todo en la tabla INVITATION: " + e.getMessage());
+        }
+        return cont;
+    }
+    // TODO
 }

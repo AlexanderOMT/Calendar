@@ -37,7 +37,7 @@ public static final String url = "jdbc:mysql:BDLocal";
 //            Class.forName("com.mysql.jdbc.Driver");
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn=DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/iy5jkxqnaep9jd04","root","minervafff");
+                    "jdbc:mysql://localhost:3306/iy5jkxqnaep9jd04?useSSL=false","root","minervafff");
             Statement stmt=conn.createStatement();  
             ResultSet rs=stmt.executeQuery("show databases;");
             if( conn != null){
