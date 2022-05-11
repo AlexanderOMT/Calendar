@@ -61,8 +61,8 @@ public final class MainPage extends javax.swing.JFrame implements usuario {
 //        userSigned.setId(1);
 //        userSigned.setName("Minerva");
 
-        userSigned.setEmail("m2@gmail.com");
-        userSigned.setId(6);
+        userSigned.setEmail("m3@gmail.com");
+        userSigned.setId(9);
         userSigned.setName("EME");
         this.setLocationRelativeTo(null);
         this.setExtendedState(MAXIMIZED_BOTH);

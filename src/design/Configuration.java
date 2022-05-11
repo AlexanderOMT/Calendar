@@ -32,26 +32,27 @@ public class Configuration extends javax.swing.JDialog {
      */
     private User userSignedUpmp;
     private MainPage mn2;
+
     public Configuration(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
-    
-    public Configuration(MainPage mn2){
+
+    public Configuration(MainPage mn2) {
         initComponents();
-        Color color = new Color(36,47,35);
+        Color color = new Color(36, 47, 35);
         this.getContentPane().setBackground(color);
         setModal(true);
         this.setLocationRelativeTo(null);
-        userSignedUpmp=userSigned;
+        userSignedUpmp = userSigned;
         jTextPane2.setText(userSignedUpmp.getName());
         description.setText(userSignedUpmp.getDescription());
-        this.mn2=mn2;
+        this.mn2 = mn2;
         changeColor();
     }
-    
-    public void changeColor(){
-        if(userSignedUpmp.getModo() == 1){
+
+    public void changeColor() {
+        if (userSignedUpmp.getModo() == 1) {
             jPanel1.setBackground(Color.decode("#000000"));
             jLabel1.setForeground(Color.decode("#FFFFFF"));
             jTextPane2.setBackground(Color.decode("#000000"));
@@ -60,7 +61,7 @@ public class Configuration extends javax.swing.JDialog {
             description.setForeground(Color.decode("#FFFFFF"));
             jButton1.setBackground(Color.decode("#AE7171"));
             jButton1.setForeground(Color.decode("#FFFFFF"));
-        }else {
+        } else {
             jPanel1.setBackground(Color.decode("#FFFFFF"));
             jLabel1.setForeground(Color.decode("#000000"));
             jTextPane2.setBackground(Color.decode("#FFFFFF"));
@@ -70,7 +71,7 @@ public class Configuration extends javax.swing.JDialog {
             jButton1.setBackground(Color.decode("#FB9696"));
             jButton1.setForeground(Color.decode("#000000"));
         }
-        
+
     }
 
     /**
@@ -126,83 +127,94 @@ public class Configuration extends javax.swing.JDialog {
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(54, 54, 54)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
-                        .addComponent(jLabel1)))
-                .addContainerGap(84, Short.MAX_VALUE))
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(54, 54, 54)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jTextPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+                                                .addComponent(jLabel1)))
+                                .addContainerGap(84, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(79, 79, 79)
-                .addComponent(jTextPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1)
-                .addGap(30, 30, 30)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38))
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(79, 79, 79)
+                                .addComponent(jTextPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel1)
+                                .addGap(30, 30, 30)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(38, 38, 38))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>                        
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+
         int result = JOptionPane.showConfirmDialog(null, "Are you sure do you want to remove your account?\n"
                 + "All calendars will be removed(even those are shared)", "WARNING",
-            JOptionPane.YES_NO_OPTION, JOptionPane.YES_OPTION);
-        
-        if (true ? result == 0 : false) removeAllUserCalendars();
-        
-        
-    }                
-    
-    private void removeAllUserCalendars(){
-    
+                JOptionPane.YES_NO_OPTION, JOptionPane.YES_OPTION);
+
+        if (true ? result == 0 : false) {
+            removeAllUserCalendars();
+        }
+
+    }
+
+    private void removeAllUserCalendars() {
+
         HerokuCalendarPermitSqlConnection calPermitConn = HerokuCalendarPermitSqlConnection.getInstance();
         HerokuCalendarSqlConnection calConn = HerokuCalendarSqlConnection.getInstance();
-        HerokuInvitationSqlConnection con_invite =new HerokuInvitationSqlConnection();
-        HerokuUsersSqlConnection con_us =new HerokuUsersSqlConnection();
+        HerokuInvitationSqlConnection con_invite = new HerokuInvitationSqlConnection();
+        HerokuUsersSqlConnection con_us = new HerokuUsersSqlConnection();
         String specialId, calendarName;
         String userEmail = userSignedUpmp.getEmail();
-        
+
         ArrayList<Integer> calendarsUser = calPermitConn.selectAllCalendarsIdByIdUser(userSignedUpmp.getId());
 
         for (int calendarId : calendarsUser) {
-            
+
             calendarName = calConn.getCalendarNameById(calendarId);
             specialId = calendarName + userEmail;
             int calendarIdToRemove = calConn.getCalendarIdBySpecialId(specialId);
-            
-            
+
+            if (calPermitConn.selectRolfromUser(userSigned.getId(), calendarId).equals("Admin")) {
+                calConn.deleteCalendarById(calendarId);
+                calPermitConn.deleteCalendarPermitById(calendarId);
+
+            } else {
+                /*se borra solo la conexión con el usuario*/
+                calPermitConn.deleteOnlyCalendarPermitfromOneUser(userSigned.getId(), calendarId);
+                HerokuInvitationSqlConnection conex_invite = new HerokuInvitationSqlConnection();
+                con_invite.deleteInvitationByTargetUserIdAndCalendarId(userSigned.getId(), calendarId);
+            }
+
         }
         con_us.deleteUserById(userSigned.getId());
-         mn2.setVisible(false);
-         this.setVisible(false);
-        
-        Sign_up a= new Sign_up();
+        mn2.setVisible(false);
+        this.setVisible(false);
+
+        Sign_up a = new Sign_up();
         a.setVisible(true);
     }
-    
+
     public void close() {
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
