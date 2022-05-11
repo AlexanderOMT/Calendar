@@ -13,11 +13,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.ListModel;
 import model.CalendarTask;
 import model.Tags;
@@ -501,7 +498,8 @@ public class dayView extends javax.swing.JFrame {
     //Delete
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
         if (jList1.getSelectedIndex() == -1) {
-            JOptionPane.showConfirmDialog(null, "Select a task.", "", JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION);
+            selectTask selectTask = new selectTask();
+            selectTask.setVisible(true);
         } else {
             ListModel model = jList1.getModel();
             List<Task> dayTasks = actualCalendar.getTasks(this.date);
@@ -510,7 +508,8 @@ public class dayView extends javax.swing.JFrame {
             taskConn.deleteTaskById(t.getId());
             loadTask();
             updateDate();
-            JOptionPane.showConfirmDialog(null, "Eliminado!", "", JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION);
+            eliminado eliminado = new eliminado();
+            eliminado.setVisible(true);
         }
     }
 
