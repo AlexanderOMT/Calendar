@@ -54,7 +54,7 @@ public class modifyTaskInternal extends javax.swing.JDialog {
 
     public void changeColor(){
         if(userSignedUpmp.getModo() == 1){
-            this.setBackground(Color.decode("#000000"));
+            this.getContentPane().setBackground(Color.decode("#000000"));
 
             nameField1.setForeground(Color.decode("#FFFFFF"));
             nameField1.setBackground(Color.decode("#000000"));
@@ -73,7 +73,7 @@ public class modifyTaskInternal extends javax.swing.JDialog {
             jButton1.setBackground(Color.decode("#859EBC"));
             jButton2.setBackground(Color.decode("#859EBC"));
         }else{
-            this.setBackground(Color.decode("#FFFFFF"));
+            this.getContentPane().setBackground(Color.decode("#FFFFFF"));
             
             nameField1.setForeground(Color.decode("#000000"));
             nameField1.setBackground(Color.decode("#FFFFFF"));
@@ -231,19 +231,19 @@ public class modifyTaskInternal extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void descriptionField1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_descriptionField1FocusGained
-        // TODO add your handling code here:
+        if(descriptionField1.getText().equals("Add a description")) descriptionField1.setText("");
     }//GEN-LAST:event_descriptionField1FocusGained
 
     private void descriptionField1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_descriptionField1FocusLost
-        // TODO add your handling code here:
+        if(descriptionField1.getText().equals("")) descriptionField1.setText("Add a description");
     }//GEN-LAST:event_descriptionField1FocusLost
 
     private void nameField1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_nameField1FocusGained
-        // TODO add your handling code here:
+        if(nameField1.getText().equals("Add a title")) nameField1.setText("");
     }//GEN-LAST:event_nameField1FocusGained
 
     private void nameField1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_nameField1FocusLost
-        // TODO add your handling code here:
+        if(nameField1.getText().equals("")) nameField1.setText("Add a title");
     }//GEN-LAST:event_nameField1FocusLost
 
     private void nameField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameField1ActionPerformed
