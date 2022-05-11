@@ -31,6 +31,7 @@ public class addTaskInternal extends javax.swing.JDialog {
     private Timestamp fecha;
     private CalendarTask actualCalendar;
     private calendarView calendar;
+    private dayView dateList;
     public addTaskInternal(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         setModal(true);
@@ -53,6 +54,18 @@ public class addTaskInternal extends javax.swing.JDialog {
         this.fecha = fecha;
         this.actualCalendar = actualCalendar;
         this.calendar=calendar;
+        setModal(true);
+        this.setLocationRelativeTo(null);
+        initTags();
+        changeColor();
+    }
+    
+    public addTaskInternal(Timestamp fecha, CalendarTask actualCalendar, dayView dateList) {
+        initComponents();
+        userSignedUpmp=userSigned;
+        this.fecha = fecha;
+        this.actualCalendar = actualCalendar;
+        this.dateList=dateList;
         setModal(true);
         this.setLocationRelativeTo(null);
         initTags();
@@ -287,27 +300,33 @@ public class addTaskInternal extends javax.swing.JDialog {
     }//GEN-LAST:event_hourBoxActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String[] tasks = (String[]) jTable1.getValueAt
-                        (jTable1.getSelectedRow(), jTable1.getSelectedColumn());
-                HerokuTaskSqlConnection con = HerokuTaskSqlConnection.getInstance();
-                HerokuCalendarPermitSqlConnection con1 = HerokuCalendarPermitSqlConnection.getInstance();
-                Task t = new Task(nameField.getText(), descriptionField.getText(), 
+        HerokuTaskSqlConnection con = HerokuTaskSqlConnection.getInstance();
+        HerokuCalendarPermitSqlConnection con1 = HerokuCalendarPermitSqlConnection.getInstance();
+        this.fecha.setHours(Integer.valueOf(hourBox.getSelectedItem().toString()));
+        this.fecha.setMinutes(Integer.valueOf(minBox.getSelectedItem().toString()));
+        Task t = new Task(nameField.getText(), descriptionField.getText(), 
                         this.fecha, 3, jComboBoxTag.getSelectedItem().toString());
-                this.actualCalendar.addTask(t);
-                int idTask = con.insertTaskByTask(t);
-                String rol = con1.selectRolfromUser(userSignedUpmp.getId(), this.actualCalendar.getId());
-                con1.insertCalendarPermit(userSignedUpmp.getId(), this.actualCalendar.getId(), idTask, rol);
-                Map<Integer, String> user_id_rol = con1.selectUsersPermitsByCalendarId(this.actualCalendar.getId());
-                user_id_rol.keySet().forEach((id) -> {
-                    con1.insertCalendarPermit(id, this.actualCalendar.getId(), idTask, user_id_rol.get(id));
-                });
-                calendar.loadTask();
-                calendar.updateTasks();
-                nameField.setText("Add a title");
-                descriptionField.setText("Add a description");
-                hourBox.setSelectedIndex(0);
-                minBox.setSelectedIndex(0);
-                setVisible(false);
+        this.actualCalendar.addTask(t);
+        int idTask = con.insertTaskByTask(t);
+        String rol = con1.selectRolfromUser(userSignedUpmp.getId(), this.actualCalendar.getId());
+        con1.insertCalendarPermit(userSignedUpmp.getId(), this.actualCalendar.getId(), idTask, rol);
+        Map<Integer, String> user_id_rol = con1.selectUsersPermitsByCalendarId(this.actualCalendar.getId());
+        user_id_rol.keySet().forEach((id) -> {
+            con1.insertCalendarPermit(id, this.actualCalendar.getId(), idTask, user_id_rol.get(id));
+        });
+        if (this.calendar != null) {
+            calendar.loadTask();
+            calendar.updateTasks();
+        }
+        if (this.dateList != null) {
+            dateList.loadTask();
+            dateList.updateDate();
+        }
+        nameField.setText("Add a title");
+        descriptionField.setText("Add a description");
+        hourBox.setSelectedIndex(0);
+        minBox.setSelectedIndex(0);
+        setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

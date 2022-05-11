@@ -11,6 +11,15 @@ public class User {
     private boolean login;
     private String description;
     private int modo;
+    private String rol;
+
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
+    }
     
     public User(){
         

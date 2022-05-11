@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class SqlConnection {
 //
@@ -21,7 +23,7 @@ public static final String url = "jdbc:mysql:BDLocal";
 
     }
 
-    public Connection getSqlConnection() throws ClassNotFoundException {
+    public Connection getSqlConnection()  {
 //        try {
 ////            Class.forName("com.mysql.jdbc.Driver");
 ////            con = DriverManager.getConnection(url, user, pswd);
@@ -39,12 +41,16 @@ public static final String url = "jdbc:mysql:BDLocal";
             Statement stmt=conn.createStatement();  
             ResultSet rs=stmt.executeQuery("show databases;");
             if( conn != null){
-                            System.out.println("Connected");  
+              System.out.println("Connected");  
 
             }
-        } catch (SQLException e) {
+        } catch (SQLException e ) {
             System.out.println(e.getMessage());
+        } catch (ClassNotFoundException ex) {
+        Logger.getLogger(SqlConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
         return conn;
+   
     }
+    
 }

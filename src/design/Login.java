@@ -30,6 +30,7 @@ public final class Login extends javax.swing.JFrame implements usuario {
      * Creates new form Login
      */
     public Login() {
+        System.out.println("Esta es la nueva rama igual que Leyre");
         initComponents();
         email.setToolTipText("Enter email");
         contraseña.setToolTipText("Enter password");
