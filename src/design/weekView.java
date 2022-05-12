@@ -36,7 +36,11 @@ public class weekView extends javax.swing.JFrame {
     private Tags tag;
     private int idCalendar;
     
+<<<<<<< HEAD
     public weekView(int month, int year, CalendarTask actualCalendar, int idCalendar) {
+=======
+    public weekView(int month, int year, CalendarTask actualCalendar) {
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
         this.idCalendar = idCalendar;
         this.actualCalendar = actualCalendar;
         this.actualMonth = month;
@@ -411,7 +415,11 @@ public class weekView extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
+<<<<<<< HEAD
         calendarView cal = new calendarView(this.actualCalendar, this.idCalendar);
+=======
+        calendarView cal = new calendarView(this.actualCalendar);
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
         cal.setVisible(true);
         setVisible(false);
     }                                        
@@ -446,7 +454,11 @@ public class weekView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+<<<<<<< HEAD
                 new weekView(3,2022,new CalendarTask(),1).setVisible(true);
+=======
+                new weekView(3,2022,new CalendarTask()).setVisible(true);
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
             }
         });
     }

@@ -40,15 +40,20 @@ public final class calendarView extends javax.swing.JFrame {
     private User userSignedUpmp;
     private HerokuTaskSqlConnection conex_task;
     private HerokuCalendarPermitSqlConnection conex_calendarPermit;
+<<<<<<< HEAD
     public int idCalendar;
     public int idActualTask;
     public float idRandom;
+=======
+    public int idActualTask;
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
     Calendar cl = new GregorianCalendar();
     Tags tag; 
     ArrayList<Integer> aux;
 
     
     // Constructor
+<<<<<<< HEAD
     public calendarView(CalendarTask actualCalendar, int idCalendar) {
         System.out.println(idCalendar);
         this.actualCalendar = actualCalendar;
@@ -63,16 +68,39 @@ public final class calendarView extends javax.swing.JFrame {
         loadTask();
        //initTaks();
         //test();
+=======
+    public calendarView(CalendarTask actualCalendar) {
+        this.actualCalendar = actualCalendar;
+        initComponents();
+        userSignedUpmp=userSigned;
+        changeColor();
+        initTags();
+        loadTask();
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
         this.setLocationRelativeTo(null);
         this.setExtendedState(MAXIMIZED_BOTH);
         actualMonth = cl.get(Calendar.MONTH);
         actualYear = cl.get(Calendar.YEAR);
         updateTasks();
         doubleClickDay();
+<<<<<<< HEAD
         
         close();
     }
     
+=======
+        ifRol();
+        close();
+    }
+    
+    public void ifRol(){
+        if(userSigned.getRol().equals("Lector")){
+            jButton5.setVisible(false);
+        }
+    }
+
+    
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
     public void changeColor(){
         if(userSignedUpmp.getModo() == 1){
             this.getContentPane().setBackground(Color.decode("#000000"));
@@ -120,7 +148,11 @@ public final class calendarView extends javax.swing.JFrame {
                         (jTable1.getSelectedRow(), jTable1.getSelectedColumn());
                     int day = Integer.parseInt(tasks[0]);
                     Timestamp date = new Timestamp (actualYear-1900, actualMonth, day, 0, 0, 0, 0);
+<<<<<<< HEAD
                     dayView dia = new dayView(actualCalendar, date, idCalendar);
+=======
+                    dayView dia = new dayView(actualCalendar, date);
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
                     dia.setVisible(true);
                     setVisible(false);
                 }
@@ -128,6 +160,7 @@ public final class calendarView extends javax.swing.JFrame {
         });
     }
     
+<<<<<<< HEAD
     // Test para añadir tareas al calendario
     public void test() {
         CalendarTask c = new CalendarTask("prueba");
@@ -155,6 +188,8 @@ public final class calendarView extends javax.swing.JFrame {
         this.actualCalendar = c;
     }
     
+=======
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
     // Method to modify the table and update the tasks
     public void updateTasks() {
         jTable1.setRowHeight(100);
@@ -518,6 +553,7 @@ public final class calendarView extends javax.swing.JFrame {
     }                                        
 
     // Add a task
+<<<<<<< HEAD
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {                                         
 // TODO add your handling code here:
         //this.actualCalendar = actualCalendar;
@@ -596,6 +632,22 @@ public final class calendarView extends javax.swing.JFrame {
     private int getIdCalendar(){
         return idCalendar;
         
+=======
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {
+        if (jTable1.getSelectedRow() == -1 || jTable1.getSelectedColumn() == -1) {
+            selectDate selectDate = new selectDate();
+            selectDate.setVisible(true);
+        }else{
+            String[] tasks = (String[]) jTable1.getValueAt
+                        (jTable1.getSelectedRow(), jTable1.getSelectedColumn());
+                Timestamp fecha = new Timestamp(this.actualYear-1900, 
+                        this.actualMonth,Integer.parseInt (tasks[0]), 
+                        Integer.valueOf(minBox.getSelectedItem().toString()), 
+                        Integer.valueOf(minBox.getSelectedItem().toString()), 0, 0);
+                addTaskInternal addTaskInternal = new addTaskInternal( jTable1, fecha, this.actualCalendar, this);
+                addTaskInternal.setVisible(true);
+        }
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
     }
     
     private void addTask(Task t){
@@ -603,6 +655,7 @@ public final class calendarView extends javax.swing.JFrame {
         conex_calendarPermit = HerokuCalendarPermitSqlConnection.getInstance();
         conex_task = HerokuTaskSqlConnection.getInstance();
         conex_task.insertTaskByTask(t);
+<<<<<<< HEAD
         
         loadTask();      
         
@@ -612,6 +665,10 @@ public final class calendarView extends javax.swing.JFrame {
     
     
     
+=======
+        loadTask();   
+    }
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
     
     private void nameFieldFocusGained(java.awt.event.FocusEvent evt) {                                      
         // TODO add your handling code here:
@@ -647,13 +704,21 @@ public final class calendarView extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
+<<<<<<< HEAD
         weekView week = new weekView(this.actualMonth,this.actualYear,this.actualCalendar,this.idCalendar);
+=======
+        weekView week = new weekView(this.actualMonth,this.actualYear,this.actualCalendar);
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
         week.setVisible(true);
         setVisible(false);
     }                                        
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+<<<<<<< HEAD
         dayView week = new dayView(this.actualCalendar, new Timestamp(this.actualYear-1900,this.actualMonth,1,0,0,0,0), this.idCalendar);
+=======
+        dayView week = new dayView(this.actualCalendar, new Timestamp(this.actualYear-1900,this.actualMonth,1,0,0,0,0));
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
         week.setVisible(true);
         setVisible(false);
     }                                        
@@ -708,7 +773,11 @@ public final class calendarView extends javax.swing.JFrame {
         
     }
     
+<<<<<<< HEAD
     private void loadTask(){
+=======
+    void loadTask(){
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
         conex_calendarPermit = HerokuCalendarPermitSqlConnection.getInstance();
         HerokuCalendarSqlConnection conex_cal = HerokuCalendarSqlConnection.getInstance();
         conex_task = HerokuTaskSqlConnection.getInstance();
@@ -757,7 +826,11 @@ public final class calendarView extends javax.swing.JFrame {
         /* Create and display the form */
         
         java.awt.EventQueue.invokeLater(() -> {
+<<<<<<< HEAD
             new calendarView(new CalendarTask(),540).setVisible(true);
+=======
+            new calendarView(new CalendarTask()).setVisible(true);
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
         });
     }
 

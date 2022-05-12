@@ -61,10 +61,17 @@ public class HerokuTaskSqlConnection  extends SqlConnection {
     
     public int selectIdBySpecialIdTasks(String special_Id) {
         
+<<<<<<< HEAD
         Connection conn = getSqlConnection();
          int task_id = 0;
         try{
             
+=======
+        
+         int task_id = 0;
+        try{
+            Connection conn = getSqlConnection();
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
             System.out.println("Entra en el try de permit");
             ps = conn.prepareStatement("SELECT DISTINCT task_id FROM task WHERE special_id=?");
             ps.setString(1, special_Id);
@@ -75,6 +82,10 @@ public class HerokuTaskSqlConnection  extends SqlConnection {
 
                 //conn.close();
                 task_id = rs.getInt("task_id");
+<<<<<<< HEAD
+=======
+                conn.close();
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
             } 
             
         } catch (SQLException e) {
@@ -143,7 +154,11 @@ public class HerokuTaskSqlConnection  extends SqlConnection {
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM task WHERE task_id=" + Integer.toString(id));
             
             ResultSet rs = ps.executeQuery();
+<<<<<<< HEAD
             
+=======
+            conn.close();
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
             
         } catch (SQLException e) {
         }
@@ -165,6 +180,10 @@ public class HerokuTaskSqlConnection  extends SqlConnection {
                 task.setPrior(rs.getInt("priority"));
                 task.setDesc(rs.getString("description"));
             }
+<<<<<<< HEAD
+=======
+            conn.close();
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
             
         } catch (SQLException e) {
         }
@@ -172,6 +191,32 @@ public class HerokuTaskSqlConnection  extends SqlConnection {
 
     }
     
+<<<<<<< HEAD
+=======
+    public void insertTaskIntoSpecificId(Task task, int id){
+        Connection conn = getSqlConnection(); 
+
+        try{
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO task(task_id, name, date, tag, priority, description) VALUES(?, ?, ?, ?, ?, ?)");
+
+            ps.setInt(1, id);
+            ps.setString(2, task.getName());
+            ps.setTimestamp(3, (Timestamp) task.getDate()); 
+            ps.setString(4, task.getTag()); 
+            ps.setInt(5, task.getPrior());
+            ps.setString(6, task.getDesc());
+
+            // ps.execute(); 
+            ps.executeUpdate();
+
+            conn.close();
+        } catch (SQLException e) {
+            //JOptionPane.showMessageDialog(null, "Error al insertar en la tabla TASK: " + e.getMessage());
+            System.out.println("Error al insertar en la tabla TASK: " + e.getMessage());
+        }
+    }
+    
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
  
     public void deleteTaskById(int id) {
         

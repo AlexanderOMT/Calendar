@@ -11,6 +11,18 @@ public class User {
     private boolean login;
     private String description;
     private int modo;
+<<<<<<< HEAD
+=======
+    private String rol;
+
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
+    }
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
     
     public User(){
         

@@ -1,7 +1,17 @@
 package design;
 
+<<<<<<< HEAD
 import static design.usuario.userSigned;
 import java.awt.Color;
+=======
+import SqlDatabase.HerokuCalendarPermitSqlConnection;
+import SqlDatabase.HerokuCalendarSqlConnection;
+import SqlDatabase.HerokuTaskSqlConnection;
+import static design.usuario.userSigned;
+import java.awt.Color;
+import java.awt.Point;
+import java.awt.event.MouseEvent;
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,13 +19,19 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.DefaultListModel;
+<<<<<<< HEAD
 import javax.swing.JOptionPane;
+=======
+import javax.swing.JList;
+import javax.swing.ListModel;
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
 import model.CalendarTask;
 import model.Tags;
 import model.Task;
 import model.User;
 
 public class dayView extends javax.swing.JFrame {
+<<<<<<< HEAD
     
     private CalendarTask actualCalendar;
     private int calendarId;
@@ -31,14 +47,65 @@ public class dayView extends javax.swing.JFrame {
         userSignedUpmp=userSigned;
         changeColor();
         
+=======
+
+    private CalendarTask actualCalendar;
+    private Timestamp date;
+    private HerokuTaskSqlConnection conex_task;
+    private HerokuCalendarPermitSqlConnection conex_calendarPermit;
+    Tags tag;
+    private User userSignedUpmp;
+
+    public dayView(CalendarTask actualCalendar, Timestamp date) {
+        this.actualCalendar = actualCalendar;
+        this.date = date;
+        initComponents();
+        userSignedUpmp = userSigned;
+        changeColor();
+
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
         initTags();
         this.setLocationRelativeTo(null);
         this.setExtendedState(MAXIMIZED_BOTH);
         updateDate();
+<<<<<<< HEAD
     }
     
     public void changeColor(){
         if(userSignedUpmp.getModo() == 1){
+=======
+        doubleClickTask();
+        ifRol();
+    }
+
+    public void ifRol() {
+        if (userSigned.getRol().equals("Lector")) {
+            jButton2.setVisible(false);
+            jButton3.setVisible(false);
+            jButton6.setVisible(false);
+        }
+    }
+
+    // Method to access with double click to the day view
+    public void doubleClickTask() {
+        jList1.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent me) {
+                JList list = (JList) me.getSource();
+                Point p = me.getPoint();
+                if (me.getClickCount() == 2) {
+                    List<Task> dayTasks = actualCalendar.getTasks(date);
+                    Task t = dayTasks.get(jList1.getSelectedIndex());
+                    taskView taskView = new taskView(t);
+                    taskView.setVisible(true);
+                }
+            }
+        });
+    }
+
+    public void changeColor() {
+        if (userSignedUpmp.getModo() == 1) {
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
             this.getContentPane().setBackground(Color.decode("#000000"));
             dayLabel.setForeground(Color.decode("#FFFFFF"));
 
@@ -49,9 +116,15 @@ public class dayView extends javax.swing.JFrame {
             jButton2.setBackground(Color.decode("#859EBC"));
             jButton3.setBackground(Color.decode("#859EBC"));
             jButton6.setBackground(Color.decode("#859EBC"));
+<<<<<<< HEAD
             
             jList1.setBackground(Color.decode("#F0F0F0"));
         }else{
+=======
+
+            jList1.setBackground(Color.decode("#F0F0F0"));
+        } else {
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
             this.getContentPane().setBackground(Color.decode("#FFFFFF"));
             dayLabel.setForeground(Color.decode("#000000"));
 
@@ -62,6 +135,7 @@ public class dayView extends javax.swing.JFrame {
             jButton2.setBackground(Color.decode("#F0F0F0"));
             jButton3.setBackground(Color.decode("#F0F0F0"));
             jButton6.setBackground(Color.decode("#F0F0F0"));
+<<<<<<< HEAD
             
             jList1.setBackground(Color.decode("#F0F0F0"));
         }
@@ -71,23 +145,65 @@ public class dayView extends javax.swing.JFrame {
         String months[] = {"January", "February", "March", "April", "May", "June", 
             "July", "August", "September", "October", "November", "December"};
         dayLabel.setText(date.getDate()+ "-" + months[date.getMonth()] + "-" + (date.getYear()+1900));
+=======
+
+            jList1.setBackground(Color.decode("#F0F0F0"));
+        }
+    }
+
+    public void updateDate() {
+        String months[] = {"January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"};
+        dayLabel.setText(date.getDate() + "-" + months[date.getMonth()] + "-" + (date.getYear() + 1900));
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
         DefaultListModel<String> modelo = new DefaultListModel<>();
         jList1.setModel(modelo);
         List<Task> dayTasks = actualCalendar.getTasks(this.date);
         if (dayTasks != null) {
             Iterator i = dayTasks.iterator();
             while (i.hasNext()) {
+<<<<<<< HEAD
                 Task t = (Task)i.next();
+=======
+                Task t = (Task) i.next();
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
                 modelo.addElement(t.getName());
             }
         }
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
     private void initTags() {
         for (Tags myVar : Tags.values()) {
             jComboBoxTag.addItem(myVar.toString());
             jComboBoxTag1.addItem(myVar.toString());
+<<<<<<< HEAD
         }   
+=======
+        }
+    }
+
+    public void loadTask() {
+        conex_calendarPermit = HerokuCalendarPermitSqlConnection.getInstance();
+        HerokuCalendarSqlConnection conex_cal = HerokuCalendarSqlConnection.getInstance();
+        conex_task = HerokuTaskSqlConnection.getInstance();
+        actualCalendar.getId();
+        System.out.println(actualCalendar.getId());
+
+        ArrayList<Integer> calendarsTask = conex_calendarPermit.selectAllTaskIdByIdCalendar(actualCalendar.getId());
+        CalendarTask c = new CalendarTask();
+
+        for (int i = 0; i < calendarsTask.size(); i++) {
+            Task t = conex_task.getTaskById(calendarsTask.get(i));
+            c.addTask(t);
+        }
+        c.setId(this.actualCalendar.getId());
+        c.setName(actualCalendar.getName());
+        this.actualCalendar = c;
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
     }
 
     /**
@@ -138,6 +254,10 @@ public class dayView extends javax.swing.JFrame {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 nameFieldFocusGained(evt);
             }
+<<<<<<< HEAD
+=======
+
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
             public void focusLost(java.awt.event.FocusEvent evt) {
                 nameFieldFocusLost(evt);
             }
@@ -155,20 +275,32 @@ public class dayView extends javax.swing.JFrame {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 descriptionFieldFocusGained(evt);
             }
+<<<<<<< HEAD
+=======
+
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
             public void focusLost(java.awt.event.FocusEvent evt) {
                 descriptionFieldFocusLost(evt);
             }
         });
         jScrollPane4.setViewportView(descriptionField);
 
+<<<<<<< HEAD
         hourBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24" }));
+=======
+        hourBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24"}));
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
         hourBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hourBoxActionPerformed(evt);
             }
         });
 
+<<<<<<< HEAD
         minBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60" }));
+=======
+        minBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60"}));
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
         minBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 minBoxActionPerformed(evt);
@@ -180,6 +312,7 @@ public class dayView extends javax.swing.JFrame {
         javax.swing.GroupLayout addTaskInternalLayout = new javax.swing.GroupLayout(addTaskInternal.getContentPane());
         addTaskInternal.getContentPane().setLayout(addTaskInternalLayout);
         addTaskInternalLayout.setHorizontalGroup(
+<<<<<<< HEAD
             addTaskInternalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(addTaskInternalLayout.createSequentialGroup()
                 .addContainerGap()
@@ -222,6 +355,50 @@ public class dayView extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jComboBoxTag, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+=======
+                addTaskInternalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(addTaskInternalLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(addTaskInternalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(addTaskInternalLayout.createSequentialGroup()
+                                                .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGroup(addTaskInternalLayout.createSequentialGroup()
+                                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+                                                .addGroup(addTaskInternalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(addTaskInternalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                                .addGroup(addTaskInternalLayout.createSequentialGroup()
+                                                                        .addComponent(jLabel6)
+                                                                        .addGap(18, 18, 18)
+                                                                        .addComponent(hourBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addGap(18, 18, 18)
+                                                                        .addComponent(minBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                .addComponent(jComboBoxTag, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                        .addComponent(jLabel3))
+                                                .addGap(175, 175, 175))))
+        );
+        addTaskInternalLayout.setVerticalGroup(
+                addTaskInternalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(addTaskInternalLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addGroup(addTaskInternalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(addTaskInternalLayout.createSequentialGroup()
+                                                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
+                                                .addGap(131, 131, 131))
+                                        .addGroup(addTaskInternalLayout.createSequentialGroup()
+                                                .addGroup(addTaskInternalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jLabel6)
+                                                        .addComponent(hourBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(minBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jLabel3)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jComboBoxTag, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
         );
 
         modifyTaskInternal.setBackground(new java.awt.Color(255, 255, 255));
@@ -235,6 +412,10 @@ public class dayView extends javax.swing.JFrame {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 nameField1FocusGained(evt);
             }
+<<<<<<< HEAD
+=======
+
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
             public void focusLost(java.awt.event.FocusEvent evt) {
                 nameField1FocusLost(evt);
             }
@@ -252,20 +433,32 @@ public class dayView extends javax.swing.JFrame {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 descriptionField1FocusGained(evt);
             }
+<<<<<<< HEAD
+=======
+
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
             public void focusLost(java.awt.event.FocusEvent evt) {
                 descriptionField1FocusLost(evt);
             }
         });
         jScrollPane5.setViewportView(descriptionField1);
 
+<<<<<<< HEAD
         hourBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24" }));
+=======
+        hourBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24"}));
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
         hourBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hourBox1ActionPerformed(evt);
             }
         });
 
+<<<<<<< HEAD
         minBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60" }));
+=======
+        minBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60"}));
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
         minBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 minBox1ActionPerformed(evt);
@@ -277,6 +470,7 @@ public class dayView extends javax.swing.JFrame {
         javax.swing.GroupLayout modifyTaskInternalLayout = new javax.swing.GroupLayout(modifyTaskInternal.getContentPane());
         modifyTaskInternal.getContentPane().setLayout(modifyTaskInternalLayout);
         modifyTaskInternalLayout.setHorizontalGroup(
+<<<<<<< HEAD
             modifyTaskInternalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(modifyTaskInternalLayout.createSequentialGroup()
                 .addContainerGap()
@@ -319,6 +513,50 @@ public class dayView extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jComboBoxTag1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+=======
+                modifyTaskInternalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(modifyTaskInternalLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(modifyTaskInternalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(modifyTaskInternalLayout.createSequentialGroup()
+                                                .addComponent(nameField1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGroup(modifyTaskInternalLayout.createSequentialGroup()
+                                                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+                                                .addGroup(modifyTaskInternalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(modifyTaskInternalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                                .addGroup(modifyTaskInternalLayout.createSequentialGroup()
+                                                                        .addComponent(jLabel7)
+                                                                        .addGap(18, 18, 18)
+                                                                        .addComponent(hourBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addGap(18, 18, 18)
+                                                                        .addComponent(minBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                .addComponent(jComboBoxTag1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                        .addComponent(jLabel4))
+                                                .addGap(175, 175, 175))))
+        );
+        modifyTaskInternalLayout.setVerticalGroup(
+                modifyTaskInternalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(modifyTaskInternalLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(nameField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addGroup(modifyTaskInternalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(modifyTaskInternalLayout.createSequentialGroup()
+                                                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
+                                                .addGap(131, 131, 131))
+                                        .addGroup(modifyTaskInternalLayout.createSequentialGroup()
+                                                .addGroup(modifyTaskInternalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jLabel7)
+                                                        .addComponent(hourBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(minBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jLabel4)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jComboBoxTag1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -372,6 +610,7 @@ public class dayView extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
+<<<<<<< HEAD
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(191, Short.MAX_VALUE)
@@ -413,12 +652,56 @@ public class dayView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton2)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+=======
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap(191, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 523, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jButton4)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(dayLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(134, 134, 134)
+                                                .addComponent(jButton5)))
+                                .addGap(18, 135, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addContainerGap(201, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jButton4)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(jButton5)
+                                                .addComponent(dayLabel)))
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
+                                .addContainerGap())
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(58, 58, 58)
+                                .addComponent(jButton1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton6)
+                                .addGap(11, 11, 11)
+                                .addComponent(jButton3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton2)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
         );
 
         pack();
     }// </editor-fold>                        
 
     //Back
+<<<<<<< HEAD
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
         calendarView cal = new calendarView(this.actualCalendar, this.calendarId);
@@ -581,6 +864,152 @@ public class dayView extends javax.swing.JFrame {
     private void minBox1ActionPerformed(java.awt.event.ActionEvent evt) {                                        
         // TODO add your handling code here:
     }                                       
+=======
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+        calendarView cal = new calendarView(this.actualCalendar);
+        cal.setVisible(true);
+        setVisible(false);
+    }
+
+    //Modify
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
+        if (jList1.getSelectedIndex() == -1) {
+            selectTask selectTask = new selectTask();
+            selectTask.setVisible(true);
+        } else {
+            List<Task> dayTasks = actualCalendar.getTasks(this.date);
+            Task t = dayTasks.get(jList1.getSelectedIndex());
+            modifyTaskInternal modifyTaskInternal = new modifyTaskInternal(t, this.date, this.actualCalendar, this);
+            modifyTaskInternal.setVisible(true);
+        }
+    }
+
+    //Delete
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
+        if (jList1.getSelectedIndex() == -1) {
+            selectTask selectTask = new selectTask();
+            selectTask.setVisible(true);
+        } else {
+            ListModel model = jList1.getModel();
+            List<Task> dayTasks = actualCalendar.getTasks(this.date);
+            Task t = dayTasks.get(jList1.getSelectedIndex());
+            HerokuTaskSqlConnection taskConn = HerokuTaskSqlConnection.getInstance();
+            taskConn.deleteTaskById(t.getId());
+            loadTask();
+            updateDate();
+            eliminado eliminado = new eliminado();
+            eliminado.setVisible(true);
+        }
+    }
+
+    // Next day
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {
+        Calendar c2 = new GregorianCalendar(this.date.getYear() + 1900, this.date.getMonth(), 1);
+        if (this.date.getDate() + 1 == c2.getActualMaximum(Calendar.DAY_OF_MONTH) + 1) {
+            if (this.date.getMonth() + 1 == 12) {
+                Calendar c1 = new GregorianCalendar(this.date.getYear() - 1 + 1900, 11, 1);
+                this.date = new Timestamp(this.date.getYear() + 1, 0, 1, 0, 0, 0, 0);
+            } else {
+                Calendar c1 = new GregorianCalendar(this.date.getYear(), this.date.getMonth() + 1, 1);
+                this.date = new Timestamp(this.date.getYear(), this.date.getMonth() + 1, 1, 0, 0, 0, 0);
+            }
+        } else {
+            this.date = new Timestamp(this.date.getYear(), this.date.getMonth(), this.date.getDate() + 1, 0, 0, 0, 0);
+        }
+        updateDate();
+    }
+
+    // Prev day
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
+        if (this.date.getDate() - 1 == 0) {
+            if (this.date.getMonth() - 1 == -1) {
+                Calendar c1 = new GregorianCalendar(this.date.getYear() - 1 + 1900, 11, 1);
+                this.date = new Timestamp(this.date.getYear() - 1, 11, c1.getActualMaximum(Calendar.DAY_OF_MONTH), 0, 0, 0, 0);
+            } else {
+                Calendar c1 = new GregorianCalendar(this.date.getYear(), this.date.getMonth() - 1, 1);
+                this.date = new Timestamp(this.date.getYear(), this.date.getMonth() - 1, c1.getActualMaximum(Calendar.DAY_OF_MONTH), 0, 0, 0, 0);
+            }
+        } else {
+            this.date = new Timestamp(this.date.getYear(), this.date.getMonth(), this.date.getDate() - 1, 0, 0, 0, 0);
+        }
+        updateDate();
+    }
+
+    // Add task
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {
+        addTaskInternal addTaskInternal = new addTaskInternal(this.date, this.actualCalendar, this);
+        addTaskInternal.setVisible(true);
+    }
+
+    private void nameFieldFocusGained(java.awt.event.FocusEvent evt) {
+        // TODO add your handling code here:
+        if (nameField.getText().equals("Add a title")) {
+            nameField.setText("");
+        }
+    }
+
+    private void nameFieldFocusLost(java.awt.event.FocusEvent evt) {
+        // TODO add your handling code here:
+        if (nameField.getText().equals("")) {
+            nameField.setText("Add a title");
+        }
+    }
+
+    private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void descriptionFieldFocusGained(java.awt.event.FocusEvent evt) {
+        // TODO add your handling code here:
+        if (descriptionField.getText().equals("Add a description")) {
+            descriptionField.setText("");
+        }
+    }
+
+    private void descriptionFieldFocusLost(java.awt.event.FocusEvent evt) {
+        // TODO add your handling code here:
+        if (descriptionField.getText().equals("")) {
+            descriptionField.setText("Add a description");
+        }
+    }
+
+    private void hourBoxActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void minBoxActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void nameField1FocusGained(java.awt.event.FocusEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void nameField1FocusLost(java.awt.event.FocusEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void nameField1ActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void descriptionField1FocusGained(java.awt.event.FocusEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void descriptionField1FocusLost(java.awt.event.FocusEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void hourBox1ActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void minBox1ActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
 
     /**
      * @param args the command line arguments
@@ -613,7 +1042,11 @@ public class dayView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+<<<<<<< HEAD
                 new dayView(new CalendarTask(), new Timestamp(2022-1900,3,1,0,0,0,0), 1).setVisible(true);
+=======
+                new dayView(new CalendarTask(), new Timestamp(2022 - 1900, 3, 1, 0, 0, 0, 0)).setVisible(true);
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
             }
         });
     }

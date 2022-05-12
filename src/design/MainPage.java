@@ -57,12 +57,22 @@ public final class MainPage extends javax.swing.JFrame implements usuario {
 
         Color color = new Color(255, 255, 255);
         this.getContentPane().setBackground(color);
+<<<<<<< HEAD
 //        userSigned.setEmail("tareas@gmail.com");
 //        userSigned.setId(3);
 
         userSigned.setEmail("minerva@gmail.com");
         userSigned.setId(4);
         userSigned.setName("Minerva");
+=======
+        userSigned.setEmail("tareas@gmail.com");
+        userSigned.setId(3);
+        userSigned.setName("Nauzet");
+
+        //userSigned.setEmail("minerva@gmail.com");
+        //userSigned.setId(4);
+        //userSigned.setName("Minerva");
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
         this.setLocationRelativeTo(null);
         this.setExtendedState(MAXIMIZED_BOTH);
         if (userSigned.getModo() == 1) {
@@ -526,7 +536,12 @@ public final class MainPage extends javax.swing.JFrame implements usuario {
 
         boton1.addActionListener((java.awt.event.ActionEvent e) -> {
             System.out.println("Se ha abierto el calendario " + calendarName);
+<<<<<<< HEAD
             calendarView cv = new calendarView(new CalendarTask(calendarName, calendar.getId()), calendar.getId());
+=======
+            userSigned.setRol(this.conex_cal_per.selectRolfromUser(userSigned.getId(), calendar.getId()));
+            calendarView cv = new calendarView(new CalendarTask(calendarName, calendar.getId()));
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
             System.out.println("ID DEL CALEDIOOOOOO: " + calendar.getId());
             cv.setVisible(true);
         });

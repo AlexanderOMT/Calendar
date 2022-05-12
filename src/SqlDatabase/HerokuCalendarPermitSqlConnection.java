@@ -110,8 +110,13 @@ public class HerokuCalendarPermitSqlConnection extends SqlConnection {
         /*metodo que se utiliza para la obtencion de una lista que contiene los id de calendarios de un usuario concreto*/
     public ArrayList<Integer> selectAllCalendarsIdByIdUser(int user_id) {
         ArrayList<Integer> calendario = new ArrayList<>();
+<<<<<<< HEAD
          Connection conn = getSqlConnection();
         try{
+=======
+        try{
+            Connection conn = getSqlConnection();
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
             PreparedStatement ps = conn.prepareStatement("SELECT DISTINCT calendar_id FROM calendar_permit inner JOIN user \n" +
                         "ON calendar_permit.user_id = user.user_id \n" +
                         "where user.user_id =" + Integer.toString(user_id) + ";");
@@ -143,10 +148,17 @@ public class HerokuCalendarPermitSqlConnection extends SqlConnection {
             ps.setInt(1, calendar_id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
+<<<<<<< HEAD
                 System.out.println(
                         "ID DEL EL TAREAAA " +
                         rs.getString("task_id")
                 );
+=======
+                /*System.out.println(
+                        "ID DEL EL TAREAAA " +
+                        rs.getString("task_id")
+                );*/
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
                 tareas.add(rs.getInt("task_id"));
             }
             conn.close();
@@ -199,7 +211,11 @@ public class HerokuCalendarPermitSqlConnection extends SqlConnection {
             PreparedStatement ps = conn.prepareStatement("INSERT INTO calendar_permit(user_id, calendar_id, task_id, rol) VALUES(?,?,?,?)");
             ps.setInt(1, user_id);
             ps.setInt(2, calendar_id);
+<<<<<<< HEAD
             ps.setInt(3, 1);
+=======
+            ps.setInt(3, 2);
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
             ps.setString(4, rol);
             // ps.execute();  
             int res = ps.executeUpdate();
@@ -209,7 +225,11 @@ public class HerokuCalendarPermitSqlConnection extends SqlConnection {
             conn.close();
             
         } catch (SQLException e) {
+<<<<<<< HEAD
             
+=======
+            System.out.println( "NO SE HA CREADO LA CONEXION ENTRE USER Y EL NEW CALENDAR POR: "+e.getMessage());
+>>>>>>> a36b0f3dbe398362dce71650181210ae1d3d3521
         }
     }
 
