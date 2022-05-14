@@ -176,15 +176,33 @@ public class Configuration extends javax.swing.JDialog {
         
         ArrayList<Integer> calendarsUser = calPermitConn.selectAllCalendarsIdByIdUser(userSignedUpmp.getId());
 
-        for (int calendarId : calendarsUser) {
+       for (int calendarId : calendarsUser) {
             
+
             calendarName = calConn.getCalendarNameById(calendarId);
             specialId = calendarName + userEmail;
             int calendarIdToRemove = calConn.getCalendarIdBySpecialId(specialId);
-            calConn.deleteCalendarById(calendarIdToRemove);
-            
+
+
+
+            if (calPermitConn.selectRolfromUser(userSigned.getId(), calendarId).equals("Admin")) {
+                calConn.deleteCalendarById(calendarId);
+                calPermitConn.deleteCalendarPermitById(calendarId);
+
+            } else {
+                /*se borra solo la conexión con el usuario*/
+                calPermitConn.deleteOnlyCalendarPermitfromOneUser(userSigned.getId(), calendarId);
+                HerokuInvitationSqlConnection conex_invite = new HerokuInvitationSqlConnection();
+                con_invite.deleteInvitationByTargetUserIdAndCalendarId(userSigned.getId(), calendarId);
+            }
+
         }
-        
+        con_us.deleteUserById(userSigned.getId());
+         mn2.setVisible(false);
+        this.setVisible(false);
+
+        Sign_up a = new Sign_up();
+        a.setVisible(true);
         
     }
 
